@@ -1,6 +1,7 @@
 export default {
   // Blues
   ocean_blue: '#80a4dd',
+  deep_blue: '#2c59a3',
   rich_black: '#090F23',
 
   // Purples

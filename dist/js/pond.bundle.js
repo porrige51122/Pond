@@ -102,6 +102,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
   // Blues
   ocean_blue: '#80a4dd',
+  deep_blue: '#2c59a3',
   rich_black: '#090F23',
 
   // Purples
@@ -893,7 +894,7 @@ var Pond = function () {
   }, {
     key: 'render',
     value: function render() {
-      ctx.fillStyle = _colours2.default.ocean_blue;
+      ctx.fillStyle = this.grd;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       this.tadpoles.forEach(function (t) {
         return t.render(canvas, ctx);
@@ -916,6 +917,9 @@ var Pond = function () {
       if (canvas.width != window.innerWidth * ratio - boundary || canvas.height != window.innerHeight - boundary) {
         canvas.width = window.innerWidth * ratio - boundary;
         canvas.height = window.innerHeight - boundary;
+        if (canvas.width > canvas.height) this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width / 4, canvas.width / 2, canvas.height / 2, canvas.width / 2);else this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.height / 4, canvas.width / 2, canvas.height / 2, canvas.height / 2);
+        this.grd.addColorStop(0, _colours2.default.ocean_blue);
+        this.grd.addColorStop(1, _colours2.default.deep_blue);
       }
     }
   }]);

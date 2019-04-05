@@ -12,6 +12,7 @@ class Pond {
     this.canvas = canvas;
     this.ctx = ctx;
 
+
     // canvas elements
     this.eventListeners();
 
@@ -97,7 +98,7 @@ class Pond {
   }
 
   render() {
-    ctx.fillStyle = colours.ocean_blue;
+    ctx.fillStyle = this.grd;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     this.tadpoles.forEach((t) => t.render(canvas, ctx));
     this.fish.forEach((f) => f.render(canvas, ctx));
@@ -114,6 +115,12 @@ class Pond {
     if (canvas.width != (window.innerWidth * ratio) - boundary || canvas.height != window.innerHeight - boundary) {
       canvas.width = (window.innerWidth * ratio) - boundary;
       canvas.height = window.innerHeight - boundary;
+      if (canvas.width > canvas.height)
+        this.grd = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.width/4, canvas.width/2, canvas.height/2, canvas.width/2);
+      else
+        this.grd = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height/4, canvas.width/2, canvas.height/2, canvas.height/2);
+      this.grd.addColorStop(0, colours.ocean_blue);
+      this.grd.addColorStop(1, colours.deep_blue);
     }
   }
 
