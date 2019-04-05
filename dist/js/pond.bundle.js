@@ -131,10 +131,10 @@ exports.default = {
 
 /***/ }),
 
-/***/ "./src/fish.js":
-/*!*********************!*\
-  !*** ./src/fish.js ***!
-  \*********************/
+/***/ "./src/creature/fish.js":
+/*!******************************!*\
+  !*** ./src/creature/fish.js ***!
+  \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -147,7 +147,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
@@ -202,10 +202,10 @@ exports.default = Fish;
 
 /***/ }),
 
-/***/ "./src/fishMovement.js":
-/*!*****************************!*\
-  !*** ./src/fishMovement.js ***!
-  \*****************************/
+/***/ "./src/creature/lily.js":
+/*!******************************!*\
+  !*** ./src/creature/lily.js ***!
+  \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -218,111 +218,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _movement = __webpack_require__(/*! ./movement */ "./src/movement.js");
-
-var _movement2 = _interopRequireDefault(_movement);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FishMovement = function (_Movement) {
-  _inherits(FishMovement, _Movement);
-
-  function FishMovement(entity, canvas) {
-    _classCallCheck(this, FishMovement);
-
-    var _this = _possibleConstructorReturn(this, (FishMovement.__proto__ || Object.getPrototypeOf(FishMovement)).call(this, entity, canvas));
-
-    _this.spacing = 20;
-    return _this;
-  }
-
-  _createClass(FishMovement, [{
-    key: 'move',
-    value: function move() {
-      for (var i = 0; i < this.entities.length; i++) {
-        var pos = this.entities[i].pos;
-        if (this.entities[i].swimming) {
-          if (pos[0] < 0 + this.spacing) {
-            this.smoothing(i, 1, 0);
-          } else if (pos[1] < 0 + this.spacing) {
-            this.smoothing(i, 0, 1);
-          } else if (pos[0] > this.canvas.width - this.spacing * 2) {
-            this.smoothing(i, -1, 0);
-          } else if (pos[1] > this.canvas.height - this.spacing * 2) {
-            this.smoothing(i, 0, -1);
-          }
-
-          var wiggleRate = 8;
-          var wiggleSize = 0.5;
-          this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
-          if (Math.random() < 0.005) {
-            this.entities[i].swimming = false;
-            this.entities[i].vel = [0, 0];
-          }
-          this.slowing(i, 2);
-        } else {
-          if (pos[0] < 0 + this.spacing) {
-            this.smoothing(i, 1, 0);
-          } else if (pos[1] < 0 + this.spacing) {
-            this.smoothing(i, 0, 5);
-          } else if (pos[0] > this.canvas.width - this.spacing * 2) {
-            this.smoothing(i, -1, 0);
-          } else if (pos[1] > this.canvas.height - this.spacing * 2) {
-            this.smoothing(i, 0, -5);
-          }
-          this.reduce(i);
-          if (this.entities[i].vel[0] < 0.01 && this.entities[i].vel[1] < 0.01) {
-            if (Math.random() < 0.5) {
-              this.entities[i].swimming = true;
-              this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
-            } else {
-              var speed = 5;
-              this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.5) * speed];
-            }
-          }
-        }
-      }
-    }
-  }, {
-    key: 'reduce',
-    value: function reduce(fish) {
-      var redFactor = 0.99;
-      var velX = this.entities[fish].vel[0] * redFactor;
-      var velY = this.entities[fish].vel[1] * redFactor;
-      this.entities[fish].vel = [velX, velY];
-    }
-  }]);
-
-  return FishMovement;
-}(_movement2.default);
-
-exports.default = FishMovement;
-
-/***/ }),
-
-/***/ "./src/lily.js":
-/*!*********************!*\
-  !*** ./src/lily.js ***!
-  \*********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
@@ -441,10 +337,10 @@ exports.default = lily;
 
 /***/ }),
 
-/***/ "./src/lilyMovement.js":
-/*!*****************************!*\
-  !*** ./src/lilyMovement.js ***!
-  \*****************************/
+/***/ "./src/creature/tadpole.js":
+/*!*********************************!*\
+  !*** ./src/creature/tadpole.js ***!
+  \*********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -457,7 +353,197 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _movement = __webpack_require__(/*! ./movement */ "./src/movement.js");
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Tadpole = function () {
+  function Tadpole(pos) {
+    _classCallCheck(this, Tadpole);
+
+    this.pos = pos;
+    this.size = 3 + Math.random();
+    this.vel = [0, 0];
+    var leaderChance = 0.015;
+    this.leader = Math.random() < leaderChance;
+    this.follow = null;
+    this.eagerness = Math.random();
+    this.changeDir = false;
+  }
+
+  _createClass(Tadpole, [{
+    key: 'tick',
+    value: function tick() {
+      this.pos[0] += this.vel[0];
+      this.pos[1] += this.vel[1];
+    }
+  }, {
+    key: 'render',
+    value: function render(canvas, ctx) {
+      // Draw Body
+      ctx.beginPath();
+      // if (this.leader)
+      // ctx.fillStyle = colours.yellow;
+      // else
+      ctx.fillStyle = _colours2.default.registration_black;
+      ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
+      ctx.fill();
+      // Draw Tail
+      ctx.beginPath();
+      ctx.fillStyle = _colours2.default.rasin_black;
+      ctx.arc(this.pos[0] - this.vel[0] * 5, this.pos[1] - this.vel[1] * 5, this.size / 4 * 3, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = _colours2.default.rasin_black;
+      ctx.arc(this.pos[0] - this.vel[0] * 10, this.pos[1] - this.vel[1] * 10, this.size / 2, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  }, {
+    key: 'getLeader',
+    value: function getLeader(tadpoles) {
+      var leaders = [];
+      for (var i = 0; i < tadpoles.length; i++) {
+        if (this.leader) {
+          break;
+        }
+        if (tadpoles[i].leader) leaders.push(i);
+      }
+      this.follow = leaders[Math.floor(Math.random() * leaders.length)];
+    }
+  }]);
+
+  return Tadpole;
+}();
+
+exports.default = Tadpole;
+
+/***/ }),
+
+/***/ "./src/movement/fishMovement.js":
+/*!**************************************!*\
+  !*** ./src/movement/fishMovement.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _movement = __webpack_require__(/*! ./movement */ "./src/movement/movement.js");
+
+var _movement2 = _interopRequireDefault(_movement);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FishMovement = function (_Movement) {
+  _inherits(FishMovement, _Movement);
+
+  function FishMovement(entity, canvas) {
+    _classCallCheck(this, FishMovement);
+
+    var _this = _possibleConstructorReturn(this, (FishMovement.__proto__ || Object.getPrototypeOf(FishMovement)).call(this, entity, canvas));
+
+    _this.spacing = 20;
+    return _this;
+  }
+
+  _createClass(FishMovement, [{
+    key: 'move',
+    value: function move() {
+      for (var i = 0; i < this.entities.length; i++) {
+        var pos = this.entities[i].pos;
+        if (this.entities[i].swimming) {
+          if (pos[0] < 0 + this.spacing) {
+            this.smoothing(i, 1, 0);
+          } else if (pos[1] < 0 + this.spacing) {
+            this.smoothing(i, 0, 1);
+          } else if (pos[0] > this.canvas.width - this.spacing * 2) {
+            this.smoothing(i, -1, 0);
+          } else if (pos[1] > this.canvas.height - this.spacing * 2) {
+            this.smoothing(i, 0, -1);
+          }
+
+          var wiggleRate = 8;
+          var wiggleSize = 0.5;
+          this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
+          if (Math.random() < 0.005) {
+            this.entities[i].swimming = false;
+            this.entities[i].vel = [0, 0];
+          }
+          this.slowing(i, 2);
+        } else {
+          if (pos[0] < 0 + this.spacing) {
+            this.smoothing(i, 1, 0);
+          } else if (pos[1] < 0 + this.spacing) {
+            this.smoothing(i, 0, 5);
+          } else if (pos[0] > this.canvas.width - this.spacing * 2) {
+            this.smoothing(i, -1, 0);
+          } else if (pos[1] > this.canvas.height - this.spacing * 2) {
+            this.smoothing(i, 0, -5);
+          }
+          this.reduce(i);
+          if (this.entities[i].vel[0] < 0.01 && this.entities[i].vel[1] < 0.01) {
+            if (Math.random() < 0.5) {
+              this.entities[i].swimming = true;
+              this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
+            } else {
+              var speed = 5;
+              this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.5) * speed];
+            }
+          }
+        }
+      }
+    }
+  }, {
+    key: 'reduce',
+    value: function reduce(fish) {
+      var redFactor = 0.99;
+      var velX = this.entities[fish].vel[0] * redFactor;
+      var velY = this.entities[fish].vel[1] * redFactor;
+      this.entities[fish].vel = [velX, velY];
+    }
+  }]);
+
+  return FishMovement;
+}(_movement2.default);
+
+exports.default = FishMovement;
+
+/***/ }),
+
+/***/ "./src/movement/lilyMovement.js":
+/*!**************************************!*\
+  !*** ./src/movement/lilyMovement.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _movement = __webpack_require__(/*! ./movement */ "./src/movement/movement.js");
 
 var _movement2 = _interopRequireDefault(_movement);
 
@@ -507,10 +593,10 @@ exports.default = LilyMovement;
 
 /***/ }),
 
-/***/ "./src/movement.js":
-/*!*************************!*\
-  !*** ./src/movement.js ***!
-  \*************************/
+/***/ "./src/movement/movement.js":
+/*!**********************************!*\
+  !*** ./src/movement/movement.js ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -562,6 +648,97 @@ exports.default = Movement;
 
 /***/ }),
 
+/***/ "./src/movement/tadMovement.js":
+/*!*************************************!*\
+  !*** ./src/movement/tadMovement.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _movement = __webpack_require__(/*! ./movement */ "./src/movement/movement.js");
+
+var _movement2 = _interopRequireDefault(_movement);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var TadMovement = function (_Movement) {
+  _inherits(TadMovement, _Movement);
+
+  function TadMovement(entity, canvas) {
+    _classCallCheck(this, TadMovement);
+
+    var _this = _possibleConstructorReturn(this, (TadMovement.__proto__ || Object.getPrototypeOf(TadMovement)).call(this, entity, canvas));
+
+    _this.spacing = 20;
+    return _this;
+  }
+
+  _createClass(TadMovement, [{
+    key: 'move',
+    value: function move() {
+      for (var i = 0; i < this.entities.length; i++) {
+        var pos = this.entities[i].pos;
+        // If near the edge, move away
+        if (pos[0] < 0 + this.spacing) {
+          this.smoothing(i, 1, 0);
+        } else if (pos[1] < 0 + this.spacing) {
+          this.smoothing(i, 0, 1);
+        } else if (pos[0] > this.canvas.width - this.spacing * 2) {
+          this.smoothing(i, -1, 0);
+        } else if (pos[1] > this.canvas.height - this.spacing * 2) {
+          this.smoothing(i, 0, -1);
+        }
+        // Leader = random Movement
+        // Non Leader = follow designated leader
+        if (this.entities[i].leader) {
+          this.smoothing(i, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2);
+          if (Math.random() < 0.0000005) {
+            this.entities[i].leader = false;
+          }
+        } else if (this.entities[i].follow == null) {
+          this.entities[i].getLeader(this.entities);
+        } else {
+          var leaderPos = this.entities[this.entities[i].follow].pos;
+          var length = Math.sqrt(Math.abs(Math.pow(pos[0] - leaderPos[0], 2) - Math.pow(pos[1] - leaderPos[1], 2)));
+          if (length == 0) {
+            length = 1;
+          }
+          if (length > this.entities[i].eagerness * this.spacing) this.smoothing(i, (leaderPos[0] - pos[0]) / (length * 2), (leaderPos[1] - pos[1]) / (length * 2));else this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
+
+          if (Math.random() < 0.00002) {
+            this.entities[i].getLeader(this.entities);
+          }
+          if (Math.random() < 0.0000005) {
+            this.entities[i].leader = true;
+          }
+        }
+        this.slowing(i, 1);
+      }
+    }
+  }]);
+
+  return TadMovement;
+}(_movement2.default);
+
+exports.default = TadMovement;
+
+/***/ }),
+
 /***/ "./src/pond.js":
 /*!*********************!*\
   !*** ./src/pond.js ***!
@@ -578,27 +755,27 @@ var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
-var _tadpole = __webpack_require__(/*! ./tadpole */ "./src/tadpole.js");
+var _tadpole = __webpack_require__(/*! ./creature/tadpole */ "./src/creature/tadpole.js");
 
 var _tadpole2 = _interopRequireDefault(_tadpole);
 
-var _fish = __webpack_require__(/*! ./fish */ "./src/fish.js");
+var _fish = __webpack_require__(/*! ./creature/fish */ "./src/creature/fish.js");
 
 var _fish2 = _interopRequireDefault(_fish);
 
-var _lily = __webpack_require__(/*! ./lily */ "./src/lily.js");
+var _lily = __webpack_require__(/*! ./creature/lily */ "./src/creature/lily.js");
 
 var _lily2 = _interopRequireDefault(_lily);
 
-var _tadMovement = __webpack_require__(/*! ./tadMovement */ "./src/tadMovement.js");
+var _tadMovement = __webpack_require__(/*! ./movement/tadMovement */ "./src/movement/tadMovement.js");
 
 var _tadMovement2 = _interopRequireDefault(_tadMovement);
 
-var _fishMovement = __webpack_require__(/*! ./fishMovement */ "./src/fishMovement.js");
+var _fishMovement = __webpack_require__(/*! ./movement/fishMovement */ "./src/movement/fishMovement.js");
 
 var _fishMovement2 = _interopRequireDefault(_fishMovement);
 
-var _lilyMovement = __webpack_require__(/*! ./lilyMovement */ "./src/lilyMovement.js");
+var _lilyMovement = __webpack_require__(/*! ./movement/lilyMovement */ "./src/movement/lilyMovement.js");
 
 var _lilyMovement2 = _interopRequireDefault(_lilyMovement);
 
@@ -749,183 +926,6 @@ var Pond = function () {
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var pond = new Pond(canvas, ctx);
-
-/***/ }),
-
-/***/ "./src/tadMovement.js":
-/*!****************************!*\
-  !*** ./src/tadMovement.js ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _movement = __webpack_require__(/*! ./movement */ "./src/movement.js");
-
-var _movement2 = _interopRequireDefault(_movement);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var TadMovement = function (_Movement) {
-  _inherits(TadMovement, _Movement);
-
-  function TadMovement(entity, canvas) {
-    _classCallCheck(this, TadMovement);
-
-    var _this = _possibleConstructorReturn(this, (TadMovement.__proto__ || Object.getPrototypeOf(TadMovement)).call(this, entity, canvas));
-
-    _this.spacing = 20;
-    return _this;
-  }
-
-  _createClass(TadMovement, [{
-    key: 'move',
-    value: function move() {
-      for (var i = 0; i < this.entities.length; i++) {
-        var pos = this.entities[i].pos;
-        // If near the edge, move away
-        if (pos[0] < 0 + this.spacing) {
-          this.smoothing(i, 1, 0);
-        } else if (pos[1] < 0 + this.spacing) {
-          this.smoothing(i, 0, 1);
-        } else if (pos[0] > this.canvas.width - this.spacing * 2) {
-          this.smoothing(i, -1, 0);
-        } else if (pos[1] > this.canvas.height - this.spacing * 2) {
-          this.smoothing(i, 0, -1);
-        }
-        // Leader = random Movement
-        // Non Leader = follow designated leader
-        if (this.entities[i].leader) {
-          this.smoothing(i, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2);
-          if (Math.random() < 0.0000005) {
-            this.entities[i].leader = false;
-          }
-        } else if (this.entities[i].follow == null) {
-          this.entities[i].getLeader(this.entities);
-        } else {
-          var leaderPos = this.entities[this.entities[i].follow].pos;
-          var length = Math.sqrt(Math.abs(Math.pow(pos[0] - leaderPos[0], 2) - Math.pow(pos[1] - leaderPos[1], 2)));
-          if (length == 0) {
-            length = 1;
-          }
-          if (length > this.entities[i].eagerness * this.spacing) this.smoothing(i, (leaderPos[0] - pos[0]) / (length * 2), (leaderPos[1] - pos[1]) / (length * 2));else this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
-
-          if (Math.random() < 0.00002) {
-            this.entities[i].getLeader(this.entities);
-          }
-          if (Math.random() < 0.0000005) {
-            this.entities[i].leader = true;
-          }
-        }
-        this.slowing(i, 1);
-      }
-    }
-  }]);
-
-  return TadMovement;
-}(_movement2.default);
-
-exports.default = TadMovement;
-
-/***/ }),
-
-/***/ "./src/tadpole.js":
-/*!************************!*\
-  !*** ./src/tadpole.js ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
-
-var _colours2 = _interopRequireDefault(_colours);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Tadpole = function () {
-  function Tadpole(pos) {
-    _classCallCheck(this, Tadpole);
-
-    this.pos = pos;
-    this.size = 3 + Math.random();
-    this.vel = [0, 0];
-    var leaderChance = 0.015;
-    this.leader = Math.random() < leaderChance;
-    this.follow = null;
-    this.eagerness = Math.random();
-    this.changeDir = false;
-  }
-
-  _createClass(Tadpole, [{
-    key: 'tick',
-    value: function tick() {
-      this.pos[0] += this.vel[0];
-      this.pos[1] += this.vel[1];
-    }
-  }, {
-    key: 'render',
-    value: function render(canvas, ctx) {
-      // Draw Body
-      ctx.beginPath();
-      // if (this.leader)
-      // ctx.fillStyle = colours.yellow;
-      // else
-      ctx.fillStyle = _colours2.default.registration_black;
-      ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
-      ctx.fill();
-      // Draw Tail
-      ctx.beginPath();
-      ctx.fillStyle = _colours2.default.rasin_black;
-      ctx.arc(this.pos[0] - this.vel[0] * 5, this.pos[1] - this.vel[1] * 5, this.size / 4 * 3, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.fillStyle = _colours2.default.rasin_black;
-      ctx.arc(this.pos[0] - this.vel[0] * 10, this.pos[1] - this.vel[1] * 10, this.size / 2, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-  }, {
-    key: 'getLeader',
-    value: function getLeader(tadpoles) {
-      var leaders = [];
-      for (var i = 0; i < tadpoles.length; i++) {
-        if (this.leader) {
-          break;
-        }
-        if (tadpoles[i].leader) leaders.push(i);
-      }
-      this.follow = leaders[Math.floor(Math.random() * leaders.length)];
-    }
-  }]);
-
-  return Tadpole;
-}();
-
-exports.default = Tadpole;
 
 /***/ })
 

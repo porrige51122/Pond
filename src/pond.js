@@ -1,10 +1,10 @@
 import colours from './colours';
-import Tadpole from './tadpole';
-import Fish from './fish';
-import lily from './lily';
-import TadMovement from './tadMovement';
-import FishMovement from './fishMovement';
-import LilyMovement from './lilyMovement';
+import Tadpole from './creature/tadpole';
+import Fish from './creature/fish';
+import Lily from './creature/lily';
+import TadMovement from './movement/tadMovement';
+import FishMovement from './movement/fishMovement';
+import LilyMovement from './movement/lilyMovement';
 
 
 class Pond {
@@ -70,7 +70,7 @@ class Pond {
       this.fish.push(new Fish([Math.random()*canvas.width,Math.random()*canvas.height]));
 
     for (let i = 0; i < this.lilySize; i++)
-      this.lillies.push(new lily([Math.random()*canvas.width,Math.random()*canvas.height]));
+      this.lillies.push(new Lily([Math.random()*canvas.width,Math.random()*canvas.height]));
 
     this.tadMovement = new TadMovement(this.tadpoles, canvas);
     this.fishMovement = new FishMovement(this.fish, canvas);
