@@ -146,7 +146,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * This class contains all information for each fish
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
@@ -160,22 +162,40 @@ var Fish = function () {
   function Fish(canvas) {
     _classCallCheck(this, Fish);
 
+    // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+    // Random size 10-15
     this.size = 10 + Math.random() * 5;
+    // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
-    this.twitching = 0;
+    // Extra Variables
     this.swimming = true;
     this.sin = 0;
   }
 
+  /**
+   * TICK - Moves the entity and modifies any frame based values
+   */
+
+
   _createClass(Fish, [{
     key: 'tick',
     value: function tick() {
-      this.sin++;
-      if (this.sin > 1440) this.sin = 0;
+      // sin is the angle along sin that the fish is swimming along
+      if (this.swimming) {
+        this.sin++;
+        if (this.sin > 1440) this.sin = 0;
+      }
+
       this.pos[0] += this.vel[0];
       this.pos[1] += this.vel[1];
     }
+
+    /**
+     * RENDER - Draws an orange ball and two smaller balls behind it to simulate
+     * a tail
+     */
+
   }, {
     key: 'render',
     value: function render(canvas, ctx) {
@@ -217,7 +237,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * This class contains all information for each lily
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
@@ -231,13 +254,24 @@ var lily = function () {
   function lily(canvas) {
     _classCallCheck(this, lily);
 
+    // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+    // All have same size 50 - CHANGE TO RANDOM SOON
     this.size = 50;
+    // Random velocity [-0.5, -0.5] - [0.5, 0.5]
     this.vel = [Math.random() - 0.5, Math.random() - 0.5];
+    // Chooses a random point to put the split of the lily pad
     this.startAngle = Math.PI * 2 * Math.random();
+    // 50% if rotates clockwise or anticlockwise
     this.clockwise = Math.random() < 0.5;
+    // 25% chance to have a water lily on top
     this.isFlower = Math.random() < 0.25;
   }
+
+  /**
+   * TICK - Moves the entity and rotates the pad
+   */
+
 
   _createClass(lily, [{
     key: 'tick',
@@ -246,10 +280,17 @@ var lily = function () {
       this.pos[0] += this.vel[0];
       this.pos[1] += this.vel[1];
     }
+
+    /**
+     * RENDER - Draws the pad with a segment if it has a lily and if it doesn't
+     * it draws a full pad with a flower on it
+     */
+
   }, {
     key: 'render',
     value: function render(canvas, ctx) {
       if (!this.isFlower) {
+        //Draw First Half
         var start = this.startAngle;
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.light_green;
@@ -259,7 +300,7 @@ var lily = function () {
         ctx.fillStyle = _colours2.default.lily_green;
         ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, start, Math.PI + start);
         ctx.fill();
-
+        // Draws second half with not full rotation to give the circle the slit
         start += Math.PI / 180 * 170;
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.light_green;
@@ -270,6 +311,7 @@ var lily = function () {
         ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, start, Math.PI + start);
         ctx.fill();
       } else {
+        // Draws the full circle
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.light_green;
         ctx.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
@@ -281,44 +323,42 @@ var lily = function () {
         this.drawFlower(ctx);
       }
     }
+
+    /**
+     *
+     */
+
+    // Draws 3 rings with reducing size and lighter colours
+
   }, {
     key: 'drawFlower',
     value: function drawFlower(ctx) {
       var firstRing = this.size / 4;
       this.drawRing(ctx, _colours2.default.pink, this.size / 2, this.size / 4 * 3);
       this.drawRing(ctx, _colours2.default.delicate_pink, this.size / 4, this.size / 2);
-      this.drawRing(ctx, _colours2.default.light_pink, this.size / 8, this.size / 4);
+      this.drawRing(ctx, _colours2.default.light_pink, this.size / 8, this.size / 3);
       ctx.beginPath();
       ctx.fillStyle = _colours2.default.yellow;
       ctx.arc(this.pos[0], this.pos[1], this.size / 8, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // Draws 8 petals each at 45 degrees to each other
+
   }, {
     key: 'drawRing',
     value: function drawRing(ctx, fillStyle, w, h) {
-      this.drawGroup(ctx, fillStyle, this.pos[0], this.pos[1], w, h);
-      ctx.save();
-      ctx.translate(this.pos[0], this.pos[1]);
-      ctx.rotate(Math.PI / 4);
-      this.drawGroup(ctx, fillStyle, 0, 0, w, h);
-      ctx.restore();
+      for (var i = 0; i <= Math.PI * 2; i += Math.PI / 4) {
+        ctx.save();
+        ctx.translate(this.pos[0], this.pos[1]);
+        ctx.rotate(i);
+        this.drawPetal(ctx, fillStyle, 0, h / 2, w, h);
+        ctx.restore();
+      }
     }
-  }, {
-    key: 'drawGroup',
-    value: function drawGroup(ctx, fillStyle, x, y, w, h) {
-      this.drawPair(ctx, fillStyle, x, y, w, h);
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(Math.PI / 2);
-      this.drawPair(ctx, fillStyle, 0, 0, w, h);
-      ctx.restore();
-    }
-  }, {
-    key: 'drawPair',
-    value: function drawPair(ctx, fillStyle, x, y, w, h) {
-      this.drawPetal(ctx, fillStyle, x, y + h / 2, w, h);
-      this.drawPetal(ctx, fillStyle, x, y - h / 2, w, h);
-    }
+
+    // Draws an elipse with center xy and width w and height h
+
   }, {
     key: 'drawPetal',
     value: function drawPetal(ctx, fillStyle, x, y, w, h) {
@@ -352,7 +392,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * This class contains all information for each tadpole
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
@@ -366,15 +408,24 @@ var Tadpole = function () {
   function Tadpole(canvas) {
     _classCallCheck(this, Tadpole);
 
+    // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+    // Random size 3-4
     this.size = 3 + Math.random();
+    // Initially still
     this.vel = [0, 0];
-    var leaderChance = 0.015;
-    this.leader = Math.random() < leaderChance;
+    // 2% chance to become leader
+    this.leader = Math.random() < 0.02;
+    // follow noone until assigned
     this.follow = null;
+    // eagerness = how close to the leader the tadpole will follow
     this.eagerness = Math.random();
-    this.changeDir = false;
   }
+
+  /**
+   * TICK - Moves the entity
+   */
+
 
   _createClass(Tadpole, [{
     key: 'tick',
@@ -382,14 +433,17 @@ var Tadpole = function () {
       this.pos[0] += this.vel[0];
       this.pos[1] += this.vel[1];
     }
+
+    /**
+     * RENDER - Draws an black ball and two smaller grey balls behind it to
+     *  simulate a tail
+     */
+
   }, {
     key: 'render',
     value: function render(canvas, ctx) {
       // Draw Body
       ctx.beginPath();
-      // if (this.leader)
-      // ctx.fillStyle = colours.yellow;
-      // else
       ctx.fillStyle = _colours2.default.registration_black;
       ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
       ctx.fill();
@@ -403,6 +457,12 @@ var Tadpole = function () {
       ctx.arc(this.pos[0] - this.vel[0] * 10, this.pos[1] - this.vel[1] * 10, this.size / 2, 0, 2 * Math.PI);
       ctx.fill();
     }
+
+    /**
+     * GETLEADER - creates an array of leader tadpoles and radomly chooses
+     * which one it will follow
+     */
+
   }, {
     key: 'getLeader',
     value: function getLeader(tadpoles) {
@@ -483,7 +543,8 @@ var FishMovement = function (_Movement) {
           var wiggleRate = 8;
           var wiggleSize = 0.5;
           this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
-          if (Math.random() < 0.005) {
+          if (this.entities[i].sin % 180 == 0 && Math.random() < 0.25) {
+            console.log('NYAH');
             this.entities[i].swimming = false;
             this.entities[i].vel = [0, 0];
           }

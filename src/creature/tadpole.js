@@ -1,28 +1,40 @@
+/**
+ * This class contains all information for each tadpole
+ */
+
 import colours from '../colours';
 
 class Tadpole {
   constructor(canvas) {
+    // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+    // Random size 3-4
     this.size = 3 + Math.random();
+    // Initially still
     this.vel = [0, 0];
-    let leaderChance = 0.015
-    this.leader = Math.random() < leaderChance;
+    // 2% chance to become leader
+    this.leader = Math.random() < 0.02;
+    // follow noone until assigned
     this.follow = null;
-    this.eagerness = Math.random()
-    this.changeDir = false;
+    // eagerness = how close to the leader the tadpole will follow
+    this.eagerness = Math.random();
   }
 
+  /**
+   * TICK - Moves the entity
+   */
   tick() {
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
   }
 
+  /**
+   * RENDER - Draws an black ball and two smaller grey balls behind it to
+   *  simulate a tail
+   */
   render(canvas, ctx) {
     // Draw Body
     ctx.beginPath();
-    // if (this.leader)
-    // ctx.fillStyle = colours.yellow;
-    // else
     ctx.fillStyle = colours.registration_black;
     ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
     ctx.fill();
@@ -37,6 +49,10 @@ class Tadpole {
     ctx.fill();
   }
 
+  /**
+   * GETLEADER - creates an array of leader tadpoles and radomly chooses
+   * which one it will follow
+   */
   getLeader(tadpoles) {
     let leaders = [];
     for (let i = 0; i < tadpoles.length; i++) {

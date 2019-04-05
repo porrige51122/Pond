@@ -91,8 +91,8 @@ class Pond {
 
     // Sets movement patterns for all entities
     this.movement.push(new TadMovement(this.tadpoles, canvas),
-                    new FishMovement(this.fish, canvas),
-                    new LilyMovement(this.lillies, canvas));
+                      new FishMovement(this.fish, canvas),
+                      new LilyMovement(this.lillies, canvas));
   }
 
   loop() {
