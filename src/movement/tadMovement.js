@@ -30,10 +30,12 @@ class TadMovement extends Movement {
         this.entities[i].getLeader(this.entities);
       } else {
         let leaderPos = this.entities[this.entities[i].follow].pos;
-        let length = Math.sqrt(Math.abs(Math.pow(pos[0] - leaderPos[0],2) - Math.pow(pos[1] - leaderPos[1],2)));
-        if (length == 0) {length = 1;}
+        let length = Math.sqrt(Math.abs(Math.pow(pos[0] - leaderPos[0], 2) - Math.pow(pos[1] - leaderPos[1], 2)));
+        if (length == 0) {
+          length = 1;
+        }
         if (length > this.entities[i].eagerness * this.spacing)
-          this.smoothing(i, (leaderPos[0]-pos[0])/(length * 2), (leaderPos[1]-pos[1])/(length * 2));
+          this.smoothing(i, (leaderPos[0] - pos[0]) / (length * 2), (leaderPos[1] - pos[1]) / (length * 2));
         else
           this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
 

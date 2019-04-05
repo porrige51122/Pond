@@ -1,53 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Pond</title>
   <style>
-.column {
-  flex: 50%;
-  padding: 10px;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      overflow:hidden;
+      text-align: center;
+    }
+    .column {
+      flex: 50%;
+    }
 
-.row {
-  display: flex;
-}
+    .row {
+      display: flex;
+    }
 
-.hide {
-  display: None;
-}
+    .hide {
+      display: None;
+    }
 
-.slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 25px;
-  background: #d3d3d3;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-}
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 25px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
 
+    #hide {
+      top: 0px;
+      right: 0px;
+      position: absolute;
+    }
   </style>
 </head>
+
 <body>
   <div class="row">
-    <div class="column">
+    <div style="flex: 75%;">
       <canvas id="myCanvas" width="600" height="600"></canvas>
+
     </div>
-    <div class="column">
-      <input type="checkbox" id='hide'>
+    <input type="checkbox" id='hide'>
+    <div id="menu" style="flex: 25%;">
+      <p style="text-align: right;"><b>Hide Sidebar --</b></p>
       </br>
-      <div id="menu">
-        <p>Tadpoles</p>
-        <input type="range" min="0" max="2000" value="300" class="slider" id="tadpoles">
-        <p>Fish</p>
-        <input type="range" min="0" max="20" value="5" class="slider" id="fish">
-        <p>Lillies</p>
-        <input type="range" min="0" max="10" value="3" class="slider" id="lillies">
-      </div>
+      <p>Tadpoles</p>
+      <input type="range" min="0" max="2000" value="300" class="slider" id="tadpoles">
+      <p>Fish</p>
+      <input type="range" min="0" max="20" value="5" class="slider" id="fish">
+      <p>Lillies</p>
+      <input type="range" min="0" max="10" value="3" class="slider" id="lillies">
     </div>
   </div>
 </body>
+
 </html>

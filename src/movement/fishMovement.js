@@ -22,7 +22,7 @@ class FishMovement extends Movement {
 
         let wiggleRate = 8;
         let wiggleSize = 0.5;
-        this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin/wiggleRate * Math.PI/180));
+        this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
         if (Math.random() < 0.005) {
           this.entities[i].swimming = false;
           this.entities[i].vel = [0, 0];
@@ -42,10 +42,10 @@ class FishMovement extends Movement {
         if (this.entities[i].vel[0] < 0.01 && this.entities[i].vel[1] < 0.01) {
           if (Math.random() < 0.5) {
             this.entities[i].swimming = true;
-            this.entities[i].vel = [(Math.random() - 0.5) * 2,(Math.random() - 0.5) * 2];
+            this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
           } else {
             let speed = 5;
-            this.entities[i].vel = [(Math.random() - 0.5) * speed,(Math.random() - 0.5) * speed];
+            this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.5) * speed];
           }
         }
       }

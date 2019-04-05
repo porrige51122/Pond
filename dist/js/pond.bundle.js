@@ -157,10 +157,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Fish = function () {
-  function Fish(pos) {
+  function Fish(canvas) {
     _classCallCheck(this, Fish);
 
-    this.pos = pos;
+    this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     this.size = 10 + Math.random() * 5;
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     this.twitching = 0;
@@ -228,10 +228,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var lily = function () {
-  function lily(pos) {
+  function lily(canvas) {
     _classCallCheck(this, lily);
 
-    this.pos = pos;
+    this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     this.size = 50;
     this.vel = [Math.random() - 0.5, Math.random() - 0.5];
     this.startAngle = Math.PI * 2 * Math.random();
@@ -363,10 +363,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Tadpole = function () {
-  function Tadpole(pos) {
+  function Tadpole(canvas) {
     _classCallCheck(this, Tadpole);
 
-    this.pos = pos;
+    this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     this.size = 3 + Math.random();
     this.vel = [0, 0];
     var leaderChance = 0.015;
@@ -750,7 +750,10 @@ exports.default = TadMovement;
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * POND: This is the controller of the entire program, this is where
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * the program loop is run, containing: render, tick and resize.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
 
@@ -790,14 +793,17 @@ var Pond = function () {
 
     this.canvas = canvas;
     this.ctx = ctx;
-
-    // canvas elements
     this.eventListeners();
-
     this.resize();
     this.init();
     this.loop();
   }
+
+  /**
+   * HTML canvas elements are initiated here and event listeners
+   * are created
+   */
+
 
   _createClass(Pond, [{
     key: 'eventListeners',
@@ -810,34 +816,42 @@ var Pond = function () {
       var lilySlider = document.getElementById('lillies');
 
       this.hidden = false;
+      this.screenRatio = 3 / 4;
       hide.addEventListener('change', function (e) {
         if (e.target.checked) {
           _this.hidden = true;
+          _this.screenRatio = 1;
           document.getElementById('menu').classList.add("hide");
         } else {
           _this.hidden = false;
+          _this.screenRatio = 3 / 4;
           document.getElementById('menu').classList.remove("hide");
         }
       });
 
+      // If the slider changes, update the size and reinitialize
       this.tadpoleSize = tadSlider.value;
       tadSlider.addEventListener('mouseup', function (e) {
         _this.tadpoleSize = tadSlider.value;
         _this.init();
       });
-
       this.fishSize = fishSlider.value;
       fishSlider.addEventListener('mouseup', function (e) {
         _this.fishSize = fishSlider.value;
         _this.init();
       });
-
       this.lilySize = lilySlider.value;
       lilySlider.addEventListener('mouseup', function (e) {
         _this.lilySize = lilySlider.value;
         _this.init();
       });
     }
+
+    /**
+     * All entities are added to their arrays and ther corresponding
+     * Movements are initiated
+     */
+
   }, {
     key: 'init',
     value: function init() {
@@ -846,21 +860,24 @@ var Pond = function () {
       this.tadpoles = [];
       this.fish = [];
       this.lillies = [];
+      this.movement = [];
 
+      // Pushes all tadpoles to their array and sets the first one as
+      // leader in case there are no tadpole leaders.
       for (var i = 0; i < this.tadpoleSize; i++) {
-        this.tadpoles.push(new _tadpole2.default([Math.random() * canvas.width, Math.random() * canvas.height]));
-      }this.tadpoles[0].leader = true;
-      this.tadpoles.forEach(function (tad) {
+        this.tadpoles.push(new _tadpole2.default(canvas));
+      }this.tadpoles.forEach(function (tad) {
         return tad.getLeader(_this2.tadpoles);
       });
+      this.tadpoles[0].leader = true;
 
+      // Pushes all fish and lillies to their arrays
       for (var _i = 0; _i < this.fishSize; _i++) {
-        this.fish.push(new _fish2.default([Math.random() * canvas.width, Math.random() * canvas.height]));
+        this.fish.push(new _fish2.default(canvas));
       }for (var _i2 = 0; _i2 < this.lilySize; _i2++) {
-        this.lillies.push(new _lily2.default([Math.random() * canvas.width, Math.random() * canvas.height]));
-      }this.tadMovement = new _tadMovement2.default(this.tadpoles, canvas);
-      this.fishMovement = new _fishMovement2.default(this.fish, canvas);
-      this.lilyMovement = new _lilyMovement2.default(this.lillies, canvas);
+        this.lillies.push(new _lily2.default(canvas));
+      } // Sets movement patterns for all entities
+      this.movement.push(new _tadMovement2.default(this.tadpoles, canvas), new _fishMovement2.default(this.fish, canvas), new _lilyMovement2.default(this.lillies, canvas));
     }
   }, {
     key: 'loop',
@@ -874,13 +891,18 @@ var Pond = function () {
         _this3.loop();
       });
     }
+
+    /**
+     * All tick functions are run for all the movements and for each
+     * entity
+     */
+
   }, {
     key: 'tick',
     value: function tick() {
-      this.tadMovement.move();
-      this.fishMovement.move();
-      this.lilyMovement.move();
-
+      this.movement.forEach(function (m) {
+        return m.move();
+      });
       this.tadpoles.forEach(function (t) {
         return t.tick();
       });
@@ -891,11 +913,19 @@ var Pond = function () {
         return l.tick();
       });
     }
+
+    /**
+     * All render functions are run for all entities
+     */
+
   }, {
     key: 'render',
     value: function render() {
+      // Clear screen
       ctx.fillStyle = this.grd;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw to canvas in order of layers
       this.tadpoles.forEach(function (t) {
         return t.render(canvas, ctx);
       });
@@ -906,18 +936,23 @@ var Pond = function () {
         return l.render(canvas, ctx);
       });
     }
+
+    /**
+     * This is run every frame loop but only gets past the if statement
+     * if the window size has changed
+     */
+
   }, {
     key: 'resize',
     value: function resize() {
-      var boundary = 25;
-      var ratio = 3 / 4;
-      if (this.hidden) {
-        ratio = 9 / 10;
-      }
-      if (canvas.width != window.innerWidth * ratio - boundary || canvas.height != window.innerHeight - boundary) {
-        canvas.width = window.innerWidth * ratio - boundary;
-        canvas.height = window.innerHeight - boundary;
-        if (canvas.width > canvas.height) this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width / 4, canvas.width / 2, canvas.height / 2, canvas.width / 2);else this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.height / 4, canvas.width / 2, canvas.height / 2, canvas.height / 2);
+      if (canvas.width != window.innerWidth * this.screenRatio || canvas.height != window.innerHeight) {
+        canvas.width = window.innerWidth * this.screenRatio;
+        canvas.height = window.innerHeight;
+        if (canvas.width > canvas.height) {
+          this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width / 4, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+        } else {
+          this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.height / 4, canvas.width / 2, canvas.height / 2, canvas.height / 2);
+        }
         this.grd.addColorStop(0, _colours2.default.ocean_blue);
         this.grd.addColorStop(1, _colours2.default.deep_blue);
       }
