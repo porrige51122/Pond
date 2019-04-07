@@ -523,7 +523,7 @@ var FishMovement = function (_Movement) {
 
   _createClass(FishMovement, [{
     key: 'move',
-    value: function move() {
+    value: function move(water) {
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
         this.edgeCheck(i, pos);
@@ -544,7 +544,8 @@ var FishMovement = function (_Movement) {
               this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
             } else {
               var speed = 5;
-              this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.5) * speed];
+              this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.65) * speed];
+              water.dropAt(this.entities[i].pos[0], this.entities[i].pos[1]);
             }
           }
         }
@@ -949,8 +950,10 @@ var Pond = function () {
   }, {
     key: 'tick',
     value: function tick() {
+      var _this4 = this;
+
       this.movement.forEach(function (m) {
-        return m.move();
+        return m.move(_this4.water);
       });
       this.tadpoles.forEach(function (t) {
         return t.tick();

@@ -6,7 +6,7 @@ class FishMovement extends Movement {
     this.spacing = 20;
   }
 
-  move() {
+  move(water) {
     for (let i = 0; i < this.entities.length; i++) {
       let pos = this.entities[i].pos;
       this.edgeCheck(i, pos);
@@ -27,7 +27,8 @@ class FishMovement extends Movement {
             this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
           } else {
             let speed = 5;
-            this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.5) * speed];
+            this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.65) * speed];
+            water.dropAt(this.entities[i].pos[0], this.entities[i].pos[1])
           }
         }
       }

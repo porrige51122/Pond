@@ -119,7 +119,7 @@ class Pond {
    * entity
    */
   tick() {
-    this.movement.forEach((m) => m.move());
+    this.movement.forEach((m) => m.move(this.water));
     this.tadpoles.forEach((t) => t.tick());
     this.fish.forEach((f) => f.tick());
     this.lillies.forEach((l) => l.tick());

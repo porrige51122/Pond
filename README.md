@@ -1,6 +1,7 @@
-# Pond V 2.0.1
+# Pond V2.0.3
 ## Description
-Pond is a tranquil home for you to take your mind off what you were doing and to calm you down. Current features include:
+Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
+Current features include:
  * ⚫ Tadpoles ⚫
    * Small little tadpoles that dance around your screen in groups
  * 🐟 Fish 🐟
@@ -18,7 +19,7 @@ Planned features:
  * ⚙ Optimisation ⚙
    * I want your pond to be tailored the way *YOU* want it therefore I want the program to run faster in general so you can fit as much as you want in it
  * 🎣 FEAR!!!! 🎣
-   * A big mouse is scary for the little fishes, so I want this to be represented properly
+   * A big pointer is scary for the little fishes, so I want this to be represented properly
  * 🎶 Music 🎶
    * No relaxation is perfect without some optional Lo-Fi tunes in the background
 
