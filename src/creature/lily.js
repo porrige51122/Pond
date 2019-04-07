@@ -34,6 +34,7 @@ class Lily {
   /**
    * RENDER - Draws the pad with a segment if it has a lily and if it doesn't
    * it draws a full pad with a flower on it
+   * Lily = full size dark circle & 3/4 light circle within
    */
   render(canvas, ctx) {
     if (!this.isFlower) {

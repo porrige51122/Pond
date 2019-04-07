@@ -7,6 +7,7 @@
 import colours from './colours';
 import Tadpole from './creature/tadpole';
 import Fish from './creature/fish';
+import Water from './water';
 import Lily from './creature/lily';
 import TadMovement from './movement/tadMovement';
 import FishMovement from './movement/fishMovement';
@@ -17,6 +18,9 @@ class Pond {
   constructor(canvas, ctx) {
     this.canvas = canvas;
     this.ctx = ctx;
+
+    this.water = new Water(canvas, ctx);
+
     this.eventListeners();
     this.resize();
     this.init();
@@ -63,6 +67,12 @@ class Pond {
       this.lilySize = lilySlider.value;
       this.init()
     });
+
+    canvas.addEventListener("mousemove", () => {
+      if (Math.random() < 0.2) {
+        this.water.dropAt(event.clientX, event.clientY);
+      }
+    })
   }
 
   /**
@@ -126,6 +136,7 @@ class Pond {
     // Draw to canvas in order of layers
     this.tadpoles.forEach((t) => t.render(canvas, ctx));
     this.fish.forEach((f) => f.render(canvas, ctx));
+    this.water.render();
     this.lillies.forEach((l) => l.render(canvas, ctx));
 
   }
@@ -135,7 +146,7 @@ class Pond {
    * if the window size has changed
    */
   resize() {
-    if (canvas.width != (window.innerWidth * this.screenRatio) || canvas.height != window.innerHeight) {
+    if (canvas.width != (window.innerWidth * this.screenRatio) << 0 || canvas.height != window.innerHeight) {
       canvas.width = (window.innerWidth * this.screenRatio);
       canvas.height = window.innerHeight;
       if (canvas.width > canvas.height) {
@@ -145,6 +156,7 @@ class Pond {
       }
       this.grd.addColorStop(0, colours.ocean_blue);
       this.grd.addColorStop(1, colours.deep_blue);
+      this.water.resize();
     }
   }
 

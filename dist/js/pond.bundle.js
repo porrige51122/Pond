@@ -250,9 +250,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var lily = function () {
-  function lily(canvas) {
-    _classCallCheck(this, lily);
+var Lily = function () {
+  function Lily(canvas) {
+    _classCallCheck(this, Lily);
 
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
@@ -273,7 +273,7 @@ var lily = function () {
    */
 
 
-  _createClass(lily, [{
+  _createClass(Lily, [{
     key: 'tick',
     value: function tick() {
       if (this.clockwise) this.startAngle += 0.001;else this.startAngle -= 0.001;
@@ -284,6 +284,7 @@ var lily = function () {
     /**
      * RENDER - Draws the pad with a segment if it has a lily and if it doesn't
      * it draws a full pad with a flower on it
+     * Lily = full size dark circle & 3/4 light circle within
      */
 
   }, {
@@ -323,10 +324,6 @@ var lily = function () {
         this.drawFlower(ctx);
       }
     }
-
-    /**
-     *
-     */
 
     // Draws 3 rings with reducing size and lighter colours
 
@@ -371,10 +368,10 @@ var lily = function () {
     }
   }]);
 
-  return lily;
+  return Lily;
 }();
 
-exports.default = lily;
+exports.default = Lily;
 
 /***/ }),
 
@@ -529,36 +526,17 @@ var FishMovement = function (_Movement) {
     value: function move() {
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
+        this.edgeCheck(i, pos);
         if (this.entities[i].swimming) {
-          if (pos[0] < 0 + this.spacing) {
-            this.smoothing(i, 1, 0);
-          } else if (pos[1] < 0 + this.spacing) {
-            this.smoothing(i, 0, 1);
-          } else if (pos[0] > this.canvas.width - this.spacing * 2) {
-            this.smoothing(i, -1, 0);
-          } else if (pos[1] > this.canvas.height - this.spacing * 2) {
-            this.smoothing(i, 0, -1);
-          }
-
           var wiggleRate = 8;
           var wiggleSize = 0.5;
           this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
-          if (this.entities[i].sin % 180 == 0 && Math.random() < 0.25) {
-            console.log('NYAH');
+          if (Math.random() < 0.005) {
             this.entities[i].swimming = false;
             this.entities[i].vel = [0, 0];
           }
           this.slowing(i, 2);
         } else {
-          if (pos[0] < 0 + this.spacing) {
-            this.smoothing(i, 1, 0);
-          } else if (pos[1] < 0 + this.spacing) {
-            this.smoothing(i, 0, 5);
-          } else if (pos[0] > this.canvas.width - this.spacing * 2) {
-            this.smoothing(i, -1, 0);
-          } else if (pos[1] > this.canvas.height - this.spacing * 2) {
-            this.smoothing(i, 0, -5);
-          }
           this.reduce(i);
           if (this.entities[i].vel[0] < 0.01 && this.entities[i].vel[1] < 0.01) {
             if (Math.random() < 0.5) {
@@ -634,15 +612,7 @@ var LilyMovement = function (_Movement) {
     value: function move() {
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
-        if (pos[0] < 0 + this.spacing) {
-          this.smoothing(i, 1, 0);
-        } else if (pos[1] < 0 + this.spacing) {
-          this.smoothing(i, 0, 5);
-        } else if (pos[0] > this.canvas.width - this.spacing * 2) {
-          this.smoothing(i, -1, 0);
-        } else if (pos[1] > this.canvas.height - this.spacing * 2) {
-          this.smoothing(i, 0, -5);
-        }
+        this.edgeCheck(i, pos);
         this.slowing(i, 0.1);
       }
     }
@@ -684,6 +654,19 @@ var Movement = function () {
   _createClass(Movement, [{
     key: "move",
     value: function move() {}
+  }, {
+    key: "edgeCheck",
+    value: function edgeCheck(index, pos) {
+      if (pos[0] < 0 + this.spacing) {
+        this.smoothing(index, 1, 0);
+      } else if (pos[1] < 0 + this.spacing) {
+        this.smoothing(index, 0, 1);
+      } else if (pos[0] > this.canvas.width - this.spacing * 2) {
+        this.smoothing(index, -1, 0);
+      } else if (pos[1] > this.canvas.height - this.spacing * 2) {
+        this.smoothing(index, 0, -1);
+      }
+    }
   }, {
     key: "smoothing",
     value: function smoothing(index, velx, vely) {
@@ -756,15 +739,7 @@ var TadMovement = function (_Movement) {
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
         // If near the edge, move away
-        if (pos[0] < 0 + this.spacing) {
-          this.smoothing(i, 1, 0);
-        } else if (pos[1] < 0 + this.spacing) {
-          this.smoothing(i, 0, 1);
-        } else if (pos[0] > this.canvas.width - this.spacing * 2) {
-          this.smoothing(i, -1, 0);
-        } else if (pos[1] > this.canvas.height - this.spacing * 2) {
-          this.smoothing(i, 0, -1);
-        }
+        this.edgeCheck(i, pos);
         // Leader = random Movement
         // Non Leader = follow designated leader
         if (this.entities[i].leader) {
@@ -828,6 +803,10 @@ var _fish = __webpack_require__(/*! ./creature/fish */ "./src/creature/fish.js")
 
 var _fish2 = _interopRequireDefault(_fish);
 
+var _water = __webpack_require__(/*! ./water */ "./src/water.js");
+
+var _water2 = _interopRequireDefault(_water);
+
 var _lily = __webpack_require__(/*! ./creature/lily */ "./src/creature/lily.js");
 
 var _lily2 = _interopRequireDefault(_lily);
@@ -854,6 +833,9 @@ var Pond = function () {
 
     this.canvas = canvas;
     this.ctx = ctx;
+
+    this.water = new _water2.default(canvas, ctx);
+
     this.eventListeners();
     this.resize();
     this.init();
@@ -905,6 +887,12 @@ var Pond = function () {
       lilySlider.addEventListener('mouseup', function (e) {
         _this.lilySize = lilySlider.value;
         _this.init();
+      });
+
+      canvas.addEventListener("mousemove", function () {
+        if (Math.random() < 0.2) {
+          _this.water.dropAt(event.clientX, event.clientY);
+        }
       });
     }
 
@@ -993,6 +981,7 @@ var Pond = function () {
       this.fish.forEach(function (f) {
         return f.render(canvas, ctx);
       });
+      this.water.render();
       this.lillies.forEach(function (l) {
         return l.render(canvas, ctx);
       });
@@ -1006,7 +995,7 @@ var Pond = function () {
   }, {
     key: 'resize',
     value: function resize() {
-      if (canvas.width != window.innerWidth * this.screenRatio || canvas.height != window.innerHeight) {
+      if (canvas.width != window.innerWidth * this.screenRatio << 0 || canvas.height != window.innerHeight) {
         canvas.width = window.innerWidth * this.screenRatio;
         canvas.height = window.innerHeight;
         if (canvas.width > canvas.height) {
@@ -1016,6 +1005,7 @@ var Pond = function () {
         }
         this.grd.addColorStop(0, _colours2.default.ocean_blue);
         this.grd.addColorStop(1, _colours2.default.deep_blue);
+        this.water.resize();
       }
     }
   }]);
@@ -1026,6 +1016,182 @@ var Pond = function () {
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var pond = new Pond(canvas, ctx);
+
+/***/ }),
+
+/***/ "./src/water.js":
+/*!**********************!*\
+  !*** ./src/water.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ *  This class contains all the water ripple effects to the pond
+ */
+
+var Water = function () {
+  function Water(canvas, ctx) {
+    _classCallCheck(this, Water);
+
+    // For ease of access
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.width = canvas.width;
+    this.height = canvas.height;
+    this.halfWidth = this.width >> 1;
+    this.halfHeight = this.height >> 1;
+
+    this.oldIdx = this.width;
+    this.newIdx = this.width * (this.height + 3);
+    this.rippleRad = 5;
+
+    // Size of each array (space for 2 images)
+    this.size = this.width * (this.height + 2) * 2;
+    this.rippleMap = [];
+    this.lastMap = [];
+
+    for (var i = 0; i < this.size; i++) {
+      this.lastMap[i] = 0;
+      this.rippleMap[i] = 0;
+    }
+
+    this.mapIdx;
+
+    // Texture = pond, ripple = new filtered layer
+    this.ripple;
+    this.texture;
+  }
+
+  /**
+   * Takes in the original canvas then adds effects and draws it back
+   * to the canvas
+   */
+
+
+  _createClass(Water, [{
+    key: "render",
+    value: function render() {
+      // Gets the images
+      this.texture = this.ctx.getImageData(0, 0, this.width, this.height);
+      this.ripple = this.ctx.getImageData(0, 0, this.width, this.height);
+
+      var i = void 0;
+      var a = void 0,
+          b = void 0;
+      var data = void 0,
+          oldData = void 0;
+      var newPixel = void 0,
+          curPixel = void 0;
+
+      i = this.oldIdx;
+      this.oldIdx = this.newIdx;
+      this.newIdx = i;
+
+      i = 0;
+      this.mapIdx = this.oldIdx;
+
+      for (var y = 0; y < this.height; y++) {
+        for (var x = 0; x < this.width; x++) {
+          data = this.rippleMap[this.mapIdx - this.width] + this.rippleMap[this.mapIdx + this.width] + this.rippleMap[this.mapIdx - 1] + this.rippleMap[this.mapIdx + 1] >> 1;
+
+          data -= this.rippleMap[this.newIdx + i];
+
+          data -= data >> 6;
+
+          this.rippleMap[this.newIdx + i] = data;
+
+          data = 1024 - data;
+
+          oldData = this.lastMap[i];
+          this.lastMap[i] = data;
+
+          if (oldData != data) {
+            a = ((x - this.halfWidth) * data / 1024 << 0) + this.halfWidth;
+            b = ((y - this.halfHeight) * data / 1024 << 0) + this.halfHeight;
+
+            if (a >= this.width) a = this.width - 1;
+            if (a < 0) a = 0;
+            if (b >= this.height) b = this.height - 1;
+            if (b < 0) b = 0;
+
+            newPixel = (a + b * this.width) * 4;
+            curPixel = i * 4;
+            this.ripple.data[curPixel] = this.texture.data[newPixel];
+            this.ripple.data[curPixel + 1] = this.texture.data[newPixel + 1];
+            this.ripple.data[curPixel + 2] = this.texture.data[newPixel + 2];
+          }
+          this.mapIdx++;
+          i++;
+        }
+      }
+
+      this.ctx.putImageData(this.ripple, 0, 0);
+    }
+
+    /**
+     * Resize method recalibrates all the settings such as width and height
+     * and size of arrays
+     */
+
+  }, {
+    key: "resize",
+    value: function resize() {
+      this.width = this.canvas.width;
+      this.height = this.canvas.height;
+
+      this.oldIdx = this.width;
+      this.newIdx = this.width * (this.height + 3);
+      this.rippleRad = 2;
+
+      this.size = this.width * (this.height + 2) * 2;
+
+      for (var i = 0; i < this.size; i++) {
+        this.lastMap[i] = 0;
+        this.rippleMap[i] = 0;
+      }
+
+      this.mapIdx;
+    }
+
+    /**
+     * Simulates a drop starting at the given coordinates
+     */
+
+  }, {
+    key: "dropAt",
+    value: function dropAt(dx, dy) {
+      dx <<= 0;
+      dy <<= 0;
+
+      for (var j = dy - this.rippleRad; j < dy + this.rippleRad; j++) {
+        for (var k = dx - this.rippleRad; k < dx + this.rippleRad; k++) {
+          this.rippleMap[this.oldIdx + j * this.width + k] += 512;
+        }
+      }
+    }
+  }, {
+    key: "randomDrop",
+    value: function randomDrop() {
+      this.dropAt(Math.random() * this.width, Math.random() * this.height);
+    }
+  }]);
+
+  return Water;
+}();
+
+exports.default = Water;
 
 /***/ })
 
