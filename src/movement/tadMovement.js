@@ -1,3 +1,8 @@
+/*
+ * TADMOVEMENT
+ * All of the movement patterns for tadpoles are contained here
+ */
+
 import Movement from './movement'
 
 class TadMovement extends Movement {
@@ -7,36 +12,48 @@ class TadMovement extends Movement {
   }
 
   move() {
+    // Chance that the tadpole will change their leadership state
+    let leaderChance = 0.0000005;
+
+    // Chance that the tadpole will change the leader they are following
+    let followChance = 0.00002;
+
+
     for (let i = 0; i < this.entities.length; i++) {
       let pos = this.entities[i].pos;
-      // If near the edge, move away
       this.edgeCheck(i, pos);
-      // Leader = random Movement
-      // Non Leader = follow designated leader
-      if (this.entities[i].leader) {
+
+      if (this.entities[i].leader) { // Leader
+        // Random movement
         this.smoothing(i, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2);
-        if (Math.random() < 0.0000005) {
+
+        if (Math.random() < leaderChance) {
           this.entities[i].leader = false;
         }
-      } else if (this.entities[i].follow == null) {
-        this.entities[i].getLeader(this.entities);
-      } else {
-        let leaderPos = this.entities[this.entities[i].follow].pos;
-        let length = Math.sqrt(Math.abs(Math.pow(pos[0] - leaderPos[0], 2) - Math.pow(pos[1] - leaderPos[1], 2)));
-        if (length == 0) {
-          length = 1;
-        }
-        if (length > this.entities[i].eagerness * this.spacing)
-          this.smoothing(i, (leaderPos[0] - pos[0]) / (length * 2), (leaderPos[1] - pos[1]) / (length * 2));
-        else
-          this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
 
-        if (Math.random() < 0.00002) {
+      } else if (this.entities[i].follow == null) { // Prevents error
+        this.entities[i].getLeader(this.entities);
+
+      } else { // Non Leader
+        let leaderPos = this.entities[this.entities[i].follow].pos;
+        let disX = pos[0] - leaderPos[0];
+        let disY = pos[1] - leaderPos[1];
+        let length = ((disX ** 2) - (disY ** 2)) ** (1 / 2);
+
+        if (length == 0) length = 1; // Preventing dividing by zero
+        if (length > this.entities[i].eagerness * this.spacing) {
+          this.smoothing(i, - (disX * 2) / (length), -(disY * 2) / (length));
+        } else {
+          this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
+        }
+
+        if (Math.random() < followChance) {
           this.entities[i].getLeader(this.entities);
         }
-        if (Math.random() < 0.0000005) {
+        if (Math.random() < leaderChance) {
           this.entities[i].leader = true;
         }
+
       }
       this.slowing(i, 1);
     }

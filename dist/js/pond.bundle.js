@@ -524,12 +524,14 @@ var FishMovement = function (_Movement) {
   _createClass(FishMovement, [{
     key: 'move',
     value: function move(water) {
+      var wiggleRate = 8;
+      var wiggleSize = 0.5;
+      var speed = 5;
+
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
         this.edgeCheck(i, pos);
         if (this.entities[i].swimming) {
-          var wiggleRate = 8;
-          var wiggleSize = 0.5;
           this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
           if (Math.random() < 0.005) {
             this.entities[i].swimming = false;
@@ -543,9 +545,8 @@ var FishMovement = function (_Movement) {
               this.entities[i].swimming = true;
               this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
             } else {
-              var speed = 5;
               this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.65) * speed];
-              water.dropAt(this.entities[i].pos[0], this.entities[i].pos[1]);
+              water.dropAt(pos[0], pos[1]);
             }
           }
         }
@@ -644,17 +645,28 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/*
+ * MOVEMENT ABSTRACT CLASS
+ * contains all universal movement methods
+ */
+
 var Movement = function () {
-  function Movement(entity, canvas) {
+  function Movement(entities, canvas) {
     _classCallCheck(this, Movement);
 
     this.canvas = canvas;
-    this.entities = entity;
+    this.entities = entities;
   }
 
   _createClass(Movement, [{
     key: "move",
     value: function move() {}
+
+    /*
+     * EDGECHECK - checks to see if entity is off the edge of the canvas
+     * If so moves the entity back onto the canvas
+     */
+
   }, {
     key: "edgeCheck",
     value: function edgeCheck(index, pos) {
@@ -668,13 +680,24 @@ var Movement = function () {
         this.smoothing(index, 0, -1);
       }
     }
+
+    /*
+     * SMOOTHING - Changes the velocity slightly to make movement smoother
+     */
+
   }, {
     key: "smoothing",
     value: function smoothing(index, velx, vely) {
-      var smoothing = 0.005;
+      var smoothing = 0.05;
       var prevVel = this.entities[index].vel;
       this.entities[index].vel = [prevVel[0] + velx * smoothing, prevVel[1] + vely * smoothing];
     }
+
+    /*
+     * SLOWING - Reduces the velocity to the limit so the entity does not go
+     * too fast
+     */
+
   }, {
     key: "slowing",
     value: function slowing(entity, limit) {
@@ -720,7 +743,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * TADMOVEMENT
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * All of the movement patterns for tadpoles are contained here
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 var TadMovement = function (_Movement) {
   _inherits(TadMovement, _Movement);
@@ -737,31 +763,45 @@ var TadMovement = function (_Movement) {
   _createClass(TadMovement, [{
     key: 'move',
     value: function move() {
+      // Chance that the tadpole will change their leadership state
+      var leaderChance = 0.0000005;
+
+      // Chance that the tadpole will change the leader they are following
+      var followChance = 0.00002;
+
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
-        // If near the edge, move away
         this.edgeCheck(i, pos);
-        // Leader = random Movement
-        // Non Leader = follow designated leader
+
         if (this.entities[i].leader) {
+          // Leader
+          // Random movement
           this.smoothing(i, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2);
-          if (Math.random() < 0.0000005) {
+
+          if (Math.random() < leaderChance) {
             this.entities[i].leader = false;
           }
         } else if (this.entities[i].follow == null) {
+          // Prevents error
           this.entities[i].getLeader(this.entities);
         } else {
+          // Non Leader
           var leaderPos = this.entities[this.entities[i].follow].pos;
-          var length = Math.sqrt(Math.abs(Math.pow(pos[0] - leaderPos[0], 2) - Math.pow(pos[1] - leaderPos[1], 2)));
-          if (length == 0) {
-            length = 1;
-          }
-          if (length > this.entities[i].eagerness * this.spacing) this.smoothing(i, (leaderPos[0] - pos[0]) / (length * 2), (leaderPos[1] - pos[1]) / (length * 2));else this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
+          var disX = pos[0] - leaderPos[0];
+          var disY = pos[1] - leaderPos[1];
+          var length = Math.pow(Math.pow(disX, 2) - Math.pow(disY, 2), 1 / 2);
 
-          if (Math.random() < 0.00002) {
+          if (length == 0) length = 1; // Preventing dividing by zero
+          if (length > this.entities[i].eagerness * this.spacing) {
+            this.smoothing(i, -(disX * 2) / length, -(disY * 2) / length);
+          } else {
+            this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
+          }
+
+          if (Math.random() < followChance) {
             this.entities[i].getLeader(this.entities);
           }
-          if (Math.random() < 0.0000005) {
+          if (Math.random() < leaderChance) {
             this.entities[i].leader = true;
           }
         }

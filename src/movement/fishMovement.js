@@ -7,12 +7,14 @@ class FishMovement extends Movement {
   }
 
   move(water) {
+    let wiggleRate = 8;
+    let wiggleSize = 0.5;
+    let speed = 5;
+
     for (let i = 0; i < this.entities.length; i++) {
       let pos = this.entities[i].pos;
       this.edgeCheck(i, pos);
       if (this.entities[i].swimming) {
-        let wiggleRate = 8;
-        let wiggleSize = 0.5;
         this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
         if (Math.random() < 0.005) {
           this.entities[i].swimming = false;
@@ -26,9 +28,8 @@ class FishMovement extends Movement {
             this.entities[i].swimming = true;
             this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
           } else {
-            let speed = 5;
             this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.65) * speed];
-            water.dropAt(this.entities[i].pos[0], this.entities[i].pos[1])
+            water.dropAt(pos[0], pos[1]);
           }
         }
       }

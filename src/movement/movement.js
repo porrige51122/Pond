@@ -1,11 +1,20 @@
+/*
+ * MOVEMENT ABSTRACT CLASS
+ * contains all universal movement methods
+ */
+
 class Movement {
-  constructor(entity, canvas) {
+  constructor(entities, canvas) {
     this.canvas = canvas;
-    this.entities = entity;
+    this.entities = entities;
   }
 
   move() {}
 
+  /*
+   * EDGECHECK - checks to see if entity is off the edge of the canvas
+   * If so moves the entity back onto the canvas
+   */
   edgeCheck(index, pos) {
     if (pos[0] < 0 + this.spacing) {
       this.smoothing(index, 1, 0);
@@ -18,14 +27,20 @@ class Movement {
     }
   }
 
+  /*
+   * SMOOTHING - Changes the velocity slightly to make movement smoother
+   */
   smoothing(index, velx, vely) {
-    let smoothing = 0.005;
+    let smoothing = 0.05;
     let prevVel = this.entities[index].vel;
     this.entities[index].vel = [prevVel[0] + velx * smoothing,
-      prevVel[1] + vely * smoothing
-    ];
+                                prevVel[1] + vely * smoothing];
   }
 
+  /*
+   * SLOWING - Reduces the velocity to the limit so the entity does not go
+   * too fast
+   */
   slowing(entity, limit) {
     let prevVel = this.entities[entity].vel;
     if (prevVel[0] > limit)
