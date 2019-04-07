@@ -4,8 +4,18 @@ class Movement {
     this.entities = entity;
   }
 
-  move() {
+  move() {}
 
+  edgeCheck(index, pos) {
+    if (pos[0] < 0 + this.spacing) {
+      this.smoothing(index, 1, 0);
+    } else if (pos[1] < 0 + this.spacing) {
+      this.smoothing(index, 0, 1);
+    } else if (pos[0] > this.canvas.width - (this.spacing * 2)) {
+      this.smoothing(index, -1, 0);
+    } else if (pos[1] > this.canvas.height - (this.spacing * 2)) {
+      this.smoothing(index, 0, -1);
+    }
   }
 
   smoothing(index, velx, vely) {

@@ -9,36 +9,17 @@ class FishMovement extends Movement {
   move() {
     for (let i = 0; i < this.entities.length; i++) {
       let pos = this.entities[i].pos;
+      this.edgeCheck(i, pos);
       if (this.entities[i].swimming) {
-        if (pos[0] < 0 + this.spacing) {
-          this.smoothing(i, 1, 0);
-        } else if (pos[1] < 0 + this.spacing) {
-          this.smoothing(i, 0, 1);
-        } else if (pos[0] > this.canvas.width - (this.spacing * 2)) {
-          this.smoothing(i, -1, 0);
-        } else if (pos[1] > this.canvas.height - (this.spacing * 2)) {
-          this.smoothing(i, 0, -1);
-        }
-
         let wiggleRate = 8;
         let wiggleSize = 0.5;
         this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
-        if (this.entities[i].sin % 180 == 0 && Math.random() < 0.25) {
-          console.log('NYAH');
+        if (Math.random() < 0.005) {
           this.entities[i].swimming = false;
           this.entities[i].vel = [0, 0];
         }
         this.slowing(i, 2);
       } else {
-        if (pos[0] < 0 + this.spacing) {
-          this.smoothing(i, 1, 0);
-        } else if (pos[1] < 0 + this.spacing) {
-          this.smoothing(i, 0, 5);
-        } else if (pos[0] > this.canvas.width - (this.spacing * 2)) {
-          this.smoothing(i, -1, 0);
-        } else if (pos[1] > this.canvas.height - (this.spacing * 2)) {
-          this.smoothing(i, 0, -5);
-        }
         this.reduce(i);
         if (this.entities[i].vel[0] < 0.01 && this.entities[i].vel[1] < 0.01) {
           if (Math.random() < 0.5) {

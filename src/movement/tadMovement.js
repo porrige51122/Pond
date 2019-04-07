@@ -10,15 +10,7 @@ class TadMovement extends Movement {
     for (let i = 0; i < this.entities.length; i++) {
       let pos = this.entities[i].pos;
       // If near the edge, move away
-      if (pos[0] < 0 + this.spacing) {
-        this.smoothing(i, 1, 0);
-      } else if (pos[1] < 0 + this.spacing) {
-        this.smoothing(i, 0, 1);
-      } else if (pos[0] > this.canvas.width - (this.spacing * 2)) {
-        this.smoothing(i, -1, 0);
-      } else if (pos[1] > this.canvas.height - (this.spacing * 2)) {
-        this.smoothing(i, 0, -1);
-      }
+      this.edgeCheck(i, pos);
       // Leader = random Movement
       // Non Leader = follow designated leader
       if (this.entities[i].leader) {
