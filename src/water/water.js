@@ -42,10 +42,10 @@ class Water {
   /**
    * Simulates a drop starting at the given coordinates
    */
-  dropAt(dx, dy) {
+  dropAt(dx, dy, vx = 0, vy = 0) {
     dx <<= 0;
     dy <<= 0;
-    this.ripples.push(new Ripple(dx, dy));
+    this.ripples.push(new Ripple(dx, dy, vx, vy));
   }
 
   randomDrop() {

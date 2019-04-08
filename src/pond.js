@@ -69,7 +69,7 @@ class Pond {
     });
 
     canvas.addEventListener("mousemove", () => {
-      if (Math.random() < 0.05) {
+      if (Math.random() < 0.5) {
         this.water.dropAt(event.clientX, event.clientY);
       }
     })
