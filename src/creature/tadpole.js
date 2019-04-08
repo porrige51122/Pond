@@ -12,8 +12,8 @@ class Tadpole {
     this.size = 3 + Math.random();
     // Initially still
     this.vel = [0, 0];
-    // 2% chance to become leader
-    this.leader = Math.random() < 0.02;
+    // 10% chance to become leader
+    this.leader = Math.random() < 0.1;
     // follow noone until assigned
     this.follow = null;
     // eagerness = how close to the leader the tadpole will follow

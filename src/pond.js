@@ -69,7 +69,7 @@ class Pond {
     });
 
     canvas.addEventListener("mousemove", () => {
-      if (Math.random() < 0.2) {
+      if (Math.random() < 0.05) {
         this.water.dropAt(event.clientX, event.clientY);
       }
     })
@@ -122,6 +122,7 @@ class Pond {
     this.movement.forEach((m) => m.move(this.water));
     this.tadpoles.forEach((t) => t.tick());
     this.fish.forEach((f) => f.tick());
+    this.water.tick();
     this.lillies.forEach((l) => l.tick());
   }
 
@@ -130,7 +131,7 @@ class Pond {
    */
   render() {
     // Clear screen
-    ctx.fillStyle = this.grd;
+    ctx.fillStyle = colours.ocean_blue;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw to canvas in order of layers
@@ -149,13 +150,6 @@ class Pond {
     if (canvas.width != (window.innerWidth * this.screenRatio) << 0 || canvas.height != window.innerHeight) {
       canvas.width = (window.innerWidth * this.screenRatio);
       canvas.height = window.innerHeight;
-      if (canvas.width > canvas.height) {
-        this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width / 4, canvas.width / 2, canvas.height / 2, canvas.width / 2);
-      } else {
-        this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.height / 4, canvas.width / 2, canvas.height / 2, canvas.height / 2);
-      }
-      this.grd.addColorStop(0, colours.ocean_blue);
-      this.grd.addColorStop(1, colours.deep_blue);
       this.water.resize();
     }
   }
