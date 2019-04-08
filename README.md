@@ -15,7 +15,9 @@ Planned features:
  * 🌙 Day Night Cycle 🌙
    * Canvas background colours change over time to show the passing of time is not a bad thing
  * ☔ Weather ☔
-   * Rain drops to show that rain isn't just for ruining your day but for clearing your mind after a stressfull day
+   * Rain drops to show that rain isn't just for ruining your day but for clearing your mind after a stressful day
+ * ⏺ Shape ⏺
+   * The pond needs to have banks to show that the pond isn't endless. It is contained. contained by you!
  * 🍖 Food 🍖
    * The ability to drop bits of bread and feed the little fish
  * 🔞 Age 🔞

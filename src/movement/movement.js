@@ -31,7 +31,7 @@ class Movement {
    * SMOOTHING - Changes the velocity slightly to make movement smoother
    */
   smoothing(index, velx, vely) {
-    let smoothing = 0.003;
+    let smoothing = 0.005;
     let prevVel = this.entities[index].vel;
     this.entities[index].vel = [prevVel[0] + velx * smoothing,
                                 prevVel[1] + vely * smoothing];

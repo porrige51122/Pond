@@ -12,8 +12,8 @@ class Tadpole {
     this.size = 3 + Math.random();
     // Initially still
     this.vel = [0, 0];
-    // 10% chance to become leader
-    this.leader = Math.random() < 0.1;
+    // 1.5% chance to become leader
+    this.leader = Math.random() < 0.015;
     // follow noone until assigned
     this.follow = null;
     // eagerness = how close to the leader the tadpole will follow
@@ -35,7 +35,11 @@ class Tadpole {
   render(canvas, ctx) {
     // Draw Body
     ctx.beginPath();
-    ctx.fillStyle = colours.registration_black;
+    if (this.leader) {
+      ctx.fillStyle = colours.yellow;
+    } else {
+      ctx.fillStyle = colours.registration_black;
+    }
     ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
     ctx.fill();
     // Draw Tail

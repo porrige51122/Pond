@@ -411,8 +411,8 @@ var Tadpole = function () {
     this.size = 3 + Math.random();
     // Initially still
     this.vel = [0, 0];
-    // 10% chance to become leader
-    this.leader = Math.random() < 0.1;
+    // 1.5% chance to become leader
+    this.leader = Math.random() < 0.015;
     // follow noone until assigned
     this.follow = null;
     // eagerness = how close to the leader the tadpole will follow
@@ -441,7 +441,11 @@ var Tadpole = function () {
     value: function render(canvas, ctx) {
       // Draw Body
       ctx.beginPath();
-      ctx.fillStyle = _colours2.default.registration_black;
+      if (this.leader) {
+        ctx.fillStyle = _colours2.default.yellow;
+      } else {
+        ctx.fillStyle = _colours2.default.registration_black;
+      }
       ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
       ctx.fill();
       // Draw Tail
@@ -526,7 +530,7 @@ var FishMovement = function (_Movement) {
     value: function move(water) {
       var wiggleRate = 8;
       var wiggleSize = 0.5;
-      var speed = 5;
+      var speed = 1;
 
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
@@ -545,8 +549,14 @@ var FishMovement = function (_Movement) {
               this.entities[i].swimming = true;
               this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
             } else {
-              this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.65) * speed];
-              water.dropAt(pos[0], pos[1]);
+              // Setting a random direction and speed while not being in the
+              // range -1 to 1 as it is too slow
+              var velx = (Math.random() > 0.5 ? 1 : -1) * speed * Math.random() + 1;
+              var vely = (Math.random() > 0.5 ? 1 : -1) * speed * Math.random() + 1;
+              this.entities[i].vel = [velx, vely];
+
+              // Adding a water drop 
+              water.dropAt(pos[0], pos[1], this.entities[i].vel[0], this.entities[i].vel[1]);
             }
           }
         }
@@ -688,7 +698,7 @@ var Movement = function () {
   }, {
     key: "smoothing",
     value: function smoothing(index, velx, vely) {
-      var smoothing = 0.003;
+      var smoothing = 0.005;
       var prevVel = this.entities[index].vel;
       this.entities[index].vel = [prevVel[0] + velx * smoothing, prevVel[1] + vely * smoothing];
     }
@@ -780,20 +790,29 @@ var TadMovement = function (_Movement) {
 
           if (Math.random() < leaderChance) {
             this.entities[i].leader = false;
+
+            // Makes all tadpoles following that leader find a new leader
+            for (var j = 0; j < this.entities.length; j++) {
+              if (this.entities[j].follow == i) {
+                this.entities[i].getLeader(this.entities);
+              }
+            }
           }
         } else if (this.entities[i].follow == null) {
           // Prevents error
           this.entities[i].getLeader(this.entities);
         } else {
           // Non Leader
+          // Setting variables
           var leaderPos = this.entities[this.entities[i].follow].pos;
           var disX = pos[0] - leaderPos[0];
           var disY = pos[1] - leaderPos[1];
-          var length = Math.pow(Math.pow(disX, 2) - Math.pow(disY, 2), 1 / 2);
+          // Length between current position and leader position
+          var length = Math.sqrt(Math.pow(disX, 2) - Math.pow(disY, 2));
 
           if (length == 0) length = 1; // Preventing dividing by zero
           if (length > this.entities[i].eagerness * this.spacing) {
-            this.smoothing(i, -(disX * 2) / length, -(disY * 2) / length);
+            this.smoothing(i, -disX / (length * 2), -disY / (length * 2));
           } else {
             this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
           }
@@ -931,7 +950,7 @@ var Pond = function () {
       });
 
       canvas.addEventListener("mousemove", function () {
-        if (Math.random() < 0.05) {
+        if (Math.random() < 0.5) {
           _this.water.dropAt(event.clientX, event.clientY);
         }
       });
@@ -1085,19 +1104,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Ripple = function () {
   function Ripple(dx, dy) {
+    var vx = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+    var vy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
     _classCallCheck(this, Ripple);
 
     this.dx = dx;
     this.dy = dy;
+    this.vx = vx * 10;
+    this.vy = vy * 10;
     this.size = 0;
     this.w = 10;
+    // larger value == larger ripple size;
+    var maxSize = 0.05;
+    var minSize = 0.1;
+    this.maxSize = maxSize + Math.random() * (minSize - maxSize);
   }
 
   _createClass(Ripple, [{
     key: 'tick',
     value: function tick() {
-      this.size += 0.5;
-      this.w -= 0.05;
+      this.size += 0.4;
+      this.w -= this.maxSize;
     }
 
     /**
@@ -1107,12 +1135,28 @@ var Ripple = function () {
   }, {
     key: 'render',
     value: function render(canvas, ctx) {
+      var x = this.dx;
+      var y = this.dy;
+      var s = this.size;
       ctx.beginPath();
       ctx.lineWidth = this.w;
       ctx.strokeStyle = _colours2.default.deep_blue;
-      ctx.moveTo(this.dx, this.dy + this.size);
-      ctx.bezierCurveTo(this.dx + this.size * 1.25, this.dy + this.size, this.dx + this.size * 1.25, this.dy - this.size, this.dx, this.dy - this.size);
-      ctx.bezierCurveTo(this.dx - this.size * 1.25, this.dy - this.size, this.dx - this.size * 1.25, this.dy + this.size, this.dx, this.dy + this.size);
+      ctx.moveTo(x, y + s);
+      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
+      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
+      ctx.stroke();
+
+      if (s > 10) {
+        s -= 10;
+        x += this.vx;
+        y += this.vy;
+      }
+      ctx.beginPath();
+      ctx.lineWidth = this.w / 2;
+      ctx.strokeStyle = _colours2.default.deep_blue;
+      ctx.moveTo(x, y + s);
+      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
+      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
       ctx.stroke();
     }
   }]);
@@ -1205,9 +1249,12 @@ var Water = function () {
   }, {
     key: 'dropAt',
     value: function dropAt(dx, dy) {
+      var vx = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+      var vy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
       dx <<= 0;
       dy <<= 0;
-      this.ripples.push(new _ripple2.default(dx, dy));
+      this.ripples.push(new _ripple2.default(dx, dy, vx, vy));
     }
   }, {
     key: 'randomDrop',
