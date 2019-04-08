@@ -1,4 +1,4 @@
-# Pond V2.0.3
+# Pond V2.0.4
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 Current features include:
@@ -46,4 +46,4 @@ Planned features:
 
 ## Credits
 https://github.com/christopher4lis/canvas-boilerplate - Used as boilerplate code for WebPack
-http://agilerepose.weebly.com/water-ripple.html - Used to create the water effect in water.js
+http://agilerepose.weebly.com/water-ripple.html - Used to create the water effect in water.js - Not used any more but still a great resource
