@@ -12,6 +12,10 @@ Current features include:
    * Move your mouse across the water and leave little waves.
 
 Planned features:
+ * 🌙 Day Night Cycle 🌙
+   * Canvas background colours change over time to show the passing of time is not a bad thing
+ * ☔ Weather ☔
+   * Rain drops to show that rain isn't just for ruining your day but for clearing your mind after a stressfull day
  * 🍖 Food 🍖
    * The ability to drop bits of bread and feed the little fish
  * 🔞 Age 🔞
@@ -33,6 +37,12 @@ Planned features:
  * Type `npm install` (This may take a couple of minutes...)
  * Type `npm start`
    * The website should open automatically [here](http://127.0.0.1:3000)
+
+## Changelog
+2.0.4 - Changed water effect to be more cartoon like
+2.0.3 - Fish now cause ripples
+2.0.2 - Made Water effect happen when mouse moves over canvas
+2.0.1 - Water Effect added
 
 ## Credits
 https://github.com/christopher4lis/canvas-boilerplate - Used as boilerplate code for WebPack
