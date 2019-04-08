@@ -411,8 +411,8 @@ var Tadpole = function () {
     this.size = 3 + Math.random();
     // Initially still
     this.vel = [0, 0];
-    // 2% chance to become leader
-    this.leader = Math.random() < 0.02;
+    // 10% chance to become leader
+    this.leader = Math.random() < 0.1;
     // follow noone until assigned
     this.follow = null;
     // eagerness = how close to the leader the tadpole will follow
@@ -688,7 +688,7 @@ var Movement = function () {
   }, {
     key: "smoothing",
     value: function smoothing(index, velx, vely) {
-      var smoothing = 0.05;
+      var smoothing = 0.003;
       var prevVel = this.entities[index].vel;
       this.entities[index].vel = [prevVel[0] + velx * smoothing, prevVel[1] + vely * smoothing];
     }
@@ -844,7 +844,7 @@ var _fish = __webpack_require__(/*! ./creature/fish */ "./src/creature/fish.js")
 
 var _fish2 = _interopRequireDefault(_fish);
 
-var _water = __webpack_require__(/*! ./water */ "./src/water.js");
+var _water = __webpack_require__(/*! ./water/water */ "./src/water/water.js");
 
 var _water2 = _interopRequireDefault(_water);
 
@@ -931,7 +931,7 @@ var Pond = function () {
       });
 
       canvas.addEventListener("mousemove", function () {
-        if (Math.random() < 0.2) {
+        if (Math.random() < 0.05) {
           _this.water.dropAt(event.clientX, event.clientY);
         }
       });
@@ -1001,6 +1001,7 @@ var Pond = function () {
       this.fish.forEach(function (f) {
         return f.tick();
       });
+      this.water.tick();
       this.lillies.forEach(function (l) {
         return l.tick();
       });
@@ -1014,7 +1015,7 @@ var Pond = function () {
     key: 'render',
     value: function render() {
       // Clear screen
-      ctx.fillStyle = this.grd;
+      ctx.fillStyle = _colours2.default.ocean_blue;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Draw to canvas in order of layers
@@ -1041,13 +1042,6 @@ var Pond = function () {
       if (canvas.width != window.innerWidth * this.screenRatio << 0 || canvas.height != window.innerHeight) {
         canvas.width = window.innerWidth * this.screenRatio;
         canvas.height = window.innerHeight;
-        if (canvas.width > canvas.height) {
-          this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width / 4, canvas.width / 2, canvas.height / 2, canvas.width / 2);
-        } else {
-          this.grd = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.height / 4, canvas.width / 2, canvas.height / 2, canvas.height / 2);
-        }
-        this.grd.addColorStop(0, _colours2.default.ocean_blue);
-        this.grd.addColorStop(1, _colours2.default.deep_blue);
         this.water.resize();
       }
     }
@@ -1062,10 +1056,10 @@ var pond = new Pond(canvas, ctx);
 
 /***/ }),
 
-/***/ "./src/water.js":
-/*!**********************!*\
-  !*** ./src/water.js ***!
-  \**********************/
+/***/ "./src/water/ripple.js":
+/*!*****************************!*\
+  !*** ./src/water/ripple.js ***!
+  \*****************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1076,13 +1070,85 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *  This class contains all the ripple effects to the pond
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/**
- *  This class contains all the water ripple effects to the pond
- */
+var Ripple = function () {
+  function Ripple(dx, dy) {
+    _classCallCheck(this, Ripple);
+
+    this.dx = dx;
+    this.dy = dy;
+    this.size = 0;
+    this.w = 10;
+  }
+
+  _createClass(Ripple, [{
+    key: 'tick',
+    value: function tick() {
+      this.size += 0.5;
+      this.w -= 0.05;
+    }
+
+    /**
+     * Takes in the original canvas then draws the ripple
+     */
+
+  }, {
+    key: 'render',
+    value: function render(canvas, ctx) {
+      ctx.beginPath();
+      ctx.lineWidth = this.w;
+      ctx.strokeStyle = _colours2.default.deep_blue;
+      ctx.moveTo(this.dx, this.dy + this.size);
+      ctx.bezierCurveTo(this.dx + this.size * 1.25, this.dy + this.size, this.dx + this.size * 1.25, this.dy - this.size, this.dx, this.dy - this.size);
+      ctx.bezierCurveTo(this.dx - this.size * 1.25, this.dy - this.size, this.dx - this.size * 1.25, this.dy + this.size, this.dx, this.dy + this.size);
+      ctx.stroke();
+    }
+  }]);
+
+  return Ripple;
+}();
+
+exports.default = Ripple;
+
+/***/ }),
+
+/***/ "./src/water/water.js":
+/*!****************************!*\
+  !*** ./src/water/water.js ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *  This class is a manager for all ripples on the canvas
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+var _ripple = __webpack_require__(/*! ./ripple */ "./src/water/ripple.js");
+
+var _ripple2 = _interopRequireDefault(_ripple);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Water = function () {
   function Water(canvas, ctx) {
@@ -1091,96 +1157,36 @@ var Water = function () {
     // For ease of access
     this.canvas = canvas;
     this.ctx = ctx;
-    this.width = canvas.width;
-    this.height = canvas.height;
-    this.halfWidth = this.width >> 1;
-    this.halfHeight = this.height >> 1;
 
-    this.oldIdx = this.width;
-    this.newIdx = this.width * (this.height + 3);
-    this.rippleRad = 5;
-
-    // Size of each array (space for 2 images)
-    this.size = this.width * (this.height + 2) * 2;
-    this.rippleMap = [];
-    this.lastMap = [];
-
-    for (var i = 0; i < this.size; i++) {
-      this.lastMap[i] = 0;
-      this.rippleMap[i] = 0;
-    }
-
-    this.mapIdx;
-
-    // Texture = pond, ripple = new filtered layer
-    this.ripple;
-    this.texture;
+    this.ripples = [];
   }
 
-  /**
-   * Takes in the original canvas then adds effects and draws it back
-   * to the canvas
-   */
-
-
   _createClass(Water, [{
-    key: "render",
-    value: function render() {
-      // Gets the images
-      this.texture = this.ctx.getImageData(0, 0, this.width, this.height);
-      this.ripple = this.ctx.getImageData(0, 0, this.width, this.height);
-
-      var i = void 0;
-      var a = void 0,
-          b = void 0;
-      var data = void 0,
-          oldData = void 0;
-      var newPixel = void 0,
-          curPixel = void 0;
-
-      i = this.oldIdx;
-      this.oldIdx = this.newIdx;
-      this.newIdx = i;
-
-      i = 0;
-      this.mapIdx = this.oldIdx;
-
-      for (var y = 0; y < this.height; y++) {
-        for (var x = 0; x < this.width; x++) {
-          data = this.rippleMap[this.mapIdx - this.width] + this.rippleMap[this.mapIdx + this.width] + this.rippleMap[this.mapIdx - 1] + this.rippleMap[this.mapIdx + 1] >> 1;
-
-          data -= this.rippleMap[this.newIdx + i];
-
-          data -= data >> 6;
-
-          this.rippleMap[this.newIdx + i] = data;
-
-          data = 1024 - data;
-
-          oldData = this.lastMap[i];
-          this.lastMap[i] = data;
-
-          if (oldData != data) {
-            a = ((x - this.halfWidth) * data / 1024 << 0) + this.halfWidth;
-            b = ((y - this.halfHeight) * data / 1024 << 0) + this.halfHeight;
-
-            if (a >= this.width) a = this.width - 1;
-            if (a < 0) a = 0;
-            if (b >= this.height) b = this.height - 1;
-            if (b < 0) b = 0;
-
-            newPixel = (a + b * this.width) * 4;
-            curPixel = i * 4;
-            this.ripple.data[curPixel] = this.texture.data[newPixel];
-            this.ripple.data[curPixel + 1] = this.texture.data[newPixel + 1];
-            this.ripple.data[curPixel + 2] = this.texture.data[newPixel + 2];
-          }
-          this.mapIdx++;
-          i++;
+    key: 'tick',
+    value: function tick() {
+      this.ripples.forEach(function (r) {
+        return r.tick();
+      });
+      for (var i = 0; i < this.ripples.length; i++) {
+        if (this.ripples[i].w < 0) {
+          this.ripples.splice(i, 1);
+          i--;
         }
       }
+    }
 
-      this.ctx.putImageData(this.ripple, 0, 0);
+    /**
+     * Renders all ripples on the canvas
+     */
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this = this;
+
+      this.ripples.forEach(function (r) {
+        return r.render(_this.canvas, _this.ctx);
+      });
     }
 
     /**
@@ -1189,43 +1195,22 @@ var Water = function () {
      */
 
   }, {
-    key: "resize",
-    value: function resize() {
-      this.width = this.canvas.width;
-      this.height = this.canvas.height;
-
-      this.oldIdx = this.width;
-      this.newIdx = this.width * (this.height + 3);
-      this.rippleRad = 2;
-
-      this.size = this.width * (this.height + 2) * 2;
-
-      for (var i = 0; i < this.size; i++) {
-        this.lastMap[i] = 0;
-        this.rippleMap[i] = 0;
-      }
-
-      this.mapIdx;
-    }
+    key: 'resize',
+    value: function resize() {}
 
     /**
      * Simulates a drop starting at the given coordinates
      */
 
   }, {
-    key: "dropAt",
+    key: 'dropAt',
     value: function dropAt(dx, dy) {
       dx <<= 0;
       dy <<= 0;
-
-      for (var j = dy - this.rippleRad; j < dy + this.rippleRad; j++) {
-        for (var k = dx - this.rippleRad; k < dx + this.rippleRad; k++) {
-          this.rippleMap[this.oldIdx + j * this.width + k] += 512;
-        }
-      }
+      this.ripples.push(new _ripple2.default(dx, dy));
     }
   }, {
-    key: "randomDrop",
+    key: 'randomDrop',
     value: function randomDrop() {
       this.dropAt(Math.random() * this.width, Math.random() * this.height);
     }

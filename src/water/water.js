@@ -2,7 +2,7 @@
  *  This class is a manager for all ripples on the canvas
  */
 
- import Ripple from './ripple';
+import Ripple from './ripple';
 
 class Water {
   constructor(canvas, ctx) {
@@ -15,14 +15,20 @@ class Water {
   }
 
   tick() {
-
+    this.ripples.forEach((r) => r.tick());
+    for (let i = 0; i < this.ripples.length; i++) {
+      if (this.ripples[i].w < 0) {
+        this.ripples.splice(i, 1);
+        i--;
+      }
+    }
   }
 
   /**
    * Renders all ripples on the canvas
    */
   render() {
-
+    this.ripples.forEach((r) => r.render(this.canvas, this.ctx));
   }
 
   /**
