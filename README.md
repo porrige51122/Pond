@@ -18,10 +18,13 @@ Planned features:
    * Rain drops to show that rain isn't just for ruining your day but for clearing your mind after a stressful day
  * ⏺ Shape ⏺
    * The pond needs to have banks to show that the pond isn't endless. It is contained. contained by you!
+   * From here we can have a random assortment of flowers and small features
  * 🍖 Food 🍖
    * The ability to drop bits of bread and feed the little fish
+   * Big fishes eat smaller fishes and population management will occur
  * 🔞 Age 🔞
-   * You can see the full life cycle of birth to death of a tadpole to a frog
+   * You can see the full life cycle of birth to death of a tadpole to a frog and other creatures
+   * Fish will 'mate' with other fish to make smaller fish and the circle of life continues
  * ⚙ Optimisation ⚙
    * I want your pond to be tailored the way *YOU* want it therefore I want the program to run faster in general so you can fit as much as you want in it
  * 🎣 FEAR!!!! 🎣
