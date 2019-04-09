@@ -44,7 +44,7 @@ Planned features:
    * The website should open automatically [here](http://127.0.0.1:3000)
 
 ## Changelog
-2.0.4 - Changed water effect to be more cartoon like
+2.0.4 - Changed water effect to be more cartoon like and general movement fixes
 2.0.3 - Fish now cause ripples
 2.0.2 - Made Water effect happen when mouse moves over canvas
 2.0.1 - Water Effect added
