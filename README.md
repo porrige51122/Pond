@@ -1,4 +1,4 @@
-# Pond V2.0.4
+# Pond V2.1.2
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 Current features include:
@@ -44,11 +44,13 @@ Planned features:
    * The website should open automatically [here](http://127.0.0.1:3000)
 
 ## Changelog
+2.1.2 - Fish now will swim away from the edge
+2.1.1 - Pond edge added - No collisions
 2.0.4 - Changed water effect to be more cartoon like and general movement fixes
 2.0.3 - Fish now cause ripples
 2.0.2 - Made Water effect happen when mouse moves over canvas
 2.0.1 - Water Effect added
 
 ## Credits
-https://github.com/christopher4lis/canvas-boilerplate - Used as boilerplate code for WebPack
+https://github.com/christopher4lis/canvas-boilerplate - Used as boilerplate code for Web Pack
 http://agilerepose.weebly.com/water-ripple.html - Used to create the water effect in water.js - Not used any more but still a great resource
