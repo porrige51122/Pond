@@ -6,8 +6,8 @@
 import Movement from './movement'
 
 class TadMovement extends Movement {
-  constructor(entity, canvas) {
-    super(entity, canvas);
+  constructor(entity, canvas, collisions) {
+    super(entity, canvas, collisions);
     this.spacing = 20;
   }
 
@@ -47,7 +47,7 @@ class TadMovement extends Movement {
         let disX = pos[0] - leaderPos[0];
         let disY = pos[1] - leaderPos[1];
         // Length between current position and leader position
-        let length = Math.sqrt(Math.pow(disX, 2) - Math.pow(disY, 2));
+        let length = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
 
         if (length == 0) length = 1; // Preventing dividing by zero
         if (length > this.entities[i].eagerness * this.spacing) {
@@ -64,8 +64,9 @@ class TadMovement extends Movement {
         }
 
       }
-      this.slowing(i, 1);
+      this.slowing(i, 0.5);
     }
+    this.collisions.checkTadpoles(this);
   }
 }
 

@@ -7,8 +7,8 @@ class Lily {
   constructor(canvas) {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
-    // All have same size 50 - CHANGE TO RANDOM SOON
-    this.size = 50;
+    // All have same size 30 - CHANGE TO RANDOM SOON
+    this.size = 30;
     // Random velocity [-0.5, -0.5] - [0.5, 0.5]
     this.vel = [Math.random() - 0.5, Math.random() - 0.5];
     // Chooses a random point to put the split of the lily pad

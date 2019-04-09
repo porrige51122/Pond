@@ -1,8 +1,8 @@
 import Movement from './movement'
 
 class FishMovement extends Movement {
-  constructor(entity, canvas) {
-    super(entity, canvas);
+  constructor(entity, canvas, collisions) {
+    super(entity, canvas, collisions);
     this.spacing = 20;
   }
 
@@ -40,6 +40,8 @@ class FishMovement extends Movement {
         }
       }
     }
+
+    this.collisions.checkFish(this);
   }
 
   reduce(fish) {

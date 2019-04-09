@@ -10,6 +10,7 @@ import Fish from './creature/fish';
 import Lily from './creature/lily';
 
 import Water from './movement/water/water';
+import Collisions from './movement/collisions';
 import TadMovement from './movement/tadMovement';
 import FishMovement from './movement/fishMovement';
 import LilyMovement from './movement/lilyMovement';
@@ -33,38 +34,29 @@ class Pond {
    * are created
    */
   eventListeners() {
-    const hide = document.getElementById('hide');
+    const hide = document.getElementById('hidecheck');
     const tadSlider = document.getElementById('tadpoles');
     const fishSlider = document.getElementById('fish');
     const lilySlider = document.getElementById('lillies');
+    const refresh = document.getElementById('refresh');
 
     this.hidden = false;
     this.screenRatio = 3/4;
     hide.addEventListener('change', e => {
       if (e.target.checked) {
-        this.hidden = true;
-        this.screenRatio = 1;
         document.getElementById('menu').classList.add("hide");
       } else {
-        this.hidden = false;
-        this.screenRatio = 3/4;
         document.getElementById('menu').classList.remove("hide");
       }
     });
 
-    // If the slider changes, update the size and reinitialize
+    // Initialise the variables
     this.tadpoleSize = tadSlider.value;
-    tadSlider.addEventListener('mouseup', e => {
-      this.tadpoleSize = tadSlider.value;
-      this.init()
-    });
     this.fishSize = fishSlider.value;
-    fishSlider.addEventListener('mouseup', e => {
-      this.fishSize = fishSlider.value;
-      this.init()
-    });
     this.lilySize = lilySlider.value;
-    lilySlider.addEventListener('mouseup', e => {
+    refresh.addEventListener('mouseup', e => {
+      this.tadpoleSize = tadSlider.value;
+      this.fishSize = fishSlider.value;
       this.lilySize = lilySlider.value;
       this.init()
     });
@@ -103,9 +95,11 @@ class Pond {
       this.lillies.push(new Lily(canvas));
 
     // Sets movement patterns for all entities
-    this.movement.push(new TadMovement(this.tadpoles, canvas),
-                      new FishMovement(this.fish, canvas),
-                      new LilyMovement(this.lillies, canvas));
+    this.collisions = new Collisions(this.tadpoles, this.fish, this.lillies, this.background);
+
+    this.movement.push(new TadMovement(this.tadpoles, canvas, this.collisions),
+                      new FishMovement(this.fish, canvas, this.collisions),
+                      new LilyMovement(this.lillies, canvas, this.collisions));
   }
 
   loop() {
@@ -151,8 +145,8 @@ class Pond {
    * if the window size has changed
    */
   resize() {
-    if (canvas.width != (window.innerWidth * this.screenRatio) << 0 || canvas.height != window.innerHeight) {
-      canvas.width = (window.innerWidth * this.screenRatio);
+    if (canvas.width != window.innerWidth << 0 || canvas.height != window.innerHeight) {
+      canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       this.water.resize();
     }

@@ -1,8 +1,8 @@
 import Movement from './movement'
 
 class LilyMovement extends Movement {
-  constructor(entity, canvas) {
-    super(entity, canvas);
+  constructor(entity, canvas, collisions) {
+    super(entity, canvas, collisions);
     this.spacing = 20;
   }
 
@@ -12,6 +12,7 @@ class LilyMovement extends Movement {
       this.edgeCheck(i, pos);
       this.slowing(i, 0.1)
     }
+    this.collisions.checkLillies(this);
   }
 }
 

@@ -4,9 +4,10 @@
  */
 
 class Movement {
-  constructor(entities, canvas) {
+  constructor(entities, canvas, collisions) {
     this.canvas = canvas;
     this.entities = entities;
+    this.collisions = collisions;
   }
 
   move() {}

@@ -9,7 +9,7 @@ class Fish {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size 10-15
-    this.size = 10 + Math.random() * 5;
+    this.size = 5 + Math.random() * 5;
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     // Extra Variables

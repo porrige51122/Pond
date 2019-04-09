@@ -135,18 +135,38 @@ var Background = function () {
     key: 'renderLand',
     value: function renderLand(canvas, ctx) {
       // Create a mask and cuts 2 circles out of it then draws it to the canvas
-      var maskCanvas = document.createElement('canvas');
-      maskCanvas.width = canvas.width;
-      maskCanvas.height = canvas.height;
-      var maskCtx = maskCanvas.getContext('2d');
-      maskCtx.fillStyle = this.landColour;
-      maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
-      maskCtx.globalCompositeOperation = 'xor';
-      maskCtx.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
-      maskCtx.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
-      maskCtx.fill();
+      var canvasB = document.createElement('canvas');
+      canvasB.width = canvas.width;
+      canvasB.height = canvas.height;
+      var ctxB = canvasB.getContext('2d');
+      ctxB.fillStyle = this.landColour;
+      ctxB.fillRect(0, 0, canvas.width, canvas.height);
+      ctxB.globalCompositeOperation = 'xor';
+      ctxB.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
+      ctxB.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
+      ctxB.fill();
 
-      ctx.drawImage(maskCanvas, 0, 0);
+      ctx.drawImage(canvasB, 0, 0);
+    }
+  }, {
+    key: 'isColliding',
+    value: function isColliding(entity) {
+      // Calculate if the object will collide with the wall
+      var dxa = entity.pos[0] - this.pos[0];
+      var dya = entity.pos[1] - this.pos[1];
+      var dxb = entity.pos[0] - this.pos[2];
+      var dyb = entity.pos[1] - this.pos[3];
+      var lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
+      var lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
+      if (lenA < this.size || lenB < this.size) {
+        return null;
+      }
+      // return collision info here
+      if (lenB > lenA) {
+        return [this.pos[0], this.pos[1]];
+      } else {
+        return [this.pos[2], this.pos[3]];
+      }
     }
   }]);
 
@@ -237,7 +257,7 @@ var Fish = function () {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size 10-15
-    this.size = 10 + Math.random() * 5;
+    this.size = 5 + Math.random() * 5;
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     // Extra Variables
@@ -328,8 +348,8 @@ var Lily = function () {
 
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
-    // All have same size 50 - CHANGE TO RANDOM SOON
-    this.size = 50;
+    // All have same size 30 - CHANGE TO RANDOM SOON
+    this.size = 30;
     // Random velocity [-0.5, -0.5] - [0.5, 0.5]
     this.vel = [Math.random() - 0.5, Math.random() - 0.5];
     // Chooses a random point to put the split of the lily pad
@@ -480,7 +500,7 @@ var Tadpole = function () {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size 3-4
-    this.size = 3 + Math.random();
+    this.size = 1 + Math.random();
     // Initially still
     this.vel = [0, 0];
     // 1.5% chance to become leader
@@ -557,6 +577,92 @@ exports.default = Tadpole;
 
 /***/ }),
 
+/***/ "./src/movement/collisions.js":
+/*!************************************!*\
+  !*** ./src/movement/collisions.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Collisions = function () {
+  function Collisions(tadpoles, fish, lillies, background) {
+    _classCallCheck(this, Collisions);
+
+    this.tadpoles = tadpoles;
+    this.fish = fish;
+    this.lillies = lillies;
+    this.background = background;
+  }
+
+  _createClass(Collisions, [{
+    key: "checkTadpoles",
+    value: function checkTadpoles(movement) {
+      for (var i = 0; i < this.tadpoles.length; i++) {
+        var pondEdge = this.background.isColliding(this.tadpoles[i]);
+        if (pondEdge != null) {
+          var pos = this.tadpoles[i].pos;
+          var dx = pondEdge[0] - pos[0];
+          var dy = pondEdge[1] - pos[1];
+          var len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+          movement.smoothing(i, dx / len, dy / len);
+        }
+      }
+    }
+  }, {
+    key: "checkFish",
+    value: function checkFish(movement) {
+      for (var i = 0; i < this.fish.length; i++) {
+        var pondEdge = this.background.isColliding(this.fish[i]);
+        if (pondEdge != null) {
+          var pos = this.fish[i].pos;
+          var dx = pondEdge[0] - pos[0];
+          var dy = pondEdge[1] - pos[1];
+          movement.smoothing(i, dx, dy);
+        }
+      }
+    }
+  }, {
+    key: "checkLillies",
+    value: function checkLillies(movement) {
+      for (var i = 0; i < this.lillies.length; i++) {
+        var pondEdge = this.background.isColliding(this.lillies[i]);
+        if (pondEdge != null) {
+          var pos = this.lillies[i].pos;
+          var dx = pondEdge[0] - pos[0];
+          var dy = pondEdge[1] - pos[1];
+          movement.smoothing(i, dx, dy);
+        }
+        for (var j = 0; j < this.lillies.length; j++) {
+          if (i == j) continue;
+          if (this.isColliding(this.lillies[i], this.lillies[j])) {}
+        }
+      }
+    }
+  }, {
+    key: "isColliding",
+    value: function isColliding(a, b) {
+      return false;
+    }
+  }]);
+
+  return Collisions;
+}();
+
+exports.default = Collisions;
+
+/***/ }),
+
 /***/ "./src/movement/fishMovement.js":
 /*!**************************************!*\
   !*** ./src/movement/fishMovement.js ***!
@@ -588,10 +694,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var FishMovement = function (_Movement) {
   _inherits(FishMovement, _Movement);
 
-  function FishMovement(entity, canvas) {
+  function FishMovement(entity, canvas, collisions) {
     _classCallCheck(this, FishMovement);
 
-    var _this = _possibleConstructorReturn(this, (FishMovement.__proto__ || Object.getPrototypeOf(FishMovement)).call(this, entity, canvas));
+    var _this = _possibleConstructorReturn(this, (FishMovement.__proto__ || Object.getPrototypeOf(FishMovement)).call(this, entity, canvas, collisions));
 
     _this.spacing = 20;
     return _this;
@@ -633,6 +739,8 @@ var FishMovement = function (_Movement) {
           }
         }
       }
+
+      this.collisions.checkFish(this);
     }
   }, {
     key: 'reduce',
@@ -682,10 +790,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var LilyMovement = function (_Movement) {
   _inherits(LilyMovement, _Movement);
 
-  function LilyMovement(entity, canvas) {
+  function LilyMovement(entity, canvas, collisions) {
     _classCallCheck(this, LilyMovement);
 
-    var _this = _possibleConstructorReturn(this, (LilyMovement.__proto__ || Object.getPrototypeOf(LilyMovement)).call(this, entity, canvas));
+    var _this = _possibleConstructorReturn(this, (LilyMovement.__proto__ || Object.getPrototypeOf(LilyMovement)).call(this, entity, canvas, collisions));
 
     _this.spacing = 20;
     return _this;
@@ -699,6 +807,7 @@ var LilyMovement = function (_Movement) {
         this.edgeCheck(i, pos);
         this.slowing(i, 0.1);
       }
+      this.collisions.checkLillies(this);
     }
   }]);
 
@@ -733,11 +842,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 
 var Movement = function () {
-  function Movement(entities, canvas) {
+  function Movement(entities, canvas, collisions) {
     _classCallCheck(this, Movement);
 
     this.canvas = canvas;
     this.entities = entities;
+    this.collisions = collisions;
   }
 
   _createClass(Movement, [{
@@ -833,10 +943,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var TadMovement = function (_Movement) {
   _inherits(TadMovement, _Movement);
 
-  function TadMovement(entity, canvas) {
+  function TadMovement(entity, canvas, collisions) {
     _classCallCheck(this, TadMovement);
 
-    var _this = _possibleConstructorReturn(this, (TadMovement.__proto__ || Object.getPrototypeOf(TadMovement)).call(this, entity, canvas));
+    var _this = _possibleConstructorReturn(this, (TadMovement.__proto__ || Object.getPrototypeOf(TadMovement)).call(this, entity, canvas, collisions));
 
     _this.spacing = 20;
     return _this;
@@ -880,7 +990,7 @@ var TadMovement = function (_Movement) {
           var disX = pos[0] - leaderPos[0];
           var disY = pos[1] - leaderPos[1];
           // Length between current position and leader position
-          var length = Math.sqrt(Math.pow(disX, 2) - Math.pow(disY, 2));
+          var length = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
 
           if (length == 0) length = 1; // Preventing dividing by zero
           if (length > this.entities[i].eagerness * this.spacing) {
@@ -896,8 +1006,9 @@ var TadMovement = function (_Movement) {
             this.entities[i].leader = true;
           }
         }
-        this.slowing(i, 1);
+        this.slowing(i, 0.5);
       }
+      this.collisions.checkTadpoles(this);
     }
   }]);
 
@@ -1138,6 +1249,10 @@ var _water = __webpack_require__(/*! ./movement/water/water */ "./src/movement/w
 
 var _water2 = _interopRequireDefault(_water);
 
+var _collisions = __webpack_require__(/*! ./movement/collisions */ "./src/movement/collisions.js");
+
+var _collisions2 = _interopRequireDefault(_collisions);
+
 var _tadMovement = __webpack_require__(/*! ./movement/tadMovement */ "./src/movement/tadMovement.js");
 
 var _tadMovement2 = _interopRequireDefault(_tadMovement);
@@ -1180,38 +1295,29 @@ var Pond = function () {
     value: function eventListeners() {
       var _this = this;
 
-      var hide = document.getElementById('hide');
+      var hide = document.getElementById('hidecheck');
       var tadSlider = document.getElementById('tadpoles');
       var fishSlider = document.getElementById('fish');
       var lilySlider = document.getElementById('lillies');
+      var refresh = document.getElementById('refresh');
 
       this.hidden = false;
       this.screenRatio = 3 / 4;
       hide.addEventListener('change', function (e) {
         if (e.target.checked) {
-          _this.hidden = true;
-          _this.screenRatio = 1;
           document.getElementById('menu').classList.add("hide");
         } else {
-          _this.hidden = false;
-          _this.screenRatio = 3 / 4;
           document.getElementById('menu').classList.remove("hide");
         }
       });
 
-      // If the slider changes, update the size and reinitialize
+      // Initialise the variables
       this.tadpoleSize = tadSlider.value;
-      tadSlider.addEventListener('mouseup', function (e) {
-        _this.tadpoleSize = tadSlider.value;
-        _this.init();
-      });
       this.fishSize = fishSlider.value;
-      fishSlider.addEventListener('mouseup', function (e) {
-        _this.fishSize = fishSlider.value;
-        _this.init();
-      });
       this.lilySize = lilySlider.value;
-      lilySlider.addEventListener('mouseup', function (e) {
+      refresh.addEventListener('mouseup', function (e) {
+        _this.tadpoleSize = tadSlider.value;
+        _this.fishSize = fishSlider.value;
         _this.lilySize = lilySlider.value;
         _this.init();
       });
@@ -1255,7 +1361,9 @@ var Pond = function () {
       }for (var _i2 = 0; _i2 < this.lilySize; _i2++) {
         this.lillies.push(new _lily2.default(canvas));
       } // Sets movement patterns for all entities
-      this.movement.push(new _tadMovement2.default(this.tadpoles, canvas), new _fishMovement2.default(this.fish, canvas), new _lilyMovement2.default(this.lillies, canvas));
+      this.collisions = new _collisions2.default(this.tadpoles, this.fish, this.lillies, this.background);
+
+      this.movement.push(new _tadMovement2.default(this.tadpoles, canvas, this.collisions), new _fishMovement2.default(this.fish, canvas, this.collisions), new _lilyMovement2.default(this.lillies, canvas, this.collisions));
     }
   }, {
     key: 'loop',
@@ -1329,8 +1437,8 @@ var Pond = function () {
   }, {
     key: 'resize',
     value: function resize() {
-      if (canvas.width != window.innerWidth * this.screenRatio << 0 || canvas.height != window.innerHeight) {
-        canvas.width = window.innerWidth * this.screenRatio;
+      if (canvas.width != window.innerWidth << 0 || canvas.height != window.innerHeight) {
+        canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         this.water.resize();
       }
