@@ -14,6 +14,7 @@ export default {
   orange_peel: '#FF9D00',
 
   // Greens
+  pea: '#78AB46',
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
 

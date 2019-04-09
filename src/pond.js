@@ -3,8 +3,7 @@
  * the program loop is run, containing: render, tick and resize.
  */
 
-
-import colours from './colours';
+import Background from './background';
 
 import Tadpole from './creature/tadpole';
 import Fish from './creature/fish';
@@ -82,6 +81,8 @@ class Pond {
    * Movements are initiated
    */
   init() {
+    this.background = new Background(canvas);
+
     this.tadpoles = [];
     this.fish = [];
     this.lillies = [];
@@ -133,8 +134,7 @@ class Pond {
    */
   render() {
     // Clear screen
-    ctx.fillStyle = colours.ocean_blue;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    this.background.renderPond(canvas, ctx);
 
     // Draw to canvas in order of layers
     this.tadpoles.forEach((t) => t.render(canvas, ctx));
@@ -142,6 +142,8 @@ class Pond {
     this.water.render();
     this.lillies.forEach((l) => l.render(canvas, ctx));
 
+    // Draw the land on the canvas
+    this.background.renderLand(canvas, ctx);
   }
 
   /**

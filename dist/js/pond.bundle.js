@@ -86,6 +86,77 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/background.js":
+/*!***************************!*\
+  !*** ./src/background.js ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Background = function () {
+  function Background(canvas) {
+    _classCallCheck(this, Background);
+
+    if (canvas.width < canvas.height) {
+      this.pos = [canvas.width / 2, canvas.height / 8 * 3, canvas.width / 2, canvas.height / 8 * 5];
+      this.size = canvas.width / 2;
+    } else {
+      this.pos = [canvas.width / 8 * 3, canvas.height / 2, canvas.width / 8 * 5, canvas.height / 2];
+      this.size = canvas.height / 2;
+    }
+    this.pondColour = _colours2.default.ocean_blue;
+    this.landColour = _colours2.default.pea;
+  }
+
+  _createClass(Background, [{
+    key: 'renderPond',
+    value: function renderPond(canvas, ctx) {
+      ctx.fillStyle = this.pondColour;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }, {
+    key: 'renderLand',
+    value: function renderLand(canvas, ctx) {
+      // Create a mask and cuts 2 circles out of it then draws it to the canvas
+      var maskCanvas = document.createElement('canvas');
+      maskCanvas.width = canvas.width;
+      maskCanvas.height = canvas.height;
+      var maskCtx = maskCanvas.getContext('2d');
+      maskCtx.fillStyle = this.landColour;
+      maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+      maskCtx.globalCompositeOperation = 'xor';
+      maskCtx.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
+      maskCtx.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
+      maskCtx.fill();
+
+      ctx.drawImage(maskCanvas, 0, 0);
+    }
+  }]);
+
+  return Background;
+}();
+
+exports.default = Background;
+
+/***/ }),
+
 /***/ "./src/colours.js":
 /*!************************!*\
   !*** ./src/colours.js ***!
@@ -115,6 +186,7 @@ exports.default = {
   orange_peel: '#FF9D00',
 
   // Greens
+  pea: '#78AB46',
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
 
@@ -836,6 +908,201 @@ exports.default = TadMovement;
 
 /***/ }),
 
+/***/ "./src/movement/water/ripple.js":
+/*!**************************************!*\
+  !*** ./src/movement/water/ripple.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *  This class contains all the ripple effects to the pond
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Ripple = function () {
+  function Ripple(dx, dy) {
+    var vx = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+    var vy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
+    _classCallCheck(this, Ripple);
+
+    this.dx = dx;
+    this.dy = dy;
+    this.vx = vx * 10;
+    this.vy = vy * 10;
+    this.size = 0;
+    this.w = 10;
+    // larger value == larger ripple size;
+    var maxSize = 0.05;
+    var minSize = 0.1;
+    this.maxSize = maxSize + Math.random() * (minSize - maxSize);
+  }
+
+  _createClass(Ripple, [{
+    key: 'tick',
+    value: function tick() {
+      this.size += 0.4;
+      this.w -= this.maxSize;
+    }
+
+    /**
+     * Takes in the original canvas then draws the ripple
+     */
+
+  }, {
+    key: 'render',
+    value: function render(canvas, ctx) {
+      var x = this.dx;
+      var y = this.dy;
+      var s = this.size;
+      ctx.beginPath();
+      ctx.lineWidth = this.w;
+      ctx.strokeStyle = _colours2.default.deep_blue;
+      ctx.moveTo(x, y + s);
+      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
+      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
+      ctx.stroke();
+
+      if (s > 10) {
+        s -= 10;
+        x += this.vx;
+        y += this.vy;
+      }
+      ctx.beginPath();
+      ctx.lineWidth = this.w / 2;
+      ctx.strokeStyle = _colours2.default.deep_blue;
+      ctx.moveTo(x, y + s);
+      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
+      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
+      ctx.stroke();
+    }
+  }]);
+
+  return Ripple;
+}();
+
+exports.default = Ripple;
+
+/***/ }),
+
+/***/ "./src/movement/water/water.js":
+/*!*************************************!*\
+  !*** ./src/movement/water/water.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *  This class is a manager for all ripples on the canvas
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+var _ripple = __webpack_require__(/*! ./ripple */ "./src/movement/water/ripple.js");
+
+var _ripple2 = _interopRequireDefault(_ripple);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Water = function () {
+  function Water(canvas, ctx) {
+    _classCallCheck(this, Water);
+
+    // For ease of access
+    this.canvas = canvas;
+    this.ctx = ctx;
+
+    this.ripples = [];
+  }
+
+  _createClass(Water, [{
+    key: 'tick',
+    value: function tick() {
+      this.ripples.forEach(function (r) {
+        return r.tick();
+      });
+      for (var i = 0; i < this.ripples.length; i++) {
+        if (this.ripples[i].w < 0) {
+          this.ripples.splice(i, 1);
+          i--;
+        }
+      }
+    }
+
+    /**
+     * Renders all ripples on the canvas
+     */
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this = this;
+
+      this.ripples.forEach(function (r) {
+        return r.render(_this.canvas, _this.ctx);
+      });
+    }
+
+    /**
+     * Resize method recalibrates all the settings such as width and height
+     * and size of arrays
+     */
+
+  }, {
+    key: 'resize',
+    value: function resize() {}
+
+    /**
+     * Simulates a drop starting at the given coordinates
+     */
+
+  }, {
+    key: 'dropAt',
+    value: function dropAt(dx, dy) {
+      var vx = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+      var vy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
+      dx <<= 0;
+      dy <<= 0;
+      this.ripples.push(new _ripple2.default(dx, dy, vx, vy));
+    }
+  }, {
+    key: 'randomDrop',
+    value: function randomDrop() {
+      this.dropAt(Math.random() * this.width, Math.random() * this.height);
+    }
+  }]);
+
+  return Water;
+}();
+
+exports.default = Water;
+
+/***/ }),
+
 /***/ "./src/pond.js":
 /*!*********************!*\
   !*** ./src/pond.js ***!
@@ -851,9 +1118,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * the program loop is run, containing: render, tick and resize.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
+var _background = __webpack_require__(/*! ./background */ "./src/background.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var _background2 = _interopRequireDefault(_background);
 
 var _tadpole = __webpack_require__(/*! ./creature/tadpole */ "./src/creature/tadpole.js");
 
@@ -863,13 +1130,13 @@ var _fish = __webpack_require__(/*! ./creature/fish */ "./src/creature/fish.js")
 
 var _fish2 = _interopRequireDefault(_fish);
 
-var _water = __webpack_require__(/*! ./water/water */ "./src/water/water.js");
-
-var _water2 = _interopRequireDefault(_water);
-
 var _lily = __webpack_require__(/*! ./creature/lily */ "./src/creature/lily.js");
 
 var _lily2 = _interopRequireDefault(_lily);
+
+var _water = __webpack_require__(/*! ./movement/water/water */ "./src/movement/water/water.js");
+
+var _water2 = _interopRequireDefault(_water);
 
 var _tadMovement = __webpack_require__(/*! ./movement/tadMovement */ "./src/movement/tadMovement.js");
 
@@ -966,6 +1233,8 @@ var Pond = function () {
     value: function init() {
       var _this2 = this;
 
+      this.background = new _background2.default(canvas);
+
       this.tadpoles = [];
       this.fish = [];
       this.lillies = [];
@@ -1034,8 +1303,7 @@ var Pond = function () {
     key: 'render',
     value: function render() {
       // Clear screen
-      ctx.fillStyle = _colours2.default.ocean_blue;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      this.background.renderPond(canvas, ctx);
 
       // Draw to canvas in order of layers
       this.tadpoles.forEach(function (t) {
@@ -1048,6 +1316,9 @@ var Pond = function () {
       this.lillies.forEach(function (l) {
         return l.render(canvas, ctx);
       });
+
+      // Draw the land on the canvas
+      this.background.renderLand(canvas, ctx);
     }
 
     /**
@@ -1072,201 +1343,6 @@ var Pond = function () {
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var pond = new Pond(canvas, ctx);
-
-/***/ }),
-
-/***/ "./src/water/ripple.js":
-/*!*****************************!*\
-  !*** ./src/water/ripple.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *  This class contains all the ripple effects to the pond
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
-
-var _colours2 = _interopRequireDefault(_colours);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Ripple = function () {
-  function Ripple(dx, dy) {
-    var vx = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-    var vy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-
-    _classCallCheck(this, Ripple);
-
-    this.dx = dx;
-    this.dy = dy;
-    this.vx = vx * 10;
-    this.vy = vy * 10;
-    this.size = 0;
-    this.w = 10;
-    // larger value == larger ripple size;
-    var maxSize = 0.05;
-    var minSize = 0.1;
-    this.maxSize = maxSize + Math.random() * (minSize - maxSize);
-  }
-
-  _createClass(Ripple, [{
-    key: 'tick',
-    value: function tick() {
-      this.size += 0.4;
-      this.w -= this.maxSize;
-    }
-
-    /**
-     * Takes in the original canvas then draws the ripple
-     */
-
-  }, {
-    key: 'render',
-    value: function render(canvas, ctx) {
-      var x = this.dx;
-      var y = this.dy;
-      var s = this.size;
-      ctx.beginPath();
-      ctx.lineWidth = this.w;
-      ctx.strokeStyle = _colours2.default.deep_blue;
-      ctx.moveTo(x, y + s);
-      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
-      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
-      ctx.stroke();
-
-      if (s > 10) {
-        s -= 10;
-        x += this.vx;
-        y += this.vy;
-      }
-      ctx.beginPath();
-      ctx.lineWidth = this.w / 2;
-      ctx.strokeStyle = _colours2.default.deep_blue;
-      ctx.moveTo(x, y + s);
-      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
-      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
-      ctx.stroke();
-    }
-  }]);
-
-  return Ripple;
-}();
-
-exports.default = Ripple;
-
-/***/ }),
-
-/***/ "./src/water/water.js":
-/*!****************************!*\
-  !*** ./src/water/water.js ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *  This class is a manager for all ripples on the canvas
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-var _ripple = __webpack_require__(/*! ./ripple */ "./src/water/ripple.js");
-
-var _ripple2 = _interopRequireDefault(_ripple);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Water = function () {
-  function Water(canvas, ctx) {
-    _classCallCheck(this, Water);
-
-    // For ease of access
-    this.canvas = canvas;
-    this.ctx = ctx;
-
-    this.ripples = [];
-  }
-
-  _createClass(Water, [{
-    key: 'tick',
-    value: function tick() {
-      this.ripples.forEach(function (r) {
-        return r.tick();
-      });
-      for (var i = 0; i < this.ripples.length; i++) {
-        if (this.ripples[i].w < 0) {
-          this.ripples.splice(i, 1);
-          i--;
-        }
-      }
-    }
-
-    /**
-     * Renders all ripples on the canvas
-     */
-
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this = this;
-
-      this.ripples.forEach(function (r) {
-        return r.render(_this.canvas, _this.ctx);
-      });
-    }
-
-    /**
-     * Resize method recalibrates all the settings such as width and height
-     * and size of arrays
-     */
-
-  }, {
-    key: 'resize',
-    value: function resize() {}
-
-    /**
-     * Simulates a drop starting at the given coordinates
-     */
-
-  }, {
-    key: 'dropAt',
-    value: function dropAt(dx, dy) {
-      var vx = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-      var vy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-
-      dx <<= 0;
-      dy <<= 0;
-      this.ripples.push(new _ripple2.default(dx, dy, vx, vy));
-    }
-  }, {
-    key: 'randomDrop',
-    value: function randomDrop() {
-      this.dropAt(Math.random() * this.width, Math.random() * this.height);
-    }
-  }]);
-
-  return Water;
-}();
-
-exports.default = Water;
 
 /***/ })
 
