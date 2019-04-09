@@ -1,7 +1,7 @@
 /**
  *  This class contains all the ripple effects to the pond
  */
-import colours from '../colours';
+import colours from '../../colours';
 
 class Ripple {
   constructor(dx, dy, vx = 0, vy = 0) {

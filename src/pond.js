@@ -5,10 +5,12 @@
 
 
 import colours from './colours';
+
 import Tadpole from './creature/tadpole';
 import Fish from './creature/fish';
-import Water from './water/water';
 import Lily from './creature/lily';
+
+import Water from './movement/water/water';
 import TadMovement from './movement/tadMovement';
 import FishMovement from './movement/fishMovement';
 import LilyMovement from './movement/lilyMovement';
