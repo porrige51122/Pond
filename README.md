@@ -56,6 +56,28 @@ Fish now cause ripples
 Made Water effect happen when mouse moves over canvas
 #### 2.0.1
 Water Effect added
+#### 1.5.1
+Helpful sliders have been added to customise pond to your own taste
+#### 1.4.3
+Lily Pads have a 25% chance to have a water lily on it
+#### 1.4.2
+Lily Pads have simple movement
+#### 1.4.1
+Lily Pads have been added
+#### 1.3.1
+Many bugs fixed with fish movement
+#### 1.2.2
+Fish have 2 states - wiggling and twitching
+#### 1.2.1
+Fish have been added
+#### 1.1.1
+Tadpoles now follow the leader
+#### 1.0.2
+Tadpoles now have a leader
+#### 1.0.1
+Tadpoles now move
+#### 1.0.0
+Tadpoles added
 
 ## Credits
 https://github.com/christopher4lis/canvas-boilerplate - Used as boilerplate code for Web Pack
