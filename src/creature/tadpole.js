@@ -35,11 +35,7 @@ class Tadpole {
   render(canvas, ctx) {
     // Draw Body
     ctx.beginPath();
-    if (this.leader) {
-      ctx.fillStyle = colours.yellow;
-    } else {
-      ctx.fillStyle = colours.registration_black;
-    }
+    ctx.fillStyle = colours.registration_black;
     ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
     ctx.fill();
     // Draw Tail
