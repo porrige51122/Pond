@@ -35,9 +35,6 @@ class Pond {
    */
   eventListeners() {
     const hide = document.getElementById('hidecheck');
-    const tadSlider = document.getElementById('tadpoles');
-    const fishSlider = document.getElementById('fish');
-    const lilySlider = document.getElementById('lillies');
     const refresh = document.getElementById('refresh');
 
     this.hidden = false;
@@ -51,21 +48,22 @@ class Pond {
     });
 
     // Initialise the variables
-    this.tadpoleSize = tadSlider.value;
-    this.fishSize = fishSlider.value;
-    this.lilySize = lilySlider.value;
+    this.tadpoleSize = document.getElementById('tadpoles').value;
+    this.fishSize = document.getElementById('fish').value;
+    this.lilySize = document.getElementById('lillies').value;
+    
     refresh.addEventListener('mouseup', e => {
-      this.tadpoleSize = tadSlider.value;
-      this.fishSize = fishSlider.value;
-      this.lilySize = lilySlider.value;
-      this.init()
+      this.tadpoleSize = document.getElementById('tadpoles').value;
+      this.fishSize = document.getElementById('fish').value;
+      this.lilySize = document.getElementById('lillies').value;
+      this.init();
     });
 
     canvas.addEventListener("mousemove", () => {
       if (Math.random() < 0.5) {
         this.water.dropAt(event.clientX, event.clientY);
       }
-    })
+    });
   }
 
   /**
@@ -145,7 +143,7 @@ class Pond {
    * if the window size has changed
    */
   resize() {
-    if (canvas.width != window.innerWidth << 0 || canvas.height != window.innerHeight) {
+    if (canvas.width != window.innerWidth || canvas.height != window.innerHeight) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       this.water.resize();

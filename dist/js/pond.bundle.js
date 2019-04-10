@@ -1296,9 +1296,6 @@ var Pond = function () {
       var _this = this;
 
       var hide = document.getElementById('hidecheck');
-      var tadSlider = document.getElementById('tadpoles');
-      var fishSlider = document.getElementById('fish');
-      var lilySlider = document.getElementById('lillies');
       var refresh = document.getElementById('refresh');
 
       this.hidden = false;
@@ -1312,13 +1309,14 @@ var Pond = function () {
       });
 
       // Initialise the variables
-      this.tadpoleSize = tadSlider.value;
-      this.fishSize = fishSlider.value;
-      this.lilySize = lilySlider.value;
+      this.tadpoleSize = document.getElementById('tadpoles').value;
+      this.fishSize = document.getElementById('fish').value;
+      this.lilySize = document.getElementById('lillies').value;
+
       refresh.addEventListener('mouseup', function (e) {
-        _this.tadpoleSize = tadSlider.value;
-        _this.fishSize = fishSlider.value;
-        _this.lilySize = lilySlider.value;
+        _this.tadpoleSize = document.getElementById('tadpoles').value;
+        _this.fishSize = document.getElementById('fish').value;
+        _this.lilySize = document.getElementById('lillies').value;
         _this.init();
       });
 
@@ -1437,7 +1435,7 @@ var Pond = function () {
   }, {
     key: 'resize',
     value: function resize() {
-      if (canvas.width != window.innerWidth << 0 || canvas.height != window.innerHeight) {
+      if (canvas.width != window.innerWidth || canvas.height != window.innerHeight) {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         this.water.resize();
