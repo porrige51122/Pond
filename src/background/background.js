@@ -1,7 +1,12 @@
-import colours from './colours';
-
+import colours from '../colours';
+import Rock from './rock';
+/**
+ * BACKGROUND:
+ * This class creates the bank of the pond and checks to see if fish are
+ * colliding with it
+ */
 class Background {
-  constructor(canvas) {
+  constructor(canvas, ctx) {
     if (canvas.width < canvas.height) {
       this.pos = [canvas.width/2, (canvas.height/8) * 3,
                   canvas.width/2, (canvas.height/8) * 5];
@@ -13,7 +18,32 @@ class Background {
     }
     this.pondColour = colours.ocean_blue;
     this.landColour = colours.pea;
+    this.createLand(canvas, ctx);
 
+  }
+
+  createLand(canvas, ctx) {
+    // Create a mask and cuts 2 circles out of it then draws it to the canvas
+    this.canvasB = document.createElement('canvas');
+    this.canvasB.width = canvas.width;
+    this.canvasB.height = canvas.height;
+    let ctxB = this.canvasB.getContext('2d');
+    ctxB.save();
+    ctxB.fillStyle = this.landColour;
+    ctxB.fillRect(0, 0, canvas.width, canvas.height);
+    ctxB.globalCompositeOperation = 'xor';
+    ctxB.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
+    ctxB.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
+    ctxB.fill();
+    ctxB.restore();
+
+    let surrounded = true;
+    while (surrounded) {
+      let pos = [50, 50];
+      let rock = new Rock(this.canvasB, ctxB, pos);
+      rock.render();
+      surrounded = false;
+    }
   }
 
   renderPond(canvas, ctx) {
@@ -22,19 +52,7 @@ class Background {
   }
 
   renderLand(canvas, ctx) {
-    // Create a mask and cuts 2 circles out of it then draws it to the canvas
-    let canvasB = document.createElement('canvas');
-    canvasB.width = canvas.width;
-    canvasB.height = canvas.height;
-    let ctxB = canvasB.getContext('2d');
-    ctxB.fillStyle = this.landColour;
-    ctxB.fillRect(0, 0, canvas.width, canvas.height);
-    ctxB.globalCompositeOperation = 'xor';
-    ctxB.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
-    ctxB.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
-    ctxB.fill();
-
-    ctx.drawImage(canvasB, 0, 0);
+    ctx.drawImage(this.canvasB, 0, 0);
   }
 
   isColliding(entity) {

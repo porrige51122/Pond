@@ -11,5 +11,7 @@ export default {
   delicate_pink: '#F4DEDB',
   light_pink: '#FFF2F2',
   registration_black: '#000000',
-  rasin_black: '#212121'
+  rasin_black: '#212121',
+  rock_gray: '#606060',
+  gray: '#808080'
 };

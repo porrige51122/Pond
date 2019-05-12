@@ -86,10 +86,10 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/background.js":
-/*!***************************!*\
-  !*** ./src/background.js ***!
-  \***************************/
+/***/ "./src/background/background.js":
+/*!**************************************!*\
+  !*** ./src/background/background.js ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -102,16 +102,25 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
+
+var _rock = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
+
+var _rock2 = _interopRequireDefault(_rock);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * BACKGROUND:
+ * This class creates the bank of the pond and checks to see if fish are
+ * colliding with it
+ */
 var Background = function () {
-  function Background(canvas) {
+  function Background(canvas, ctx) {
     _classCallCheck(this, Background);
 
     if (canvas.width < canvas.height) {
@@ -123,9 +132,35 @@ var Background = function () {
     }
     this.pondColour = _colours2.default.ocean_blue;
     this.landColour = _colours2.default.pea;
+    this.createLand(canvas, ctx);
   }
 
   _createClass(Background, [{
+    key: 'createLand',
+    value: function createLand(canvas, ctx) {
+      // Create a mask and cuts 2 circles out of it then draws it to the canvas
+      this.canvasB = document.createElement('canvas');
+      this.canvasB.width = canvas.width;
+      this.canvasB.height = canvas.height;
+      var ctxB = this.canvasB.getContext('2d');
+      ctxB.save();
+      ctxB.fillStyle = this.landColour;
+      ctxB.fillRect(0, 0, canvas.width, canvas.height);
+      ctxB.globalCompositeOperation = 'xor';
+      ctxB.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
+      ctxB.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
+      ctxB.fill();
+      ctxB.restore();
+
+      var surrounded = true;
+      while (surrounded) {
+        var pos = [50, 50];
+        var rock = new _rock2.default(this.canvasB, ctxB, pos);
+        rock.render();
+        surrounded = false;
+      }
+    }
+  }, {
     key: 'renderPond',
     value: function renderPond(canvas, ctx) {
       ctx.fillStyle = this.pondColour;
@@ -134,19 +169,7 @@ var Background = function () {
   }, {
     key: 'renderLand',
     value: function renderLand(canvas, ctx) {
-      // Create a mask and cuts 2 circles out of it then draws it to the canvas
-      var canvasB = document.createElement('canvas');
-      canvasB.width = canvas.width;
-      canvasB.height = canvas.height;
-      var ctxB = canvasB.getContext('2d');
-      ctxB.fillStyle = this.landColour;
-      ctxB.fillRect(0, 0, canvas.width, canvas.height);
-      ctxB.globalCompositeOperation = 'xor';
-      ctxB.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
-      ctxB.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
-      ctxB.fill();
-
-      ctx.drawImage(canvasB, 0, 0);
+      ctx.drawImage(this.canvasB, 0, 0);
     }
   }, {
     key: 'isColliding',
@@ -177,6 +200,84 @@ exports.default = Background;
 
 /***/ }),
 
+/***/ "./src/background/rock.js":
+/*!********************************!*\
+  !*** ./src/background/rock.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Rock = function () {
+  function Rock(canvas, ctx, pos) {
+    _classCallCheck(this, Rock);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.pos = pos;
+    this.generatePoints();
+  }
+
+  _createClass(Rock, [{
+    key: 'generatePoints',
+    value: function generatePoints() {
+      var pointCountAvg = 8;
+      this.circPos = [360 / pointCountAvg * Math.random() * 2];
+      while (this.circPos[this.circPos.length - 1] < 360) {
+        var nextPoint = this.circPos[this.circPos.length - 1] + 360 / pointCountAvg * Math.random() * 2;
+        this.circPos.push(nextPoint);
+      }
+      this.circPos.pop();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var size = 20 + Math.random() * 10;
+      this.drawPoints(size, _colours2.default.rock_gray);
+      this.drawPoints(size / 2, _colours2.default.gray);
+    }
+  }, {
+    key: 'drawPoints',
+    value: function drawPoints(size, colour) {
+      var points = [];
+      for (var a = 0; a < this.circPos.length; a++) {
+        var x = size * Math.cos(this.circPos[a] * (Math.PI / 180)) + this.pos[0];
+        var y = size * Math.sin(this.circPos[a] * (Math.PI / 180)) + this.pos[1];
+        points.push([x, y]);
+      }
+      this.ctx.beginPath();
+      this.ctx.fillStyle = colour;
+      this.ctx.moveTo(points[0][0], points[0][1]);
+      for (var b = 0; b < points.length; b++) {
+        this.ctx.lineTo(points[b][0], points[b][1]);
+      }
+      this.ctx.fill();
+    }
+  }]);
+
+  return Rock;
+}();
+
+exports.default = Rock;
+
+/***/ }),
+
 /***/ "./src/colours.js":
 /*!************************!*\
   !*** ./src/colours.js ***!
@@ -203,7 +304,9 @@ exports.default = {
   delicate_pink: '#F4DEDB',
   light_pink: '#FFF2F2',
   registration_black: '#000000',
-  rasin_black: '#212121'
+  rasin_black: '#212121',
+  rock_gray: '#606060',
+  gray: '#808080'
 };
 
 /***/ }),
@@ -1209,7 +1312,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * the program loop is run, containing: render, tick and resize.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _background = __webpack_require__(/*! ./background */ "./src/background.js");
+var _background = __webpack_require__(/*! ./background/background */ "./src/background/background.js");
 
 var _background2 = _interopRequireDefault(_background);
 
@@ -1317,7 +1420,7 @@ var Pond = function () {
     value: function init() {
       var _this2 = this;
 
-      this.background = new _background2.default(canvas);
+      this.background = new _background2.default(canvas, ctx);
 
       this.tadpoles = [];
       this.fish = [];
@@ -1419,6 +1522,7 @@ var Pond = function () {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         this.water.resize();
+        // this.background.createLand(canvas, ctx);
       }
     }
   }]);

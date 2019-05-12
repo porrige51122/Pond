@@ -3,7 +3,7 @@
  * the program loop is run, containing: render, tick and resize.
  */
 
-import Background from './background';
+import Background from './background/background';
 
 import Tadpole from './creature/tadpole';
 import Fish from './creature/fish';
@@ -51,7 +51,7 @@ class Pond {
     this.tadpoleSize = document.getElementById('tadpoles').value;
     this.fishSize = document.getElementById('fish').value;
     this.lilySize = document.getElementById('lillies').value;
-    
+
     refresh.addEventListener('mouseup', e => {
       this.tadpoleSize = document.getElementById('tadpoles').value;
       this.fishSize = document.getElementById('fish').value;
@@ -71,7 +71,7 @@ class Pond {
    * Movements are initiated
    */
   init() {
-    this.background = new Background(canvas);
+    this.background = new Background(canvas, ctx);
 
     this.tadpoles = [];
     this.fish = [];
@@ -147,6 +147,7 @@ class Pond {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       this.water.resize();
+      // this.background.createLand(canvas, ctx);
     }
   }
 
