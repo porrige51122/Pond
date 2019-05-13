@@ -12,6 +12,7 @@ export default {
   light_pink: '#FFF2F2',
   registration_black: '#000000',
   rasin_black: '#212121',
+  dark_gray: '#474747',
   rock_gray: '#606060',
   gray: '#808080'
 };

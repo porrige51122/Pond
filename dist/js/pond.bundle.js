@@ -106,9 +106,9 @@ var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
-var _rock = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
+var _rock2 = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
 
-var _rock2 = _interopRequireDefault(_rock);
+var _rock3 = _interopRequireDefault(_rock2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -153,11 +153,30 @@ var Background = function () {
       ctxB.restore();
 
       var surrounded = true;
+      var angle = 0;
       while (surrounded) {
-        var pos = [50, 50];
-        var rock = new _rock2.default(this.canvasB, ctxB, pos);
-        rock.render();
-        surrounded = false;
+        var x = this.size * Math.cos(angle) + this.pos[0];
+        var y = this.size * Math.sin(angle) + this.pos[1];
+        var pos = [x, y];
+        var dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
+        if (dis > this.size) {
+          var rock = new _rock3.default(this.canvasB, ctxB, pos);
+          rock.render();
+        }
+        if (angle > 360) surrounded = false;else angle += 5;
+      }
+      surrounded = true;
+      angle = 0;
+      while (surrounded) {
+        var _x = this.size * Math.cos(angle) + this.pos[2];
+        var _y = this.size * Math.sin(angle) + this.pos[3];
+        var _pos = [_x, _y];
+        var _dis = Math.sqrt(Math.pow(_x - this.pos[0], 2) + Math.pow(_y - this.pos[1], 2));
+        if (_dis > this.size) {
+          var _rock = new _rock3.default(this.canvasB, ctxB, _pos);
+          _rock.render();
+        }
+        if (angle > 360) surrounded = false;else angle += 5;
       }
     }
   }, {
@@ -240,7 +259,7 @@ var Rock = function () {
       var pointCountAvg = 8;
       this.circPos = [360 / pointCountAvg * Math.random() * 2];
       while (this.circPos[this.circPos.length - 1] < 360) {
-        var nextPoint = this.circPos[this.circPos.length - 1] + 360 / pointCountAvg * Math.random() * 2;
+        var nextPoint = this.circPos[this.circPos.length - 1] + 360 / pointCountAvg / 2 + 360 / pointCountAvg / 2 * Math.random() * 2;
         this.circPos.push(nextPoint);
       }
       this.circPos.pop();
@@ -249,25 +268,46 @@ var Rock = function () {
     key: 'render',
     value: function render() {
       var size = 20 + Math.random() * 10;
-      this.drawPoints(size, _colours2.default.rock_gray);
-      this.drawPoints(size / 2, _colours2.default.gray);
-    }
-  }, {
-    key: 'drawPoints',
-    value: function drawPoints(size, colour) {
       var points = [];
       for (var a = 0; a < this.circPos.length; a++) {
         var x = size * Math.cos(this.circPos[a] * (Math.PI / 180)) + this.pos[0];
         var y = size * Math.sin(this.circPos[a] * (Math.PI / 180)) + this.pos[1];
         points.push([x, y]);
+        x = size * 5 / 8 * Math.cos(this.circPos[a] * (Math.PI / 180)) + this.pos[0];
+        y = size * 5 / 8 * Math.sin(this.circPos[a] * (Math.PI / 180)) + this.pos[1];
+        points.push([x, y]);
       }
+
       this.ctx.beginPath();
-      this.ctx.fillStyle = colour;
+      this.ctx.fillStyle = _colours2.default.rock_gray;
       this.ctx.moveTo(points[0][0], points[0][1]);
-      for (var b = 0; b < points.length; b++) {
-        this.ctx.lineTo(points[b][0], points[b][1]);
+      for (var _a = 2; _a < points.length; _a += 2) {
+        this.ctx.lineTo(points[_a][0], points[_a][1]);
+      }this.ctx.fill();
+
+      this.ctx.beginPath();
+      this.ctx.fillStyle = _colours2.default.gray;
+      this.ctx.moveTo(points[1][0], points[1][1]);
+      for (var _a2 = 1; _a2 < points.length; _a2 += 2) {
+        this.ctx.lineTo(points[_a2][0], points[_a2][1]);
+      }this.ctx.fill();
+
+      for (var _a3 = 0; _a3 < points.length - 2; _a3 += 2) {
+        this.drawLines(points[_a3], points[_a3 + 1], points[_a3 + 2], points[_a3 + 3]);
       }
-      this.ctx.fill();
+      this.drawLines(points[points.length - 2], points[points.length - 1], points[0], points[1]);
+    }
+  }, {
+    key: 'drawLines',
+    value: function drawLines(a, b, c, d) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = _colours2.default.dark_gray;
+      this.ctx.moveTo(a[0], a[1]);
+      this.ctx.lineTo(b[0], b[1]);
+      this.ctx.lineTo(d[0], d[1]);
+      this.ctx.lineTo(c[0], c[1]);
+      this.ctx.lineTo(a[0], a[1]);
+      this.ctx.stroke();
     }
   }]);
 
@@ -305,6 +345,7 @@ exports.default = {
   light_pink: '#FFF2F2',
   registration_black: '#000000',
   rasin_black: '#212121',
+  dark_gray: '#474747',
   rock_gray: '#606060',
   gray: '#808080'
 };
