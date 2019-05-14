@@ -1,5 +1,6 @@
 import colours from '../colours';
 import Rock from './rock';
+import Cattail from './cattail';
 /**
  * BACKGROUND:
  * This class creates the bank of the pond and checks to see if fish are
@@ -39,6 +40,7 @@ class Background {
 
     let surrounded = true;
     let angle = 0;
+
     while (surrounded) {
       let x = this.size * Math.cos(angle) + this.pos[0];
       let y = this.size * Math.sin(angle) + this.pos[1];
@@ -48,18 +50,10 @@ class Background {
         let rock = new Rock(this.canvasB, ctxB, pos);
         rock.render();
       }
-      if (angle > 360)
-        surrounded = false;
-      else
-        angle += 5;
-    }
-    surrounded = true;
-    angle = 0;
-    while (surrounded) {
-      let x = this.size * Math.cos(angle) + this.pos[2];
-      let y = this.size * Math.sin(angle) + this.pos[3];
-      let pos = [x, y];
-      let dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
+      x += this.pos[2] - this.pos[0];
+      y += this.pos[3] - this.pos[1];
+      pos = [x, y];
+      dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
       if (dis > this.size) {
         let rock = new Rock(this.canvasB, ctxB, pos);
         rock.render();

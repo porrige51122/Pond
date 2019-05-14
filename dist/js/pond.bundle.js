@@ -110,6 +110,10 @@ var _rock2 = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
 
 var _rock3 = _interopRequireDefault(_rock2);
 
+var _cattail = __webpack_require__(/*! ./cattail */ "./src/background/cattail.js");
+
+var _cattail2 = _interopRequireDefault(_cattail);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -154,6 +158,7 @@ var Background = function () {
 
       var surrounded = true;
       var angle = 0;
+
       while (surrounded) {
         var x = this.size * Math.cos(angle) + this.pos[0];
         var y = this.size * Math.sin(angle) + this.pos[1];
@@ -163,17 +168,12 @@ var Background = function () {
           var rock = new _rock3.default(this.canvasB, ctxB, pos);
           rock.render();
         }
-        if (angle > 360) surrounded = false;else angle += 5;
-      }
-      surrounded = true;
-      angle = 0;
-      while (surrounded) {
-        var _x = this.size * Math.cos(angle) + this.pos[2];
-        var _y = this.size * Math.sin(angle) + this.pos[3];
-        var _pos = [_x, _y];
-        var _dis = Math.sqrt(Math.pow(_x - this.pos[0], 2) + Math.pow(_y - this.pos[1], 2));
-        if (_dis > this.size) {
-          var _rock = new _rock3.default(this.canvasB, ctxB, _pos);
+        x += this.pos[2] - this.pos[0];
+        y += this.pos[3] - this.pos[1];
+        pos = [x, y];
+        dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
+        if (dis > this.size) {
+          var _rock = new _rock3.default(this.canvasB, ctxB, pos);
           _rock.render();
         }
         if (angle > 360) surrounded = false;else angle += 5;
@@ -216,6 +216,51 @@ var Background = function () {
 }();
 
 exports.default = Background;
+
+/***/ }),
+
+/***/ "./src/background/cattail.js":
+/*!***********************************!*\
+  !*** ./src/background/cattail.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Cattail = function () {
+  function Cattail(canvas, ctx, pos) {
+    _classCallCheck(this, Cattail);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.pos = pos;
+  }
+
+  _createClass(Cattail, [{
+    key: 'render',
+    value: function render() {}
+  }]);
+
+  return Cattail;
+}();
+
+exports.default = Cattail;
 
 /***/ }),
 
