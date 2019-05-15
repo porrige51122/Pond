@@ -35,7 +35,7 @@ Planned features:
 ## Requirements
  * [NodeJs](https://nodejs.org/en/)
 
-## How to run
+## How to run developer build
  * Clone or download the repository
  * Extract it to a folder
  * Open Terminal and navigate to this folder
@@ -45,7 +45,7 @@ Planned features:
 
 ## Changelog
 #### 2.1.5
-Cattails code has been written
+Cattails render code has been written
 #### 2.1.4
 Rocks will now generate around the edge of the pond
 #### 2.1.3
