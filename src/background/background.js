@@ -38,9 +38,10 @@ class Background {
     ctxB.fill();
     ctxB.restore();
 
+    // Draws a rock at 5 degrees around the edge of each circle without it
+    // intersecting the lake
     let surrounded = true;
     let angle = 0;
-
     while (surrounded) {
       let x = this.size * Math.cos(angle) + this.pos[0];
       let y = this.size * Math.sin(angle) + this.pos[1];
@@ -63,6 +64,14 @@ class Background {
       else
         angle += 5;
     }
+    // Draws Cattails
+    surrounded = true;
+    while (surrounded) {
+      let pos = [50, 50];
+      let cattail = new Cattail(this.canvasB, ctxB, pos);
+      cattail.render()
+      surrounded = false;
+    }
   }
 
   renderPond(canvas, ctx) {
@@ -70,6 +79,7 @@ class Background {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
+  // Draws loaded template
   renderLand(canvas, ctx) {
     ctx.drawImage(this.canvasB, 0, 0);
   }

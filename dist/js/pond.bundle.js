@@ -156,9 +156,10 @@ var Background = function () {
       ctxB.fill();
       ctxB.restore();
 
+      // Draws a rock at 5 degrees around the edge of each circle without it
+      // intersecting the lake
       var surrounded = true;
       var angle = 0;
-
       while (surrounded) {
         var x = this.size * Math.cos(angle) + this.pos[0];
         var y = this.size * Math.sin(angle) + this.pos[1];
@@ -178,6 +179,14 @@ var Background = function () {
         }
         if (angle > 360) surrounded = false;else angle += 5;
       }
+      // Draws Cattails
+      surrounded = true;
+      while (surrounded) {
+        var _pos = [50, 50];
+        var cattail = new _cattail2.default(this.canvasB, ctxB, _pos);
+        cattail.render();
+        surrounded = false;
+      }
     }
   }, {
     key: 'renderPond',
@@ -185,6 +194,9 @@ var Background = function () {
       ctx.fillStyle = this.pondColour;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
+
+    // Draws loaded template
+
   }, {
     key: 'renderLand',
     value: function renderLand(canvas, ctx) {
@@ -253,8 +265,37 @@ var Cattail = function () {
   }
 
   _createClass(Cattail, [{
-    key: 'render',
-    value: function render() {}
+    key: "render",
+    value: function render() {
+      var stemLength = 25;
+      var stemThickness = 5;
+      var stemColour = _colours2.default.dark_green;
+      var headLength = 15;
+      var headThickness = 10;
+      var headColour = _colours2.default.olive;
+      var tipLength = 5;
+      var tipThickness = 2;
+      var tipColour = _colours2.default.khaki;
+      var rotation = Math.random() * 2 * Math.PI;
+      this.ctx.save();
+      this.ctx.translate(this.pos[0], this.pos[1]);
+      this.ctx.rotate(rotation);
+      this.drawLine(0, stemLength, stemThickness, stemColour);
+      this.drawLine(stemLength, headLength, headThickness, headColour);
+      this.drawLine(stemLength + headLength, tipLength, tipThickness, tipColour);
+      this.ctx.restore();
+    }
+  }, {
+    key: "drawLine",
+    value: function drawLine(start, length, thickness, colour) {
+      this.ctx.beginPath();
+      this.ctx.lineCap = "round";
+      this.ctx.strokeStyle = colour;
+      this.ctx.lineWidth = thickness;
+      this.ctx.moveTo(0, start);
+      this.ctx.lineTo(0, length + start);
+      this.ctx.stroke();
+    }
   }]);
 
   return Cattail;
@@ -382,6 +423,10 @@ exports.default = {
   deep_blue: '#2c59a3',
   yellow: '#FFD000',
   orange_peel: '#FF9D00',
+  khaki: '#F0E68C',
+  olive: '#808000',
+  forest_green: '#228B22',
+  dark_green: '#006400',
   pea: '#78AB46',
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
