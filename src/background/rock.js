@@ -1,10 +1,11 @@
 import colours from '../colours';
 
 class Rock {
-  constructor(canvas, ctx, pos) {
+  constructor(canvas, ctx, pos, size) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.pos = pos;
+    this.size = size;
     this.generatePoints();
   }
 
@@ -19,7 +20,7 @@ class Rock {
   }
 
   render() {
-    let size = 20 + Math.random() * 10;
+    let size = this.size/20 + this.size/20 * Math.random();
     let points = [];
     for (let a = 0; a < this.circPos.length; a++) {
       let x = size * Math.cos(this.circPos[a] * (Math.PI/180)) + this.pos[0];

@@ -1,21 +1,22 @@
 import colours from '../colours';
 
 class Cattail {
-  constructor(canvas, ctx, pos) {
+  constructor(canvas, ctx, pos, size) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.pos = pos;
+    this.size = size;
   }
 
   render() {
-    let stemLength = 25;
-    let stemThickness = 5;
+    let stemLength = this.size/8;
+    let stemThickness = stemLength/5;
     let stemColour = colours.dark_green;
-    let headLength = 15;
-    let headThickness = 10;
+    let headLength = this.size/15;
+    let headThickness = headLength/4 * 3;
     let headColour = colours.olive;
-    let tipLength = 5;
-    let tipThickness = 2;
+    let tipLength = this.size/40;
+    let tipThickness = tipLength/3;
     let tipColour = colours.khaki;
     let rotation = Math.random() * 2 * Math.PI;
     this.ctx.save();

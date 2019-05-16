@@ -114,6 +114,10 @@ var _cattail = __webpack_require__(/*! ./cattail */ "./src/background/cattail.js
 
 var _cattail2 = _interopRequireDefault(_cattail);
 
+var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/longGrass.js");
+
+var _longGrass2 = _interopRequireDefault(_longGrass);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -156,6 +160,22 @@ var Background = function () {
       ctxB.fill();
       ctxB.restore();
 
+      var grassCount = 1000;
+      for (var i = 0; i < grassCount; i++) {
+        var pondEdge = false;
+        var pos = void 0;
+        while (!pondEdge) {
+          pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+          var dis = Math.sqrt(Math.pow(pos[0] - this.pos[2], 2) + Math.pow(pos[1] - this.pos[3], 2));
+          var dis2 = Math.sqrt(Math.pow(pos[0] - this.pos[0], 2) + Math.pow(pos[1] - this.pos[1], 2));
+          if (dis > this.size && dis2 > this.size) {
+            pondEdge = true;
+          }
+        }
+        var entity = new _longGrass2.default(this.canvasB, ctxB, pos, this.size);
+        entity.render();
+      }
+
       // Draws a rock at 5 degrees around the edge of each circle without it
       // intersecting the lake
       var surrounded = true;
@@ -163,29 +183,31 @@ var Background = function () {
       while (surrounded) {
         var x = this.size * Math.cos(angle) + this.pos[0];
         var y = this.size * Math.sin(angle) + this.pos[1];
-        var pos = [x, y];
-        var dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
-        if (dis > this.size) {
-          var rock = new _rock3.default(this.canvasB, ctxB, pos);
+        var _pos = [x, y];
+        var _dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
+        if (_dis > this.size) {
+          var rock = void 0;
+          if (Math.random() > 0.1) {
+            rock = new _rock3.default(this.canvasB, ctxB, _pos, this.size);
+          } else {
+            rock = new _cattail2.default(this.canvasB, ctxB, _pos, this.size);
+          }
           rock.render();
         }
         x += this.pos[2] - this.pos[0];
         y += this.pos[3] - this.pos[1];
-        pos = [x, y];
-        dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
-        if (dis > this.size) {
-          var _rock = new _rock3.default(this.canvasB, ctxB, pos);
+        _pos = [x, y];
+        _dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
+        if (_dis > this.size) {
+          var _rock = void 0;
+          if (Math.random() > 0.2) {
+            _rock = new _rock3.default(this.canvasB, ctxB, _pos, this.size);
+          } else {
+            _rock = new _cattail2.default(this.canvasB, ctxB, _pos, this.size);
+          }
           _rock.render();
         }
-        if (angle > 360) surrounded = false;else angle += 5;
-      }
-      // Draws Cattails
-      surrounded = true;
-      while (surrounded) {
-        var _pos = [50, 50];
-        var cattail = new _cattail2.default(this.canvasB, ctxB, _pos);
-        cattail.render();
-        surrounded = false;
+        if (angle > 360 * 4) surrounded = false;else angle += Math.random() * 10;
       }
     }
   }, {
@@ -256,25 +278,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Cattail = function () {
-  function Cattail(canvas, ctx, pos) {
+  function Cattail(canvas, ctx, pos, size) {
     _classCallCheck(this, Cattail);
 
     this.canvas = canvas;
     this.ctx = ctx;
     this.pos = pos;
+    this.size = size;
   }
 
   _createClass(Cattail, [{
     key: "render",
     value: function render() {
-      var stemLength = 25;
-      var stemThickness = 5;
+      var stemLength = this.size / 8;
+      var stemThickness = stemLength / 5;
       var stemColour = _colours2.default.dark_green;
-      var headLength = 15;
-      var headThickness = 10;
+      var headLength = this.size / 15;
+      var headThickness = headLength / 4 * 3;
       var headColour = _colours2.default.olive;
-      var tipLength = 5;
-      var tipThickness = 2;
+      var tipLength = this.size / 40;
+      var tipThickness = tipLength / 3;
       var tipColour = _colours2.default.khaki;
       var rotation = Math.random() * 2 * Math.PI;
       this.ctx.save();
@@ -305,6 +328,72 @@ exports.default = Cattail;
 
 /***/ }),
 
+/***/ "./src/background/longGrass.js":
+/*!*************************************!*\
+  !*** ./src/background/longGrass.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LongGrass = function () {
+  function LongGrass(canvas, ctx, pos, size) {
+    _classCallCheck(this, LongGrass);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.pos = pos;
+    this.size = size;
+  }
+
+  _createClass(LongGrass, [{
+    key: 'render',
+    value: function render() {
+      var w = this.size / 40;
+      var h = w * 6;
+      var rotation = Math.random() * Math.PI;
+      this.ctx.save();
+      this.ctx.translate(this.pos[0], this.pos[1]);
+      this.ctx.rotate(rotation);
+      this.ctx.beginPath();
+      this.ctx.fillStyle = _colours2.default.forest_green;
+      this.ctx.moveTo(0, -h / 2);
+      this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
+      this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
+      this.ctx.fill();
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = _colours2.default.dark_green;
+      this.ctx.moveTo(0, -h / 2);
+      this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
+      this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
+      this.ctx.stroke();
+      this.ctx.restore();
+    }
+  }]);
+
+  return LongGrass;
+}();
+
+exports.default = LongGrass;
+
+/***/ }),
+
 /***/ "./src/background/rock.js":
 /*!********************************!*\
   !*** ./src/background/rock.js ***!
@@ -330,12 +419,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Rock = function () {
-  function Rock(canvas, ctx, pos) {
+  function Rock(canvas, ctx, pos, size) {
     _classCallCheck(this, Rock);
 
     this.canvas = canvas;
     this.ctx = ctx;
     this.pos = pos;
+    this.size = size;
     this.generatePoints();
   }
 
@@ -353,7 +443,7 @@ var Rock = function () {
   }, {
     key: 'render',
     value: function render() {
-      var size = 20 + Math.random() * 10;
+      var size = this.size / 20 + this.size / 20 * Math.random();
       var points = [];
       for (var a = 0; a < this.circPos.length; a++) {
         var x = size * Math.cos(this.circPos[a] * (Math.PI / 180)) + this.pos[0];

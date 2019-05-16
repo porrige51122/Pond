@@ -1,6 +1,7 @@
 import colours from '../colours';
 import Rock from './rock';
 import Cattail from './cattail';
+import LongGrass from './longGrass';
 /**
  * BACKGROUND:
  * This class creates the bank of the pond and checks to see if fish are
@@ -38,6 +39,22 @@ class Background {
     ctxB.fill();
     ctxB.restore();
 
+    let grassCount = 1000;
+    for (let i = 0; i < grassCount; i++) {
+      let pondEdge = false;
+      let pos;
+      while (!pondEdge) {
+        pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+        let dis = Math.sqrt(Math.pow(pos[0] - this.pos[2], 2) + Math.pow(pos[1] - this.pos[3], 2));
+        let dis2 = Math.sqrt(Math.pow(pos[0] - this.pos[0], 2) + Math.pow(pos[1] - this.pos[1], 2));
+        if (dis > this.size && dis2 > this.size) {
+          pondEdge = true;
+        }
+      }
+      let entity = new LongGrass(this.canvasB, ctxB, pos, this.size);
+      entity.render();
+    }
+
     // Draws a rock at 5 degrees around the edge of each circle without it
     // intersecting the lake
     let surrounded = true;
@@ -48,7 +65,12 @@ class Background {
       let pos = [x, y];
       let dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
       if (dis > this.size) {
-        let rock = new Rock(this.canvasB, ctxB, pos);
+        let rock;
+        if (Math.random() > 0.1) {
+          rock = new Rock(this.canvasB, ctxB, pos, this.size);
+        } else {
+          rock = new Cattail(this.canvasB, ctxB, pos, this.size);
+        }
         rock.render();
       }
       x += this.pos[2] - this.pos[0];
@@ -56,21 +78,18 @@ class Background {
       pos = [x, y];
       dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
       if (dis > this.size) {
-        let rock = new Rock(this.canvasB, ctxB, pos);
+        let rock;
+        if (Math.random() > 0.2) {
+          rock = new Rock(this.canvasB, ctxB, pos, this.size);
+        } else {
+          rock = new Cattail(this.canvasB, ctxB, pos, this.size);
+        }
         rock.render();
       }
-      if (angle > 360)
+      if (angle > 360 * 4)
         surrounded = false;
       else
-        angle += 5;
-    }
-    // Draws Cattails
-    surrounded = true;
-    while (surrounded) {
-      let pos = [50, 50];
-      let cattail = new Cattail(this.canvasB, ctxB, pos);
-      cattail.render()
-      surrounded = false;
+        angle += Math.random() * 10;
     }
   }
 
