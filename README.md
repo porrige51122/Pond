@@ -10,15 +10,15 @@ Current features include:
    * Large pads which float on the top of the water without a care in the world,
  * 🌊 Water Effects 🌊
    * Move your mouse across the water and leave little waves.
+ * ⏺ Shape ⏺
+   * The pond has banks to show that the pond isn't endless. It is contained. contained by you!
+   * From here we have a random assortment of grass and cattails and rocks
 
 Planned features:
  * 🌙 Day Night Cycle 🌙
    * Canvas background colours change over time to show the passing of time is not a bad thing
  * ☔ Weather ☔
    * Rain drops to show that rain isn't just for ruining your day but for clearing your mind after a stressful day
- * ⏺ Shape ⏺
-   * The pond needs to have banks to show that the pond isn't endless. It is contained. contained by you!
-   * From here we can have a random assortment of flowers and small features
  * 🍖 Food 🍖
    * The ability to drop bits of bread and feed the little fish
    * Big fishes eat smaller fishes and population management will occur
