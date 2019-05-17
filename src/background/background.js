@@ -65,12 +65,7 @@ class Background {
       let pos = [x, y];
       let dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
       if (dis > this.size) {
-        let rock;
-        if (Math.random() > 0.1) {
-          rock = new Rock(this.canvasB, ctxB, pos, this.size);
-        } else {
-          rock = new Cattail(this.canvasB, ctxB, pos, this.size);
-        }
+        let rock = new Rock(this.canvasB, ctxB, pos, this.size);
         rock.render();
       }
       x += this.pos[2] - this.pos[0];
@@ -78,18 +73,37 @@ class Background {
       pos = [x, y];
       dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
       if (dis > this.size) {
-        let rock;
-        if (Math.random() > 0.2) {
-          rock = new Rock(this.canvasB, ctxB, pos, this.size);
-        } else {
-          rock = new Cattail(this.canvasB, ctxB, pos, this.size);
-        }
+        let rock = new Rock(this.canvasB, ctxB, pos, this.size);
         rock.render();
       }
       if (angle > 360 * 4)
         surrounded = false;
       else
         angle += Math.random() * 10;
+    }
+    surrounded = true;
+    angle = 0;
+    while (surrounded) {
+      let x = this.size * Math.cos(angle) + this.pos[0];
+      let y = this.size * Math.sin(angle) + this.pos[1];
+      let pos = [x, y];
+      let dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
+      if (dis > this.size) {
+        let rock = new Cattail(this.canvasB, ctxB, pos, this.size);
+        rock.render();
+      }
+      x += this.pos[2] - this.pos[0];
+      y += this.pos[3] - this.pos[1];
+      pos = [x, y];
+      dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
+      if (dis > this.size) {
+        let rock = new Cattail(this.canvasB, ctxB, pos, this.size);
+        rock.render();
+      }
+      if (angle > 360 * 4)
+        surrounded = false;
+      else
+        angle += Math.random() * 50;
     }
   }
 

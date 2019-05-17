@@ -106,9 +106,9 @@ var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
-var _rock2 = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
+var _rock4 = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
 
-var _rock3 = _interopRequireDefault(_rock2);
+var _rock5 = _interopRequireDefault(_rock4);
 
 var _cattail = __webpack_require__(/*! ./cattail */ "./src/background/cattail.js");
 
@@ -186,12 +186,7 @@ var Background = function () {
         var _pos = [x, y];
         var _dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
         if (_dis > this.size) {
-          var rock = void 0;
-          if (Math.random() > 0.1) {
-            rock = new _rock3.default(this.canvasB, ctxB, _pos, this.size);
-          } else {
-            rock = new _cattail2.default(this.canvasB, ctxB, _pos, this.size);
-          }
+          var rock = new _rock5.default(this.canvasB, ctxB, _pos, this.size);
           rock.render();
         }
         x += this.pos[2] - this.pos[0];
@@ -199,15 +194,31 @@ var Background = function () {
         _pos = [x, y];
         _dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
         if (_dis > this.size) {
-          var _rock = void 0;
-          if (Math.random() > 0.2) {
-            _rock = new _rock3.default(this.canvasB, ctxB, _pos, this.size);
-          } else {
-            _rock = new _cattail2.default(this.canvasB, ctxB, _pos, this.size);
-          }
+          var _rock = new _rock5.default(this.canvasB, ctxB, _pos, this.size);
           _rock.render();
         }
         if (angle > 360 * 4) surrounded = false;else angle += Math.random() * 10;
+      }
+      surrounded = true;
+      angle = 0;
+      while (surrounded) {
+        var _x = this.size * Math.cos(angle) + this.pos[0];
+        var _y = this.size * Math.sin(angle) + this.pos[1];
+        var _pos2 = [_x, _y];
+        var _dis2 = Math.sqrt(Math.pow(_x - this.pos[2], 2) + Math.pow(_y - this.pos[3], 2));
+        if (_dis2 > this.size) {
+          var _rock2 = new _cattail2.default(this.canvasB, ctxB, _pos2, this.size);
+          _rock2.render();
+        }
+        _x += this.pos[2] - this.pos[0];
+        _y += this.pos[3] - this.pos[1];
+        _pos2 = [_x, _y];
+        _dis2 = Math.sqrt(Math.pow(_x - this.pos[0], 2) + Math.pow(_y - this.pos[1], 2));
+        if (_dis2 > this.size) {
+          var _rock3 = new _cattail2.default(this.canvasB, ctxB, _pos2, this.size);
+          _rock3.render();
+        }
+        if (angle > 360 * 4) surrounded = false;else angle += Math.random() * 50;
       }
     }
   }, {
@@ -284,20 +295,21 @@ var Cattail = function () {
     this.canvas = canvas;
     this.ctx = ctx;
     this.pos = pos;
-    this.size = size;
+    this.size = size / 2 + size / 2 * Math.random();
   }
 
   _createClass(Cattail, [{
     key: "render",
     value: function render() {
-      var stemLength = this.size / 8;
-      var stemThickness = stemLength / 5;
+      var length = Math.random();
+      var stemLength = this.size / 8 * length;
+      var stemThickness = this.size / 64;
       var stemColour = _colours2.default.dark_green;
-      var headLength = this.size / 15;
-      var headThickness = headLength / 4 * 3;
+      var headLength = this.size / 15 * length;
+      var headThickness = this.size / 20;
       var headColour = _colours2.default.olive;
-      var tipLength = this.size / 40;
-      var tipThickness = tipLength / 3;
+      var tipLength = this.size / 40 * length;
+      var tipThickness = this.size / 120;
       var tipColour = _colours2.default.khaki;
       var rotation = Math.random() * 2 * Math.PI;
       this.ctx.save();

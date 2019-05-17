@@ -5,18 +5,19 @@ class Cattail {
     this.canvas = canvas;
     this.ctx = ctx;
     this.pos = pos;
-    this.size = size;
+    this.size = size/2 + size/2 * Math.random();
   }
 
   render() {
-    let stemLength = this.size/8;
-    let stemThickness = stemLength/5;
+    let length = Math.random();
+    let stemLength = this.size/8 * length;
+    let stemThickness = this.size/64;
     let stemColour = colours.dark_green;
-    let headLength = this.size/15;
-    let headThickness = headLength/4 * 3;
+    let headLength = this.size/15 * length;
+    let headThickness = this.size/20;
     let headColour = colours.olive;
-    let tipLength = this.size/40;
-    let tipThickness = tipLength/3;
+    let tipLength = this.size/40 * length;
+    let tipThickness = this.size/120;
     let tipColour = colours.khaki;
     let rotation = Math.random() * 2 * Math.PI;
     this.ctx.save();
