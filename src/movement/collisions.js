@@ -8,7 +8,7 @@ class Collisions {
 
   checkTadpoles(movement) {
     for (let i = 0; i < this.tadpoles.length; i++) {
-      let pondEdge = this.background.isColliding(this.tadpoles[i]);
+      let pondEdge = this.background.isColliding(this.tadpoles[i].pos);
       if (pondEdge != null) {
         let pos = this.tadpoles[i].pos;
         let dx = pondEdge[0] - pos[0];
@@ -21,7 +21,7 @@ class Collisions {
 
   checkFish(movement) {
     for (let i = 0; i < this.fish.length; i++) {
-      let pondEdge = this.background.isColliding(this.fish[i]);
+      let pondEdge = this.background.isColliding(this.fish[i].pos);
       if (pondEdge != null) {
         let pos = this.fish[i].pos;
         let dx = pondEdge[0] - pos[0];
@@ -33,7 +33,7 @@ class Collisions {
 
   checkLillies(movement) {
     for (let i = 0; i < this.lillies.length; i++) {
-      let pondEdge = this.background.isColliding(this.lillies[i]);
+      let pondEdge = this.background.isColliding(this.lillies[i].pos);
       if (pondEdge != null) {
         let pos = this.lillies[i].pos;
         let dx = pondEdge[0] - pos[0];

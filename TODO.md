@@ -20,3 +20,4 @@ This contains all things that are currently being worked on or thought about:
   * Collisions between creatures
  * Redo collisions
   * make them actually collisions rather than
+ * Spawn everything within the pond area

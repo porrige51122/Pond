@@ -84,9 +84,7 @@ class Background {
       let pos;
       while (!pondEdge) {
         pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
-        let dis = Math.sqrt(Math.pow(pos[0] - this.pos[2], 2) + Math.pow(pos[1] - this.pos[3], 2));
-        let dis2 = Math.sqrt(Math.pow(pos[0] - this.pos[0], 2) + Math.pow(pos[1] - this.pos[1], 2));
-        if (dis > this.size && dis2 > this.size) {
+        if (this.isColliding(pos) != null) {
           pondEdge = true;
         }
       }
@@ -109,12 +107,12 @@ class Background {
     ctx.drawImage(this.canvasB, 0, 0);
   }
 
-  isColliding(entity) {
+  isColliding(pos) {
     // Calculate if the object will collide with the wall
-    let dxa = entity.pos[0] - this.pos[0];
-    let dya = entity.pos[1] - this.pos[1];
-    let dxb = entity.pos[0] - this.pos[2];
-    let dyb = entity.pos[1] - this.pos[3];
+    let dxa = pos[0] - this.pos[0];
+    let dya = pos[1] - this.pos[1];
+    let dxb = pos[0] - this.pos[2];
+    let dyb = pos[1] - this.pos[3];
     let lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
     let lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
     if (lenA < this.size || lenB < this.size) {

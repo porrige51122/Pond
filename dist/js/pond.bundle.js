@@ -203,9 +203,7 @@ var Background = function () {
         var pos = void 0;
         while (!pondEdge) {
           pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
-          var dis = Math.sqrt(Math.pow(pos[0] - this.pos[2], 2) + Math.pow(pos[1] - this.pos[3], 2));
-          var dis2 = Math.sqrt(Math.pow(pos[0] - this.pos[0], 2) + Math.pow(pos[1] - this.pos[1], 2));
-          if (dis > this.size && dis2 > this.size) {
+          if (this.isColliding(pos) != null) {
             pondEdge = true;
           }
         }
@@ -234,12 +232,12 @@ var Background = function () {
     }
   }, {
     key: 'isColliding',
-    value: function isColliding(entity) {
+    value: function isColliding(pos) {
       // Calculate if the object will collide with the wall
-      var dxa = entity.pos[0] - this.pos[0];
-      var dya = entity.pos[1] - this.pos[1];
-      var dxb = entity.pos[0] - this.pos[2];
-      var dyb = entity.pos[1] - this.pos[3];
+      var dxa = pos[0] - this.pos[0];
+      var dya = pos[1] - this.pos[1];
+      var dxb = pos[0] - this.pos[2];
+      var dyb = pos[1] - this.pos[3];
       var lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
       var lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
       if (lenA < this.size || lenB < this.size) {
@@ -934,7 +932,7 @@ var Collisions = function () {
     key: "checkTadpoles",
     value: function checkTadpoles(movement) {
       for (var i = 0; i < this.tadpoles.length; i++) {
-        var pondEdge = this.background.isColliding(this.tadpoles[i]);
+        var pondEdge = this.background.isColliding(this.tadpoles[i].pos);
         if (pondEdge != null) {
           var pos = this.tadpoles[i].pos;
           var dx = pondEdge[0] - pos[0];
@@ -948,7 +946,7 @@ var Collisions = function () {
     key: "checkFish",
     value: function checkFish(movement) {
       for (var i = 0; i < this.fish.length; i++) {
-        var pondEdge = this.background.isColliding(this.fish[i]);
+        var pondEdge = this.background.isColliding(this.fish[i].pos);
         if (pondEdge != null) {
           var pos = this.fish[i].pos;
           var dx = pondEdge[0] - pos[0];
@@ -961,7 +959,7 @@ var Collisions = function () {
     key: "checkLillies",
     value: function checkLillies(movement) {
       for (var i = 0; i < this.lillies.length; i++) {
-        var pondEdge = this.background.isColliding(this.lillies[i]);
+        var pondEdge = this.background.isColliding(this.lillies[i].pos);
         if (pondEdge != null) {
           var pos = this.lillies[i].pos;
           var dx = pondEdge[0] - pos[0];
