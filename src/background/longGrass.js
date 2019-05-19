@@ -1,11 +1,14 @@
 import colours from '../colours';
 
 class LongGrass {
-  constructor(canvas, ctx, pos, size) {
+  constructor(canvas, ctx, size) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.pos = pos;
     this.size = size;
+  }
+
+  setPos(pos) {
+    this.pos = pos;
   }
 
   render() {

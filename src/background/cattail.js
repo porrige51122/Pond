@@ -1,11 +1,14 @@
 import colours from '../colours';
 
 class Cattail {
-  constructor(canvas, ctx, pos, size) {
+  constructor(canvas, ctx, size) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.pos = pos;
     this.size = size/2 + size/2 * Math.random();
+  }
+
+  setPos(pos) {
+    this.pos = pos;
   }
 
   render() {
@@ -24,8 +27,8 @@ class Cattail {
     this.ctx.translate(this.pos[0], this.pos[1]);
     this.ctx.rotate(rotation);
     this.drawLine(0, stemLength, stemThickness, stemColour);
-    this.drawLine(stemLength, headLength, headThickness, headColour);
-    this.drawLine(stemLength + headLength, tipLength, tipThickness, tipColour);
+    this.drawLine(stemLength + stemThickness, headLength, headThickness, headColour);
+    this.drawLine(stemLength + stemThickness + headLength, tipLength, tipThickness, tipColour);
     this.ctx.restore();
   }
 

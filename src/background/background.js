@@ -40,71 +40,63 @@ class Background {
     ctxB.restore();
 
     let grassCount = 1000;
-    for (let i = 0; i < grassCount; i++) {
+    this.aroundPond(grassCount, new LongGrass(this.canvasB, ctxB, this.size));
+    // Approximate count due to random nature
+    let rockCount = 100;
+    this.edgeOfPond(rockCount, new Rock(this.canvasB, ctxB, this.size));
+    let cattailCount = 30;
+    this.edgeOfPond(cattailCount, new Cattail(this.canvasB, ctxB, this.size));
+    }
+
+
+  edgeOfPond(count, entity) {
+    let surrounded = true;
+    let angle = 0;
+
+    while (surrounded) {
+      let x = this.size * Math.cos(angle) + this.pos[0];
+      let y = this.size * Math.sin(angle) + this.pos[1];
+      let pos = [x, y];
+      let dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
+      if (dis > this.size) {
+        entity.setPos(pos);
+        entity.render();
+      }
+
+      x += this.pos[2] - this.pos[0];
+      y += this.pos[3] - this.pos[1];
+      pos = [x, y];
+      dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
+      if (dis > this.size) {
+        entity.setPos(pos);
+        entity.render();
+      }
+      if (angle > count * 25)
+        surrounded = false;
+      else
+        angle += Math.random() * 50;
+    }
+  }
+
+  aroundPond(count, entity) {
+    for (let i = 0; i < count; i++) {
       let pondEdge = false;
       let pos;
       while (!pondEdge) {
-        pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+        pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
         let dis = Math.sqrt(Math.pow(pos[0] - this.pos[2], 2) + Math.pow(pos[1] - this.pos[3], 2));
         let dis2 = Math.sqrt(Math.pow(pos[0] - this.pos[0], 2) + Math.pow(pos[1] - this.pos[1], 2));
         if (dis > this.size && dis2 > this.size) {
           pondEdge = true;
         }
       }
-      let entity = new LongGrass(this.canvasB, ctxB, pos, this.size);
+      entity.setPos(pos);
       entity.render();
     }
+  }
 
-    // Draws a rock at 5 degrees around the edge of each circle without it
-    // intersecting the lake
-    let surrounded = true;
-    let angle = 0;
-    while (surrounded) {
-      let x = this.size * Math.cos(angle) + this.pos[0];
-      let y = this.size * Math.sin(angle) + this.pos[1];
-      let pos = [x, y];
-      let dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
-      if (dis > this.size) {
-        let rock = new Rock(this.canvasB, ctxB, pos, this.size);
-        rock.render();
-      }
-      x += this.pos[2] - this.pos[0];
-      y += this.pos[3] - this.pos[1];
-      pos = [x, y];
-      dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
-      if (dis > this.size) {
-        let rock = new Rock(this.canvasB, ctxB, pos, this.size);
-        rock.render();
-      }
-      if (angle > 360 * 4)
-        surrounded = false;
-      else
-        angle += Math.random() * 10;
-    }
-    surrounded = true;
-    angle = 0;
-    while (surrounded) {
-      let x = this.size * Math.cos(angle) + this.pos[0];
-      let y = this.size * Math.sin(angle) + this.pos[1];
-      let pos = [x, y];
-      let dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
-      if (dis > this.size) {
-        let rock = new Cattail(this.canvasB, ctxB, pos, this.size);
-        rock.render();
-      }
-      x += this.pos[2] - this.pos[0];
-      y += this.pos[3] - this.pos[1];
-      pos = [x, y];
-      dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
-      if (dis > this.size) {
-        let rock = new Cattail(this.canvasB, ctxB, pos, this.size);
-        rock.render();
-      }
-      if (angle > 360 * 4)
-        surrounded = false;
-      else
-        angle += Math.random() * 50;
-    }
+  withinPond(count, entity) {
+    // TODO: Code to put all entities within the pond
   }
 
   renderPond(canvas, ctx) {
