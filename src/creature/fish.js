@@ -15,6 +15,8 @@ class Fish {
     // Extra Variables
     this.swimming = true;
     this.sin = 0;
+    this.angle = 0;
+    this.left = true;
   }
 
   /**
@@ -30,6 +32,18 @@ class Fish {
 
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
+
+    if (this.left) {
+      this.angle++;
+    } else {
+      this.angle--;
+    }
+    if (this.angle > 15) {
+      this.left = false;
+    } else if (this.angle < - 15) {
+      this.left = true;
+    }
+
   }
 
   /**
@@ -37,22 +51,39 @@ class Fish {
    * a tail
    */
   render(canvas, ctx) {
-    // Draw Body
-    ctx.beginPath();
-    ctx.fillStyle = colours.orange_peel;
-    ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
-    ctx.fill();
-    // Draw Tail
-    ctx.beginPath();
-    ctx.fillStyle = colours.orange_peel;
-    ctx.arc(this.pos[0] - (this.vel[0] * 10), this.pos[1] - (this.vel[1] * 10), this.size / 4 * 3, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.fillStyle = colours.orange_peel;
-    ctx.arc(this.pos[0] - (this.vel[0] * 20), this.pos[1] - (this.vel[1] * 20), this.size / 2, 0, 2 * Math.PI);
-    ctx.fill();
+    let x = this.pos[0];
+    let y = this.pos[1];
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 1;
+    this.drawfish(canvas, ctx, x, y, this.angle);
+
   }
 
+  drawfish(canvas, ctx, x, y, offset) {
+   /**
+   * Tail Coordinates
+   */
+  let t = [x - 5 + offset, y - 50, x + 5 + offset, y - 50];
+   /**
+   * Head Coordinates
+   */
+  let h = [x - 15, y, x + 15, y];
+
+  // Draw Head
+  ctx.beginPath();
+  ctx.moveTo(h[0], h[1]);
+  ctx.bezierCurveTo(x - 15, y + 20, x + 15, y + 20,    h[2],  h[3]);
+  ctx.bezierCurveTo(x + 15, y +  7, x - 15, y +  7,    h[0],  h[1]);
+  ctx.fill();
+  // Draw Body
+  ctx.beginPath();
+  ctx.moveTo(h[0], h[1]);
+  ctx.bezierCurveTo(x - 10, y - 25, x - 10, y - 25,   t[0],   t[1]);
+  ctx.bezierCurveTo((t[0] + t[2])/2, t[1] - 2, (t[0] + t[2])/2, t[1] - 2,   t[2],   t[3]);
+  ctx.bezierCurveTo(x + 10, y - 25, x + 10, y - 25, x + 15,      y);
+  ctx.bezierCurveTo(x + 15, y +  7, x - 15, y +  7,    h[0],  h[1]);
+  ctx.stroke();
+}
 }
 
 export default Fish;

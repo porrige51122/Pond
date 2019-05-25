@@ -8,8 +8,6 @@ This contains all things that are currently being worked on or thought about:
    * Trees
      * Sakura tree
        * Blossom falls on the water
-
-## To do
  * Redo the fish
    * Get a new design for the fish
    * Different patterns for each fish
@@ -18,6 +16,9 @@ This contains all things that are currently being worked on or thought about:
    * Add lots of different kinds of fish
    * Have interactions with other fish
    * Have a swarm function for when food dropping is implemented
+   * add shadows
+
+## To do
  * Spatial Hashing
    * Collisions between creatures
  * Redo collisions
