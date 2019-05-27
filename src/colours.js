@@ -2,6 +2,7 @@ export default {
   // Daytime
   ocean_blue: '#80a4dd',
   deep_blue: '#2c59a3',
+  pond_shadow: 'rgba(11, 45, 99, 0.7)',
   yellow: '#FFD000',
   orange_peel: '#FF9D00',
   khaki: '#F0E68C',
