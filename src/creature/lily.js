@@ -38,8 +38,18 @@ class Lily {
    */
   render(canvas, ctx) {
     if (!this.isFlower) {
-      //Draw First Half
       let start = this.startAngle;
+      // Shadow
+      ctx.beginPath();
+      ctx.fillStyle = colours.deep_blue;
+      ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = colours.deep_blue;
+      ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start + (Math.PI / 180) * 170);
+      ctx.fill();
+      
+      // Draw First Half
       ctx.beginPath();
       ctx.fillStyle = colours.light_green;
       ctx.arc(this.pos[0], this.pos[1], this.size, start, Math.PI + start);
@@ -59,6 +69,11 @@ class Lily {
       ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, start, Math.PI + start);
       ctx.fill();
     } else {
+      // Shadow
+      ctx.beginPath();
+      ctx.fillStyle = colours.deep_blue;
+      ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, 0, Math.PI * 2);
+      ctx.fill();
       // Draws the full circle
       ctx.beginPath();
       ctx.fillStyle = colours.light_green;

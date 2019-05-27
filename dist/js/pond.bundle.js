@@ -624,16 +624,24 @@ var Fish = function () {
     value: function render(canvas, ctx) {
       this.angles.push(this.angle);
       this.angles.shift();
+
+      ctx.save();
+      ctx.translate(this.pos[0] + 10, this.pos[1] + 10);
+      ctx.rotate(this.angle - Math.PI / 2);
+      ctx.lineWidth = 1;
+      this.drawfish(canvas, ctx, 0, 0, this.angles, true);
+      ctx.restore();
+
       ctx.save();
       ctx.translate(this.pos[0], this.pos[1]);
       ctx.rotate(this.angle - Math.PI / 2);
       ctx.lineWidth = 1;
-      this.drawfish(canvas, ctx, 0, 0, this.angles);
+      this.drawfish(canvas, ctx, 0, 0, this.angles, false);
       ctx.restore();
     }
   }, {
     key: 'drawfish',
-    value: function drawfish(canvas, ctx, x, y, offsetArr) {
+    value: function drawfish(canvas, ctx, x, y, offsetArr, shadow) {
       var offset = (offsetArr[0] - offsetArr[1]) * 100;
       if (offset > 10) {
         offset = 10;
@@ -648,10 +656,14 @@ var Fish = function () {
       var f = [t[0] + offset - this.size / 2, t[1] - this.size, t[2] + offset + this.size / 2, t[3] - this.size];
       // Fin Coordinates
       var a = [h[0] - this.size - offset, h[1] - this.size, h[2] + this.size + offset, h[3] - this.size];
-
+      if (shadow) {
+        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.strokeStyle = _colours2.default.deep_blue;
+      } else {
+        ctx.fillStyle = _colours2.default.yellow;
+        ctx.strokeStyle = _colours2.default.khaki;
+      }
       // Draw Head
-      ctx.fillStyle = _colours2.default.yellow;
-      ctx.strokeStyle = _colours2.default.khaki;
       ctx.beginPath();
       this.fishHead(canvas, ctx, x, y, h);
       ctx.fill();
@@ -673,7 +685,9 @@ var Fish = function () {
       this.fishFins(canvas, ctx, x, y, h, t, a);
       ctx.stroke();
       // Draw Body
-      ctx.fillStyle = _colours2.default.orange_peel;
+      if (!shadow) {
+        ctx.fillStyle = _colours2.default.orange_peel;
+      }
       ctx.beginPath();
       this.fishBody(canvas, ctx, x, y, h, t);
       ctx.fill();
@@ -796,8 +810,18 @@ var Lily = function () {
     key: 'render',
     value: function render(canvas, ctx) {
       if (!this.isFlower) {
-        //Draw First Half
         var start = this.startAngle;
+        // Shadow
+        ctx.beginPath();
+        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start + Math.PI / 180 * 170);
+        ctx.fill();
+
+        // Draw First Half
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.light_green;
         ctx.arc(this.pos[0], this.pos[1], this.size, start, Math.PI + start);
@@ -817,6 +841,11 @@ var Lily = function () {
         ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, start, Math.PI + start);
         ctx.fill();
       } else {
+        // Shadow
+        ctx.beginPath();
+        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, 0, Math.PI * 2);
+        ctx.fill();
         // Draws the full circle
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.light_green;
