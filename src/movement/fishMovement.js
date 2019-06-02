@@ -30,8 +30,8 @@ class FishMovement extends Movement {
           } else {
             // Setting a random direction and speed while not being in the
             // range -1 to 1 as it is too slow
-            let velx = (Math.random() > 0.5 ? 1 : -1) * (speed * Math.random() + 1);
-            let vely = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1);
+            let velx = (Math.random() > 0.5 ? 1 : -1) * (speed * Math.random() + 1.5);
+            let vely = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1.5);
             this.entities[i].vel = [velx, vely];
 
             // Adding a water drop

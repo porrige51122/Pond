@@ -14,6 +14,10 @@ class Water {
 
   }
 
+  setBackground(background) {
+    this.background = background;
+  }
+
   tick() {
     this.ripples.forEach((r) => r.tick());
     for (let i = 0; i < this.ripples.length; i++) {
@@ -45,7 +49,8 @@ class Water {
   dropAt(dx, dy, vx = 0, vy = 0) {
     dx <<= 0;
     dy <<= 0;
-    this.ripples.push(new Ripple(dx, dy, vx, vy));
+    if (this.background.isColliding([dx, dy]) == null)
+      this.ripples.push(new Ripple(dx, dy, vx, vy));
   }
 
   randomDrop() {

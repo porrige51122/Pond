@@ -72,6 +72,7 @@ class Pond {
    */
   init() {
     this.background = new Background(canvas, ctx);
+    this.water.setBackground(this.background);
 
     this.tadpoles = [];
     this.fish = [];

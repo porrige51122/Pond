@@ -1138,8 +1138,8 @@ var FishMovement = function (_Movement) {
             } else {
               // Setting a random direction and speed while not being in the
               // range -1 to 1 as it is too slow
-              var velx = (Math.random() > 0.5 ? 1 : -1) * (speed * Math.random() + 1);
-              var vely = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1);
+              var velx = (Math.random() > 0.5 ? 1 : -1) * (speed * Math.random() + 1.5);
+              var vely = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1.5);
               this.entities[i].vel = [velx, vely];
 
               // Adding a water drop
@@ -1559,6 +1559,11 @@ var Water = function () {
   }
 
   _createClass(Water, [{
+    key: 'setBackground',
+    value: function setBackground(background) {
+      this.background = background;
+    }
+  }, {
     key: 'tick',
     value: function tick() {
       this.ripples.forEach(function (r) {
@@ -1607,7 +1612,7 @@ var Water = function () {
 
       dx <<= 0;
       dy <<= 0;
-      this.ripples.push(new _ripple2.default(dx, dy, vx, vy));
+      if (this.background.isColliding([dx, dy]) == null) this.ripples.push(new _ripple2.default(dx, dy, vx, vy));
     }
   }, {
     key: 'randomDrop',
@@ -1747,6 +1752,7 @@ var Pond = function () {
       var _this2 = this;
 
       this.background = new _background2.default(canvas, ctx);
+      this.water.setBackground(this.background);
 
       this.tadpoles = [];
       this.fish = [];
