@@ -42,17 +42,24 @@ class Fish {
   render(canvas, ctx) {
     this.angles.push(this.angle);
     this.angles.shift();
+
     ctx.save();
     ctx.translate(this.pos[0], this.pos[1]);
     ctx.rotate(this.angle - Math.PI / 2);
     ctx.lineWidth = 1;
-    this.drawfish(canvas, ctx, 0, 0, this.angles);
+    this.drawfish(canvas, ctx, 0, 0, this.angles, true);
     ctx.restore();
 
+    ctx.save();
+    ctx.translate(this.pos[0], this.pos[1]);
+    ctx.rotate(this.angle - Math.PI / 2);
+    ctx.lineWidth = 1;
+    this.drawfish(canvas, ctx, 0, 0, this.angles, false);
+    ctx.restore();
 
   }
 
-  drawfish(canvas, ctx, x, y, offsetArr) {
+  drawfish(canvas, ctx, x, y, offsetArr, shadow) {
     let offset = (offsetArr[0] - offsetArr[1]) * 100;
     if (offset > 10) {
       offset = 10;

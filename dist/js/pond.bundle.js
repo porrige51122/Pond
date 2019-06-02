@@ -624,16 +624,24 @@ var Fish = function () {
     value: function render(canvas, ctx) {
       this.angles.push(this.angle);
       this.angles.shift();
+
       ctx.save();
       ctx.translate(this.pos[0], this.pos[1]);
       ctx.rotate(this.angle - Math.PI / 2);
       ctx.lineWidth = 1;
-      this.drawfish(canvas, ctx, 0, 0, this.angles);
+      this.drawfish(canvas, ctx, 0, 0, this.angles, true);
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(this.pos[0], this.pos[1]);
+      ctx.rotate(this.angle - Math.PI / 2);
+      ctx.lineWidth = 1;
+      this.drawfish(canvas, ctx, 0, 0, this.angles, false);
       ctx.restore();
     }
   }, {
     key: 'drawfish',
-    value: function drawfish(canvas, ctx, x, y, offsetArr) {
+    value: function drawfish(canvas, ctx, x, y, offsetArr, shadow) {
       var offset = (offsetArr[0] - offsetArr[1]) * 100;
       if (offset > 10) {
         offset = 10;
@@ -796,8 +804,18 @@ var Lily = function () {
     key: 'render',
     value: function render(canvas, ctx) {
       if (!this.isFlower) {
-        //Draw First Half
         var start = this.startAngle;
+        // Shadow
+        ctx.beginPath();
+        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start + Math.PI / 180 * 170);
+        ctx.fill();
+
+        // Draw First Half
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.light_green;
         ctx.arc(this.pos[0], this.pos[1], this.size, start, Math.PI + start);
@@ -817,6 +835,11 @@ var Lily = function () {
         ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, start, Math.PI + start);
         ctx.fill();
       } else {
+        // Shadow
+        ctx.beginPath();
+        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, 0, Math.PI * 2);
+        ctx.fill();
         // Draws the full circle
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.light_green;
