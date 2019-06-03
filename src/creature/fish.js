@@ -79,69 +79,35 @@ class Fish {
     ctx.fillStyle = colours.yellow;
     ctx.strokeStyle = colours.khaki;
     ctx.beginPath();
-    this.fishHead(canvas, ctx, x, y, h);
+    this.fishShape(canvas, ctx, x, y, h, t, f, a);
     ctx.fill();
     ctx.beginPath();
-    this.fishHead(canvas, ctx, x, y, h);
+    this.fishShape(canvas, ctx, x, y, h, t, f, a);
     ctx.stroke();
-    // Draw Tail
-    ctx.beginPath();
-    this.fishTail(canvas, ctx, x, y, h, t, f);
-    ctx.fill();
-    ctx.beginPath();
-    this.fishTail(canvas, ctx, x, y, h, t, f);
-    ctx.stroke();
-    // Draw Fins
-    ctx.beginPath();
-    this.fishFins(canvas, ctx, x, y, h, t, a);
-    ctx.fill();
-    ctx.beginPath();
-    this.fishFins(canvas, ctx, x, y, h, t, a);
-    ctx.stroke();
-    // Draw Body
-    ctx.fillStyle = colours.orange_peel;
-    ctx.beginPath();
-    this.fishBody(canvas, ctx, x, y, h, t);
-    ctx.fill();
-    ctx.beginPath();
-    this.fishBody(canvas, ctx, x, y, h, t);
-    ctx.stroke();
-
   }
 
-  fishFins(canvas, ctx, x, y, h, t, a) {
-    // right fin
-    ctx.moveTo(h[0], h[1]);
-    ctx.bezierCurveTo(a[0], h[1] - this.size / 2, a[0], h[1] - this.size / 2, a[0], a[1]);
-    ctx.bezierCurveTo(h[0] + this.size * (1 / 10), h[1] - this.size * (3 / 2), h[0] + this.size * (1 / 5), h[1] - this.size * (3 / 2), h[0] + this.size / 2, h[1] - this.size * (4 / 5));
-    ctx.lineTo(h[0], h[1]);
-    // left fin
-    ctx.lineTo(h[2], h[3]);
-    ctx.bezierCurveTo(a[2], h[3] - this.size / 2, a[2], h[3] - this.size / 2, a[2], a[3]);
-    ctx.bezierCurveTo(h[2] - this.size * (1 / 10), h[3] - this.size * (3 / 2), h[2] - this.size * (1 / 5), h[3] - this.size * (3 / 2), h[2] - this.size / 2, h[3] - this.size * (4 / 5));
-    ctx.lineTo(h[2], h[3]);
-  }
-
-  fishTail(canvas, ctx, x, y, h, t, f) {
-    ctx.moveTo(t[0], t[1]);
-    ctx.lineTo(f[0], f[1]);
-    ctx.lineTo(f[2], f[3]);
-    ctx.lineTo(t[2], t[3]);
-  }
-
-  fishHead(canvas, ctx, x, y, h) {
+  fishShape(canvas, ctx, x, y, h, t, f, a) {
+    // Head
     ctx.moveTo(h[0], h[1]);
     ctx.bezierCurveTo(x - this.size * (3 / 2), y + this.size * 2, x + this.size * (3 / 2), y + this.size * 2, h[2], h[3]);
-    ctx.bezierCurveTo(x + this.size * (3 / 2), y + this.size * (7 / 10), x - this.size * (3 / 2), y + this.size * (7 / 10), h[0], h[1]);
+    // L fin
+    ctx.bezierCurveTo(a[2], h[3] - this.size / 2, a[2], h[3] - this.size / 2, a[2], a[3]);
+    ctx.bezierCurveTo(h[2] - this.size * (1 / 10), h[3] - this.size * (3 / 2), h[2] - this.size * (1 / 5), h[3] - this.size * (3 / 2), h[2], h[3] - this.size * (4 / 5));
+    ctx.lineTo(h[2], h[3]);
+    // L body
+    ctx.bezierCurveTo(x + this.size, y - this.size * (5 / 2), x + this.size, y - this.size * (5 / 2), t[2], t[3]);
+    // Tail
+    ctx.lineTo(f[2], f[3]);
+    ctx.lineTo(f[0], f[1]);
+    ctx.lineTo(t[0], t[1]);
+    // R body
+    ctx.bezierCurveTo(x - this.size, y - this.size * (5 / 2), x - this.size, y - this.size * (5 / 2), h[0], h[1]);
+    // R fin
+    ctx.bezierCurveTo(a[0], h[1] - this.size / 2, a[0], h[1] - this.size / 2, a[0], a[1]);
+    ctx.bezierCurveTo(h[0] + this.size * (1 / 10), h[1] - this.size * (3 / 2), h[0] + this.size * (1 / 5), h[1] - this.size * (3 / 2), h[0], h[1] - this.size * (4 / 5));
+    ctx.lineTo(h[0], h[1]);
   }
 
-  fishBody(canvas, ctx, x, y, h, t) {
-    ctx.moveTo(h[0], h[1]);
-    ctx.bezierCurveTo(x - this.size, y - this.size * (5 / 2), x - this.size, y - this.size * (5 / 2), t[0], t[1]);
-    ctx.bezierCurveTo((t[0] + t[2]) / 2, t[1] - this.size * (2 / 10), (t[0] + t[2]) / 2, t[1] - this.size * (2 / 10), t[2], t[3]);
-    ctx.bezierCurveTo(x + this.size, y - this.size * (5 / 2), x + this.size, y - this.size * (5 / 2), x + this.size * (3 / 2), y);
-    ctx.bezierCurveTo(x + this.size * (3 / 2), y + this.size * (7 / 10), x - this.size * (3 / 2), y + this.size * (7 / 10), h[0], h[1]);
-  }
 }
 
 export default Fish;
