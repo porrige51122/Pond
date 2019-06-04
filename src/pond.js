@@ -58,9 +58,10 @@ class Pond {
       this.lilySize = document.getElementById('lillies').value;
       this.init();
     });
-
+    let mousemovecount = 0;
     canvas.addEventListener("mousemove", () => {
-      if (Math.random() < 0.5) {
+      mousemovecount++;
+      if (mousemovecount % 4 == 0) {
         this.water.dropAt(event.clientX, event.clientY);
       }
     });
@@ -148,7 +149,10 @@ class Pond {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       this.water.resize();
-      // this.background.createLand(canvas, ctx);
+      this.tadpoleSize = document.getElementById('tadpoles').value;
+      this.fishSize = document.getElementById('fish').value;
+      this.lilySize = document.getElementById('lillies').value;
+      this.init();
     }
   }
 

@@ -51,7 +51,7 @@ class Fish {
     ctx.restore();
 
     ctx.save();
-    ctx.translate(this.pos[0], this.pos[1]);
+    ctx.translate(this.pos[0] - 10, this.pos[1] - 10);
     ctx.rotate(this.angle - Math.PI / 2);
     ctx.lineWidth = 1;
     this.drawfish(canvas, ctx, 0, 0, this.angles, false);
@@ -76,14 +76,22 @@ class Fish {
     let a = [h[0] - this.size - offset, h[1] - this.size, h[2] + this.size + offset, h[3] - this.size];
 
     // Draw Head
-    ctx.fillStyle = colours.yellow;
-    ctx.strokeStyle = colours.khaki;
+    if (shadow)
+      ctx.fillStyle = colours.deep_blue;
+    else
+      ctx.fillStyle = colours.orange_peel;
+
     ctx.beginPath();
     this.fishShape(canvas, ctx, x, y, h, t, f, a);
     ctx.fill();
-    ctx.beginPath();
-    this.fishShape(canvas, ctx, x, y, h, t, f, a);
-    ctx.stroke();
+    
+    if (!shadow) {
+      ctx.strokeStyle = colours.yellow;
+      ctx.beginPath();
+      this.fishShape(canvas, ctx, x, y, h, t, f, a);
+      ctx.stroke();
+    }
+
   }
 
   fishShape(canvas, ctx, x, y, h, t, f, a) {

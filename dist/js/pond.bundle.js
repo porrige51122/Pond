@@ -528,21 +528,21 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
   // Daytime
-  ocean_blue: '#80a4dd',
-  deep_blue: '#2c59a3',
+  ocean_blue: '#94D0FF',
+  deep_blue: 'rgba(135,149,232,0.7)',
   pond_shadow: 'rgba(11, 45, 99, 0.7)',
-  yellow: '#FFD000',
-  orange_peel: '#FF9D00',
+  yellow: '#fdf3b8',
+  orange_peel: '#FCC08F',
   khaki: '#F0E68C',
   olive: '#808000',
-  forest_green: '#228B22',
-  dark_green: '#006400',
-  pea: '#78AB46',
+  forest_green: '#68BA71',
+  dark_green: '#388941',
+  pea: '#60A568',
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
-  pink: '#FFC0CB',
-  delicate_pink: '#F4DEDB',
-  light_pink: '#FFF2F2',
+  pink: '#FF6AD5',
+  delicate_pink: '#FF9BE2',
+  light_pink: '#FFBCEC',
   registration_black: '#000000',
   rasin_black: '#212121',
   dark_gray: '#474747',
@@ -633,7 +633,7 @@ var Fish = function () {
       ctx.restore();
 
       ctx.save();
-      ctx.translate(this.pos[0], this.pos[1]);
+      ctx.translate(this.pos[0] - 10, this.pos[1] - 10);
       ctx.rotate(this.angle - Math.PI / 2);
       ctx.lineWidth = 1;
       this.drawfish(canvas, ctx, 0, 0, this.angles, false);
@@ -658,14 +658,18 @@ var Fish = function () {
       var a = [h[0] - this.size - offset, h[1] - this.size, h[2] + this.size + offset, h[3] - this.size];
 
       // Draw Head
-      ctx.fillStyle = _colours2.default.yellow;
-      ctx.strokeStyle = _colours2.default.khaki;
+      if (shadow) ctx.fillStyle = _colours2.default.deep_blue;else ctx.fillStyle = _colours2.default.orange_peel;
+
       ctx.beginPath();
       this.fishShape(canvas, ctx, x, y, h, t, f, a);
       ctx.fill();
-      ctx.beginPath();
-      this.fishShape(canvas, ctx, x, y, h, t, f, a);
-      ctx.stroke();
+
+      if (!shadow) {
+        ctx.strokeStyle = _colours2.default.yellow;
+        ctx.beginPath();
+        this.fishShape(canvas, ctx, x, y, h, t, f, a);
+        ctx.stroke();
+      }
     }
   }, {
     key: 'fishShape',
@@ -1719,9 +1723,10 @@ var Pond = function () {
         _this.lilySize = document.getElementById('lillies').value;
         _this.init();
       });
-
+      var mousemovecount = 0;
       canvas.addEventListener("mousemove", function () {
-        if (Math.random() < 0.5) {
+        mousemovecount++;
+        if (mousemovecount % 4 == 0) {
           _this.water.dropAt(event.clientX, event.clientY);
         }
       });
@@ -1840,7 +1845,10 @@ var Pond = function () {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         this.water.resize();
-        // this.background.createLand(canvas, ctx);
+        this.tadpoleSize = document.getElementById('tadpoles').value;
+        this.fishSize = document.getElementById('fish').value;
+        this.lilySize = document.getElementById('lillies').value;
+        this.init();
       }
     }
   }]);
