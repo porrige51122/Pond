@@ -12,6 +12,20 @@ class Fish {
     this.size = 4 + Math.random() * 5;
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
+    // Colour
+    switch (Math.floor(Math.random() * 2)) {
+      case 0:
+        this.colourA = colours.orange_peel;
+        this.colourB = colours.yellow;
+        break;
+      case 1:
+        this.colourA = colours.yellow;
+        this.colourB = colours.orange_peel;
+        break;
+      default:
+        this.colourA = colours.registration_black;
+        this.colourB = colours.registration_black;
+    }
     // Extra Variables
     this.swimming = true;
     this.sin = 0;
@@ -79,14 +93,14 @@ class Fish {
     if (shadow)
       ctx.fillStyle = colours.deep_blue;
     else
-      ctx.fillStyle = colours.orange_peel;
+      ctx.fillStyle = this.colourA;
 
     ctx.beginPath();
     this.fishShape(canvas, ctx, x, y, h, t, f, a);
     ctx.fill();
-    
+
     if (!shadow) {
-      ctx.strokeStyle = colours.yellow;
+      ctx.strokeStyle = this.colourB;
       ctx.beginPath();
       this.fishShape(canvas, ctx, x, y, h, t, f, a);
       ctx.stroke();

@@ -42,13 +42,9 @@ class Lily {
       // Shadow
       ctx.beginPath();
       ctx.fillStyle = colours.deep_blue;
-      ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start);
+      ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, 0, Math.PI * 2);
       ctx.fill();
-      ctx.beginPath();
-      ctx.fillStyle = colours.deep_blue;
-      ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start + (Math.PI / 180) * 170);
-      ctx.fill();
-      
+
       // Draw First Half
       ctx.beginPath();
       ctx.fillStyle = colours.light_green;

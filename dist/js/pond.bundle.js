@@ -588,6 +588,20 @@ var Fish = function () {
     this.size = 4 + Math.random() * 5;
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
+    // Colour
+    switch (Math.floor(Math.random() * 2)) {
+      case 0:
+        this.colourA = _colours2.default.orange_peel;
+        this.colourB = _colours2.default.yellow;
+        break;
+      case 1:
+        this.colourA = _colours2.default.yellow;
+        this.colourB = _colours2.default.orange_peel;
+        break;
+      default:
+        this.colourA = _colours2.default.registration_black;
+        this.colourB = _colours2.default.registration_black;
+    }
     // Extra Variables
     this.swimming = true;
     this.sin = 0;
@@ -658,14 +672,14 @@ var Fish = function () {
       var a = [h[0] - this.size - offset, h[1] - this.size, h[2] + this.size + offset, h[3] - this.size];
 
       // Draw Head
-      if (shadow) ctx.fillStyle = _colours2.default.deep_blue;else ctx.fillStyle = _colours2.default.orange_peel;
+      if (shadow) ctx.fillStyle = _colours2.default.deep_blue;else ctx.fillStyle = this.colourA;
 
       ctx.beginPath();
       this.fishShape(canvas, ctx, x, y, h, t, f, a);
       ctx.fill();
 
       if (!shadow) {
-        ctx.strokeStyle = _colours2.default.yellow;
+        ctx.strokeStyle = this.colourB;
         ctx.beginPath();
         this.fishShape(canvas, ctx, x, y, h, t, f, a);
         ctx.stroke();
@@ -775,11 +789,7 @@ var Lily = function () {
         // Shadow
         ctx.beginPath();
         ctx.fillStyle = _colours2.default.deep_blue;
-        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.fillStyle = _colours2.default.deep_blue;
-        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, start, Math.PI + start + Math.PI / 180 * 170);
+        ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw First Half
