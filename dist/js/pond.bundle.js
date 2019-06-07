@@ -579,7 +579,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Fish = function () {
-  function Fish(canvas) {
+  function Fish(canvas, ctx) {
     _classCallCheck(this, Fish);
 
     // Random Position on canvas
@@ -589,14 +589,29 @@ var Fish = function () {
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     // Colour
-    switch (Math.floor(Math.random() * 2)) {
+    switch (Math.floor(Math.random() * 4)) {
+      // Beni-goi (are entirely red/orange)
       case 0:
         this.colourA = _colours2.default.orange_peel;
         this.colourB = _colours2.default.yellow;
         break;
+      // ki-goi (are entirely yellow/gold)
       case 1:
         this.colourA = _colours2.default.yellow;
         this.colourB = _colours2.default.orange_peel;
+        break;
+      // Tancho (White with a red mark on the head but no red on body)
+      case 2:
+        this.colourA = ctx.createRadialGradient(0, 0, this.size / 4, 0, 0, this.size * 4);
+        this.colourA.addColorStop(0, "red");
+        this.colourA.addColorStop(0.25, "white");
+        this.colourA.addColorStop(1, "white");
+        this.colourB = _colours2.default.yellow;
+        break;
+      // Karasugoi (are entirely black/dark gray)
+      case 3:
+        this.colourA = _colours2.default.dark_gray;
+        this.colourB = "white";
         break;
       default:
         this.colourA = _colours2.default.registration_black;
@@ -616,7 +631,7 @@ var Fish = function () {
 
 
   _createClass(Fish, [{
-    key: 'tick',
+    key: "tick",
     value: function tick() {
       // sin is the angle along sin that the fish is swimming along
       if (this.swimming) {
@@ -634,7 +649,7 @@ var Fish = function () {
      */
 
   }, {
-    key: 'render',
+    key: "render",
     value: function render(canvas, ctx) {
       this.angles.push(this.angle);
       this.angles.shift();
@@ -654,7 +669,7 @@ var Fish = function () {
       ctx.restore();
     }
   }, {
-    key: 'drawfish',
+    key: "drawfish",
     value: function drawfish(canvas, ctx, x, y, offsetArr, shadow) {
       var offset = (offsetArr[0] - offsetArr[1]) * 100;
       if (offset > 10) {
@@ -686,7 +701,7 @@ var Fish = function () {
       }
     }
   }, {
-    key: 'fishShape',
+    key: "fishShape",
     value: function fishShape(canvas, ctx, x, y, h, t, f, a) {
       // Head
       ctx.moveTo(h[0], h[1]);
@@ -1771,7 +1786,7 @@ var Pond = function () {
 
       // Pushes all fish and lillies to their arrays
       for (var _i = 0; _i < this.fishSize; _i++) {
-        this.fish.push(new _fish2.default(canvas));
+        this.fish.push(new _fish2.default(canvas, ctx));
       }for (var _i2 = 0; _i2 < this.lilySize; _i2++) {
         this.lillies.push(new _lily2.default(canvas));
       } // Sets movement patterns for all entities

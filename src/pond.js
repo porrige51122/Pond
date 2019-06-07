@@ -89,7 +89,7 @@ class Pond {
 
     // Pushes all fish and lillies to their arrays
     for (let i = 0; i < this.fishSize; i++)
-      this.fish.push(new Fish(canvas));
+      this.fish.push(new Fish(canvas, ctx));
 
     for (let i = 0; i < this.lilySize; i++)
       this.lillies.push(new Lily(canvas));
