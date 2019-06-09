@@ -1,4 +1,4 @@
-# Pond V 2.1.8 - ALPHA
+# Pond V 2.1.9 - ALPHA
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 Current features include:
@@ -44,6 +44,8 @@ Planned features:
    * The website should open automatically [here](http://127.0.0.1:3000)
 
 ## Changelog
+#### 2.1.9
+Made all entities scalable
 #### 2.1.8
 Added more fish colours and more shadows!
 #### 2.1.7
