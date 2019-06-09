@@ -105,7 +105,7 @@ class Pond {
 
   loop() {
     window.requestAnimationFrame(() => {
-      this.resize()
+      this.resize();
       this.tick();
       this.render();
       this.loop();

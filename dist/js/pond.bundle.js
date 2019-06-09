@@ -283,6 +283,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * CATTAIL class
+ * Draws a cattail of a random angle at a position on the canvas
+ */
 var Cattail = function () {
   function Cattail(canvas, ctx, size) {
     _classCallCheck(this, Cattail);
@@ -311,6 +315,7 @@ var Cattail = function () {
       var tipThickness = this.size / 120;
       var tipColour = _colours2.default.khaki;
       var rotation = Math.random() * 2 * Math.PI;
+
       this.ctx.save();
       this.ctx.translate(this.pos[0], this.pos[1]);
       this.ctx.rotate(rotation);
