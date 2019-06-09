@@ -44,7 +44,6 @@ class Tadpole {
     ctx.arc(this.pos[0] - (this.vel[0] * 5), this.pos[1] - (this.vel[1] * 5), this.size / 4 * 3, 0, 2 * Math.PI);
     ctx.fill();
     ctx.beginPath();
-    ctx.fillStyle = colours.rasin_black;
     ctx.arc(this.pos[0] - (this.vel[0] * 10), this.pos[1] - (this.vel[1] * 10), this.size / 2, 0, 2 * Math.PI);
     ctx.fill();
   }

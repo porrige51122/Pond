@@ -2,6 +2,7 @@ import colours from '../colours';
 import Rock from './rock';
 import Cattail from './cattail';
 import LongGrass from './longGrass';
+import Tree from './tree';
 /**
  * BACKGROUND:
  * This class creates the bank of the pond and checks to see if fish are
@@ -46,6 +47,7 @@ class Background {
     this.edgeOfPond(rockCount, new Rock(this.canvasB, ctxB, this.size));
     let cattailCount = 30;
     this.edgeOfPond(cattailCount, new Cattail(this.canvasB, ctxB, this.size));
+    this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
     }
 
 

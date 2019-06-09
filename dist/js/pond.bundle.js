@@ -118,6 +118,10 @@ var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/longGr
 
 var _longGrass2 = _interopRequireDefault(_longGrass);
 
+var _tree = __webpack_require__(/*! ./tree */ "./src/background/tree.js");
+
+var _tree2 = _interopRequireDefault(_tree);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -167,6 +171,7 @@ var Background = function () {
       this.edgeOfPond(rockCount, new _rock2.default(this.canvasB, ctxB, this.size));
       var cattailCount = 30;
       this.edgeOfPond(cattailCount, new _cattail2.default(this.canvasB, ctxB, this.size));
+      this.aroundPond(1, new _tree2.default(this.canvasB, ctxB, this.size));
     }
   }, {
     key: 'edgeOfPond',
@@ -518,6 +523,83 @@ exports.default = Rock;
 
 /***/ }),
 
+/***/ "./src/background/tree.js":
+/*!********************************!*\
+  !*** ./src/background/tree.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Tree = function () {
+  function Tree(canvas, ctx, size) {
+    _classCallCheck(this, Tree);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.size = size;
+  }
+
+  _createClass(Tree, [{
+    key: "setPos",
+    value: function setPos(pos) {
+      this.pos = pos;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var w = this.size / 10;
+      console.log(w);
+      this.drawTree(this.pos[0], this.pos[1], w);
+    }
+  }, {
+    key: "drawTree",
+    value: function drawTree(x, y, w) {
+      for (var i = 0; i < 2; i++) {
+        var dx = Math.random() * 100 - 50;
+        var dy = Math.random() * 100 - 50;
+        this.drawBranch(x, y, dx, dy, w);
+        if (w > 5) {
+          this.drawTree(x + dx, y + dy, w / 1.5);
+        }
+      }
+    }
+  }, {
+    key: "drawBranch",
+    value: function drawBranch(x, y, dx, dy, w) {
+      this.ctx.beginPath();
+      this.ctx.lineWidth = w;
+      this.ctx.lineCap = "round";
+      this.ctx.strokeStyle = _colours2.default.bark;
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(x + dx, y + dy);
+      this.ctx.stroke();
+    }
+  }]);
+
+  return Tree;
+}();
+
+exports.default = Tree;
+
+/***/ }),
+
 /***/ "./src/colours.js":
 /*!************************!*\
   !*** ./src/colours.js ***!
@@ -538,6 +620,7 @@ exports.default = {
   pond_shadow: 'rgba(11, 45, 99, 0.7)',
   yellow: '#fdf3b8',
   orange_peel: '#FCC08F',
+  bark: '#56000a',
   khaki: '#F0E68C',
   olive: '#808000',
   forest_green: '#68BA71',
@@ -974,7 +1057,6 @@ var Tadpole = function () {
       ctx.arc(this.pos[0] - this.vel[0] * 5, this.pos[1] - this.vel[1] * 5, this.size / 4 * 3, 0, 2 * Math.PI);
       ctx.fill();
       ctx.beginPath();
-      ctx.fillStyle = _colours2.default.rasin_black;
       ctx.arc(this.pos[0] - this.vel[0] * 10, this.pos[1] - this.vel[1] * 10, this.size / 2, 0, 2 * Math.PI);
       ctx.fill();
     }
