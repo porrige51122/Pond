@@ -1,5 +1,9 @@
 import colours from '../colours';
 
+/**
+ * CATTAIL class
+ * Draws a cattail of a random angle at a position on the canvas
+ */
 class Cattail {
   constructor(canvas, ctx, size) {
     this.canvas = canvas;
@@ -23,6 +27,7 @@ class Cattail {
     let tipThickness = this.size/120;
     let tipColour = colours.khaki;
     let rotation = Math.random() * 2 * Math.PI;
+    
     this.ctx.save();
     this.ctx.translate(this.pos[0], this.pos[1]);
     this.ctx.rotate(rotation);
