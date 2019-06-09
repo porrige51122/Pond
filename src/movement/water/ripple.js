@@ -29,16 +29,11 @@ class Ripple {
     let x = this.dx;
     let y = this.dy;
     let s = this.size;
+    
     ctx.beginPath();
     ctx.lineWidth = this.w;
     ctx.strokeStyle = colours.deep_blue;
-    ctx.moveTo(x, y + s);
-    ctx.bezierCurveTo(x + s * 1.25, y + s,
-                      x + s * 1.25, y - s,
-                      x, y - s);
-    ctx.bezierCurveTo(x - s * 1.25,y - s,
-                      x - s * 1.25, y + s,
-                      x, y + s);
+    ctx.arc(x, y, s, 0, Math.PI * 2);
     ctx.stroke();
 
     if (s > 10) {
@@ -49,13 +44,7 @@ class Ripple {
     ctx.beginPath();
     ctx.lineWidth = this.w/2;
     ctx.strokeStyle = colours.deep_blue;
-    ctx.moveTo(x, y + s);
-    ctx.bezierCurveTo(x + s * 1.25, y + s,
-                      x + s * 1.25, y - s,
-                      x, y - s);
-    ctx.bezierCurveTo(x - s * 1.25,y - s,
-                      x - s * 1.25, y + s,
-                      x, y + s);
+    ctx.arc(x, y, s, 0, Math.PI * 2);
     ctx.stroke();
   }
 }

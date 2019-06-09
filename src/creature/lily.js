@@ -4,11 +4,11 @@
 import colours from '../colours';
 
 class Lily {
-  constructor(canvas) {
+  constructor(canvas, size) {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // All have same size 30 - CHANGE TO RANDOM SOON
-    this.size = 30;
+    this.size = size/10;
     // Random velocity [-0.5, -0.5] - [0.5, 0.5]
     this.vel = [Math.random() - 0.5, Math.random() - 0.5];
     // Chooses a random point to put the split of the lily pad

@@ -5,11 +5,11 @@
 import colours from '../colours';
 
 class Tadpole {
-  constructor(canvas) {
+  constructor(canvas, size) {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size 3-4
-    this.size = 1 + Math.random();
+    this.size = size/200;
     // Initially still
     this.vel = [0, 0];
     // 1.5% chance to become leader

@@ -5,11 +5,11 @@
 import colours from '../colours';
 
 class Fish {
-  constructor(canvas, ctx) {
+  constructor(canvas, ctx, size) {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size this.size-this.size * (3/2)
-    this.size = 4 + Math.random() * 5;
+    this.size = size/40;
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     // Colour
@@ -104,7 +104,6 @@ class Fish {
     // Fin Coordinates
     let a = [h[0] - this.size - offset, h[1] - this.size, h[2] + this.size + offset, h[3] - this.size];
 
-    // Draw Head
     if (shadow)
       ctx.fillStyle = colours.deep_blue;
     else

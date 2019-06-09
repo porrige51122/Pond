@@ -579,13 +579,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Fish = function () {
-  function Fish(canvas, ctx) {
+  function Fish(canvas, ctx, size) {
     _classCallCheck(this, Fish);
 
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size this.size-this.size * (3/2)
-    this.size = 4 + Math.random() * 5;
+    this.size = size / 40;
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     // Colour
@@ -686,7 +686,6 @@ var Fish = function () {
       // Fin Coordinates
       var a = [h[0] - this.size - offset, h[1] - this.size, h[2] + this.size + offset, h[3] - this.size];
 
-      // Draw Head
       if (shadow) ctx.fillStyle = _colours2.default.deep_blue;else ctx.fillStyle = this.colourA;
 
       ctx.beginPath();
@@ -760,13 +759,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Lily = function () {
-  function Lily(canvas) {
+  function Lily(canvas, size) {
     _classCallCheck(this, Lily);
 
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // All have same size 30 - CHANGE TO RANDOM SOON
-    this.size = 30;
+    this.size = size / 10;
     // Random velocity [-0.5, -0.5] - [0.5, 0.5]
     this.vel = [Math.random() - 0.5, Math.random() - 0.5];
     // Chooses a random point to put the split of the lily pad
@@ -922,13 +921,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Tadpole = function () {
-  function Tadpole(canvas) {
+  function Tadpole(canvas, size) {
     _classCallCheck(this, Tadpole);
 
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size 3-4
-    this.size = 1 + Math.random();
+    this.size = size / 200;
     // Initially still
     this.vel = [0, 0];
     // 1.5% chance to become leader
@@ -1506,12 +1505,11 @@ var Ripple = function () {
       var x = this.dx;
       var y = this.dy;
       var s = this.size;
+
       ctx.beginPath();
       ctx.lineWidth = this.w;
       ctx.strokeStyle = _colours2.default.deep_blue;
-      ctx.moveTo(x, y + s);
-      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
-      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
+      ctx.arc(x, y, s, 0, Math.PI * 2);
       ctx.stroke();
 
       if (s > 10) {
@@ -1522,9 +1520,7 @@ var Ripple = function () {
       ctx.beginPath();
       ctx.lineWidth = this.w / 2;
       ctx.strokeStyle = _colours2.default.deep_blue;
-      ctx.moveTo(x, y + s);
-      ctx.bezierCurveTo(x + s * 1.25, y + s, x + s * 1.25, y - s, x, y - s);
-      ctx.bezierCurveTo(x - s * 1.25, y - s, x - s * 1.25, y + s, x, y + s);
+      ctx.arc(x, y, s, 0, Math.PI * 2);
       ctx.stroke();
     }
   }]);
@@ -1769,6 +1765,7 @@ var Pond = function () {
 
       this.background = new _background2.default(canvas, ctx);
       this.water.setBackground(this.background);
+      var size = this.background.size;
 
       this.tadpoles = [];
       this.fish = [];
@@ -1778,7 +1775,7 @@ var Pond = function () {
       // Pushes all tadpoles to their array and sets the first one as
       // leader in case there are no tadpole leaders.
       for (var i = 0; i < this.tadpoleSize; i++) {
-        this.tadpoles.push(new _tadpole2.default(canvas));
+        this.tadpoles.push(new _tadpole2.default(canvas, size));
       }this.tadpoles.forEach(function (tad) {
         return tad.getLeader(_this2.tadpoles);
       });
@@ -1786,9 +1783,9 @@ var Pond = function () {
 
       // Pushes all fish and lillies to their arrays
       for (var _i = 0; _i < this.fishSize; _i++) {
-        this.fish.push(new _fish2.default(canvas, ctx));
+        this.fish.push(new _fish2.default(canvas, ctx, size));
       }for (var _i2 = 0; _i2 < this.lilySize; _i2++) {
-        this.lillies.push(new _lily2.default(canvas));
+        this.lillies.push(new _lily2.default(canvas, size));
       } // Sets movement patterns for all entities
       this.collisions = new _collisions2.default(this.tadpoles, this.fish, this.lillies, this.background);
 
