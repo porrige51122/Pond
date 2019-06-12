@@ -21,6 +21,7 @@ class Tree {
       this.ctx.rotate(i);
       this.drawTree(0, 0, w);
     }
+    // this.drawLeaf(0,0,this.size/200);
     this.ctx.restore();
 
   }
@@ -36,8 +37,37 @@ class Tree {
         // Change w amount for change in thickness
         this.drawTree(x + dx, y + dy, w/1.75);
       }
+      this.ctx.fillStyle = colours.leaf_brown;
+      this.drawLeaf(x + dx, y + dy, this.size/200);
     }
 
+  }
+
+  drawLeaf(x, y, w) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
+    this.ctx.bezierCurveTo(x - (4 * w), y     , x - (4 * w), y     , x - (8 * w), y - (2 * w));
+    this.ctx.bezierCurveTo(x - (4 * w), y - (2 * w), x - (4 * w), y - (2 * w), x     , y     );
+
+    this.ctx.bezierCurveTo(x + (4 * w), y     , x + (4 * w), y     , x + (8 * w), y - (2 * w));
+    this.ctx.bezierCurveTo(x + (4 * w), y - (2 * w), x + (4 * w), y - (2 * w), x     , y     );
+
+    this.ctx.bezierCurveTo(x - (6 * w), y     , x - (6 * w), y     , x - (12 * w), y + (4 * w));
+    this.ctx.bezierCurveTo(x - (6 * w), y + (4 * w), x - (6 * w), y + (4 * w), x     , y     );
+
+    this.ctx.bezierCurveTo(x + (6 * w), y     , x + (6 * w), y     , x + (12 * w), y + (4 * w));
+    this.ctx.bezierCurveTo(x + (6 * w), y + (4 * w), x + (6 * w), y + (4 * w), x     , y     );
+
+    this.ctx.bezierCurveTo(x - (3 * w), y + (7 * w), x - (3 * w), y + (7 * w), x - (10 * w), y + (12 * w));
+    this.ctx.bezierCurveTo(x - (6 * w), y + (5 * w), x - (8 * w), y + (5 * w), x     , y     );
+
+    this.ctx.bezierCurveTo(x + (3 * w), y + (7 * w), x + (3 * w), y + (7 * w), x + (10 * w), y + (12 * w));
+    this.ctx.bezierCurveTo(x + (6 * w), y + (5 * w), x + (8 * w), y + (5 * w), x     , y     );
+
+    this.ctx.bezierCurveTo(x - (3 * w), y + (9 * w), x - (3 * w), y + (9 * w), x     , y + (18 * w));
+    this.ctx.bezierCurveTo(x + (3 * w), y + (9 * w), x + (3 * w), y + (9 * w), x     , y     );
+
+    this.ctx.fill();
   }
 
   drawBranch(x, y, dx, dy, w) {

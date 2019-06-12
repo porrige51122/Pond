@@ -14,6 +14,7 @@ export default {
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
   pink: '#FF6AD5',
+  leaf_brown: '#ecb4bf',
   delicate_pink: '#FF9BE2',
   light_pink: '#FFBCEC',
   registration_black: '#000000',
