@@ -38,12 +38,12 @@ class Tree {
         this.drawTree(x + dx, y + dy, w/1.75);
       }
       this.ctx.fillStyle = colours.leaf_brown;
-      this.drawLeaf(x + dx, y + dy, this.size/200);
+      this.drawSakuraLeaf(x + dx, y + dy, this.size/200);
     }
 
   }
 
-  drawLeaf(x, y, w) {
+  drawSakuraLeaf(x, y, w) {
     this.ctx.beginPath();
     this.ctx.moveTo(x, y);
     this.ctx.bezierCurveTo(x - (4 * w), y     , x - (4 * w), y     , x - (8 * w), y - (2 * w));
