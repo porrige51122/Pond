@@ -564,19 +564,29 @@ var Tree = function () {
   }, {
     key: "render",
     value: function render() {
-      var w = this.size / 10;
-      console.log(w);
-      this.drawTree(this.pos[0], this.pos[1], w);
+      // Change for initial thickness
+      var w = this.size / 20;
+
+      this.ctx.save();
+      this.ctx.translate(this.pos[0], this.pos[1]);
+      for (var i = 0; i < Math.PI * 2; i += Math.PI / 8) {
+        this.ctx.rotate(i);
+        this.drawTree(0, 0, w);
+      }
+      this.ctx.restore();
     }
   }, {
     key: "drawTree",
     value: function drawTree(x, y, w) {
       for (var i = 0; i < 2; i++) {
-        var dx = Math.random() * 100 - 50;
-        var dy = Math.random() * 100 - 50;
+        // Change the amount for spread of the tree
+        var dx = Math.random() * this.size / 7;
+        var dy = Math.random() * this.size / 7;
         this.drawBranch(x, y, dx, dy, w);
-        if (w > 5) {
-          this.drawTree(x + dx, y + dy, w / 1.5);
+        // Change for minimum branch thickness
+        if (w > this.size / 80) {
+          // Change w amount for change in thickness
+          this.drawTree(x + dx, y + dy, w / 1.75);
         }
       }
     }
@@ -620,7 +630,7 @@ exports.default = {
   pond_shadow: 'rgba(11, 45, 99, 0.7)',
   yellow: '#fdf3b8',
   orange_peel: '#FCC08F',
-  bark: '#56000a',
+  bark: '#917e7e',
   khaki: '#F0E68C',
   olive: '#808000',
   forest_green: '#68BA71',

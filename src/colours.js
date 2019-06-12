@@ -5,7 +5,7 @@ export default {
   pond_shadow: 'rgba(11, 45, 99, 0.7)',
   yellow: '#fdf3b8',
   orange_peel: '#FCC08F',
-  bark: '#56000a',
+  bark: '#917e7e',
   khaki: '#F0E68C',
   olive: '#808000',
   forest_green: '#68BA71',

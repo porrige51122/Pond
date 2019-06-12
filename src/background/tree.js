@@ -12,19 +12,29 @@ class Tree {
   }
 
   render() {
-    let w = this.size/10;
-    console.log(w);
-    this.drawTree(this.pos[0], this.pos[1], w);
+    // Change for initial thickness
+    let w = this.size/20;
+
+    this.ctx.save();
+    this.ctx.translate(this.pos[0], this.pos[1]);
+    for (let i = 0; i < Math.PI * 2; i += Math.PI/8) {
+      this.ctx.rotate(i);
+      this.drawTree(0, 0, w);
+    }
+    this.ctx.restore();
 
   }
 
   drawTree(x, y, w) {
     for (let i = 0; i < 2; i++) {
-      let dx = Math.random() * 100 - 50;
-      let dy = Math.random() * 100 - 50;
+      // Change the amount for spread of the tree
+      let dx = Math.random() * this.size/7;
+      let dy = Math.random() * this.size/7;
       this.drawBranch(x, y, dx, dy, w);
-      if (w > 5) {
-        this.drawTree(x + dx, y + dy, w/1.5);
+      // Change for minimum branch thickness
+      if (w > this.size/80) {
+        // Change w amount for change in thickness
+        this.drawTree(x + dx, y + dy, w/1.75);
       }
     }
 
