@@ -2,14 +2,11 @@
 This contains all things that are currently being worked on or thought about:
 
 ## In progress
+* Pond edge features
+  * Plants
+  * Stepping stones
 
 ## To do
- * Pond edge features
-   * Plants
-   * Stepping stones
-   * Trees
-     * Sakura tree
-       * Blossom falls on the water
  * Spatial Hashing
    * Collisions between creatures
  * Redo collisions
