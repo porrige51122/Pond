@@ -40,15 +40,22 @@ class Background {
     ctxB.fill();
     ctxB.restore();
 
+    // Draw grassCount number of grass on pond bank
     let grassCount = 1000;
     this.aroundPond(grassCount, new LongGrass(this.canvasB, ctxB, this.size));
-    // Approximate count due to random nature
+    // Draw rockCount number of rocks around Pond
     let rockCount = 100;
     this.edgeOfPond(rockCount, new Rock(this.canvasB, ctxB, this.size));
+    // 25% chance to draw stepping stones
+    // TODO: Draw Stepping stones
+    // Draw cattailCount number of cattails around pond
     let cattailCount = 30;
     this.edgeOfPond(cattailCount, new Cattail(this.canvasB, ctxB, this.size));
-    this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
+    // 75% chance of tree around pond
+    if (Math.random() < 0.75) {
+      this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
     }
+  }
 
 
   edgeOfPond(count, entity) {
