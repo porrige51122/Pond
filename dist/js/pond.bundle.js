@@ -164,14 +164,21 @@ var Background = function () {
       ctxB.fill();
       ctxB.restore();
 
+      // Draw grassCount number of grass on pond bank
       var grassCount = 1000;
       this.aroundPond(grassCount, new _longGrass2.default(this.canvasB, ctxB, this.size));
-      // Approximate count due to random nature
+      // Draw rockCount number of rocks around Pond
       var rockCount = 100;
       this.edgeOfPond(rockCount, new _rock2.default(this.canvasB, ctxB, this.size));
+      // 25% chance to draw stepping stones
+      // TODO: Draw Stepping stones
+      // Draw cattailCount number of cattails around pond
       var cattailCount = 30;
       this.edgeOfPond(cattailCount, new _cattail2.default(this.canvasB, ctxB, this.size));
-      this.aroundPond(1, new _tree2.default(this.canvasB, ctxB, this.size));
+      // 75% chance of tree around pond
+      if (Math.random() < 0.75) {
+        this.aroundPond(1, new _tree2.default(this.canvasB, ctxB, this.size));
+      }
     }
   }, {
     key: 'edgeOfPond',
