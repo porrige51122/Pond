@@ -2,7 +2,7 @@
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 
-Currently Hosted Here: [relaxing-pond.herokuapp.com](https://relaxing-pond.herokuapp.com/)
+Hosted Here: [relaxing-pond.herokuapp.com](https://relaxing-pond.herokuapp.com/)
  
 Current features include:
  * ⚫ Tadpoles ⚫
