@@ -1,7 +1,7 @@
 # Pond V 2.1.11 - ALPHA
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
-Currently Hosted Here: [Heroku](https://relaxing-pond.herokuapp.com/)
+ * Currently Hosted Here: [Heroku](https://relaxing-pond.herokuapp.com/)
 Current features include:
  * ⚫ Tadpoles ⚫
    * Small little tadpoles that dance around your screen in groups
