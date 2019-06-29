@@ -2,9 +2,6 @@
 This contains all things that are currently being worked on or thought about:
 
 ## In progress
-* Pond edge features
-  * Plants
-  * Stepping stones
 
 ## To do
  * Spatial Hashing
@@ -20,3 +17,7 @@ This contains all things that are currently being worked on or thought about:
    * Have interactions with other fish
    * Have a swarm function for when food dropping is implemented
    * add shadows
+ * Pond edge features
+   * Plants
+   * Stepping stones
+
