@@ -3,7 +3,7 @@
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 
 Hosted Here: [relaxing-pond.herokuapp.com](https://relaxing-pond.herokuapp.com/)
- 
+
 Current features include:
  * ⚫ Tadpoles ⚫
    * Small little tadpoles that dance around your screen in groups
@@ -15,7 +15,7 @@ Current features include:
    * Move your mouse across the water and leave little waves.
  * ⏺ Shape ⏺
    * The pond has banks to show that the pond isn't endless. It is contained. contained by you!
-   * From here we have a random assortment of grass and cattails and rocks
+   * From here we have a random assortment of grass and cattails and more!
  * 🎶 Music 🎶
    * No relaxation is perfect without some optional Lo-Fi tunes in the background
 
