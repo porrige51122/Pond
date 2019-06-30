@@ -110,17 +110,25 @@ var _rock = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
 
 var _rock2 = _interopRequireDefault(_rock);
 
-var _cattail = __webpack_require__(/*! ./cattail */ "./src/background/cattail.js");
+var _cattail = __webpack_require__(/*! ./plants/cattail */ "./src/background/plants/cattail.js");
 
 var _cattail2 = _interopRequireDefault(_cattail);
 
-var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/longGrass.js");
+var _longGrass = __webpack_require__(/*! ./plants/longGrass */ "./src/background/plants/longGrass.js");
 
 var _longGrass2 = _interopRequireDefault(_longGrass);
 
-var _tree = __webpack_require__(/*! ./tree */ "./src/background/tree.js");
+var _tree = __webpack_require__(/*! ./plants/tree */ "./src/background/plants/tree.js");
 
 var _tree2 = _interopRequireDefault(_tree);
+
+var _lobeliaCardinalis = __webpack_require__(/*! ./plants/lobeliaCardinalis */ "./src/background/plants/lobeliaCardinalis.js");
+
+var _lobeliaCardinalis2 = _interopRequireDefault(_lobeliaCardinalis);
+
+var _flowerBush = __webpack_require__(/*! ./plants/flowerBush */ "./src/background/plants/flowerBush.js");
+
+var _flowerBush2 = _interopRequireDefault(_flowerBush);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -165,13 +173,17 @@ var Background = function () {
       ctxB.restore();
 
       // Draw grassCount number of grass on pond bank
-      var grassCount = 1000;
+      var grassCount = this.size * 5;
       this.aroundPond(grassCount, new _longGrass2.default(this.canvasB, ctxB, this.size));
       // Draw rockCount number of rocks around Pond
       var rockCount = 100;
       this.edgeOfPond(rockCount, new _rock2.default(this.canvasB, ctxB, this.size));
       // 25% chance to draw stepping stones
       // TODO: Draw Stepping stones
+
+      // Draw Flowers
+      this.aroundPond(Math.ceil(Math.random() * this.size / 80), new _flowerBush2.default(this.canvasB, ctxB, this.size));
+
       // Draw cattailCount number of cattails around pond
       var cattailCount = 30;
       this.edgeOfPond(cattailCount, new _cattail2.default(this.canvasB, ctxB, this.size));
@@ -271,10 +283,10 @@ exports.default = Background;
 
 /***/ }),
 
-/***/ "./src/background/cattail.js":
-/*!***********************************!*\
-  !*** ./src/background/cattail.js ***!
-  \***********************************/
+/***/ "./src/background/plants/cattail.js":
+/*!******************************************!*\
+  !*** ./src/background/plants/cattail.js ***!
+  \******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -287,7 +299,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
@@ -356,10 +368,10 @@ exports.default = Cattail;
 
 /***/ }),
 
-/***/ "./src/background/longGrass.js":
-/*!*************************************!*\
-  !*** ./src/background/longGrass.js ***!
-  \*************************************/
+/***/ "./src/background/plants/flowerBush.js":
+/*!*********************************************!*\
+  !*** ./src/background/plants/flowerBush.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -372,7 +384,274 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/plants/longGrass.js");
+
+var _longGrass2 = _interopRequireDefault(_longGrass);
+
+var _irisEnsataVariegata = __webpack_require__(/*! ./irisEnsataVariegata */ "./src/background/plants/irisEnsataVariegata.js");
+
+var _irisEnsataVariegata2 = _interopRequireDefault(_irisEnsataVariegata);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FlowerBush = function () {
+  function FlowerBush(canvas, ctx, size) {
+    _classCallCheck(this, FlowerBush);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.size = size;
+  }
+
+  _createClass(FlowerBush, [{
+    key: 'setPos',
+    value: function setPos(pos) {
+      this.pos = pos;
+    }
+    // ctx.save pushes current state onto stack therefore
+    // multiple saves can be used to minimize code
+
+  }, {
+    key: 'render',
+    value: function render() {
+      var s = this.size / 15;
+      var flower = new _irisEnsataVariegata2.default(this.canvas, this.ctx, this.size);
+      var x = this.pos[0];
+      var y = this.pos[1];
+
+      this.drawBush(x, y);
+
+      flower.setPos([0, 0]);
+      this.ctx.save();
+
+      this.ctx.translate(x, y);
+      this.ctx.save();
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+      this.ctx.restore();
+      this.ctx.translate(0, s * 1.2);
+      this.ctx.save();
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+      this.ctx.restore();
+      this.ctx.translate(-s, -(2 * s));
+      this.ctx.save();
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+      this.ctx.restore();
+      this.ctx.translate(2 * s, 0);
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+
+      this.ctx.restore();
+    }
+  }, {
+    key: 'drawBush',
+    value: function drawBush(x, y) {
+      var w = this.size / 20;
+      var h = w * 6;
+      this.ctx.save();
+      this.ctx.translate(x, y);
+
+      for (var i = 0; i < Math.PI; i += Math.PI / 10) {
+        this.ctx.save();
+        this.ctx.rotate(i);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = _colours2.default.forest_green;
+        this.ctx.moveTo(0, -h / 2);
+        this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
+        this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = _colours2.default.yellow_green;
+        this.ctx.moveTo(0, -h / 2);
+        this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
+        this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
+        this.ctx.stroke();
+        this.ctx.restore();
+      }
+      this.ctx.restore();
+    }
+  }]);
+
+  return FlowerBush;
+}();
+
+exports.default = FlowerBush;
+
+/***/ }),
+
+/***/ "./src/background/plants/irisEnsataVariegata.js":
+/*!******************************************************!*\
+  !*** ./src/background/plants/irisEnsataVariegata.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/plants/longGrass.js");
+
+var _longGrass2 = _interopRequireDefault(_longGrass);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var IrisEnsataVariegata = function () {
+  function IrisEnsataVariegata(canvas, ctx, size) {
+    _classCallCheck(this, IrisEnsataVariegata);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.size = size / 180;
+  }
+
+  _createClass(IrisEnsataVariegata, [{
+    key: 'setPos',
+    value: function setPos(pos) {
+      this.pos = pos;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var x = this.pos[0];
+      var y = this.pos[1];
+      for (var i = 0; i <= 2 * Math.PI; i += 2 / 3 * Math.PI) {
+        this.ctx.save();
+        this.ctx.translate(x, y);
+        this.ctx.rotate(i);
+
+        this.ctx.beginPath();
+        this.ctx.fillStyle = _colours2.default.purple;
+        this.drawPetal(0, -this.size / 2);
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = _colours2.default.indigo;
+        this.drawPetal(0, -this.size / 2);
+        this.ctx.stroke();
+
+        this.ctx.beginPath();
+        this.ctx.fillStyle = _colours2.default.yellow;
+        this.drawInnerPetal(0, -this.size / 2);
+        this.ctx.fill();
+
+        this.ctx.restore();
+      }
+    }
+  }, {
+    key: 'drawPetal',
+    value: function drawPetal(x, y) {
+      var s = this.size;
+      this.ctx.moveTo(x, y);
+      this.ctx.bezierCurveTo(x - 2 * s, y - 1 * s, x - 2 * s, y - 1 * s, x - 3 * s, y - 5 * s);
+      this.ctx.bezierCurveTo(x - 2 * s, y - 6 * s, x - 2 * s, y - 6 * s, x, y - 5 * s);
+      this.ctx.bezierCurveTo(x + 2 * s, y - 6 * s, x + 2 * s, y - 6 * s, x + 3 * s, y - 5 * s);
+      this.ctx.bezierCurveTo(x + 2 * s, y - 1 * s, x + 2 * s, y - 1 * s, x, y);
+    }
+  }, {
+    key: 'drawInnerPetal',
+    value: function drawInnerPetal(x, y) {
+      var s = this.size;
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(x - s / 2, y - s / 2);
+      this.ctx.lineTo(x, y - 3 * s);
+      this.ctx.lineTo(x + s / 2, y - s / 2);
+      this.ctx.lineTo(x, y);
+    }
+  }]);
+
+  return IrisEnsataVariegata;
+}();
+
+exports.default = IrisEnsataVariegata;
+
+/***/ }),
+
+/***/ "./src/background/plants/lobeliaCardinalis.js":
+/*!****************************************************!*\
+  !*** ./src/background/plants/lobeliaCardinalis.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LobeliaCardinalis = function () {
+  function LobeliaCardinalis(canvas, ctx, size) {
+    _classCallCheck(this, LobeliaCardinalis);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.size = size;
+  }
+
+  _createClass(LobeliaCardinalis, [{
+    key: 'setPos',
+    value: function setPos(pos) {
+      this.pos = pos;
+    }
+  }, {
+    key: 'render',
+    value: function render() {}
+  }]);
+
+  return LobeliaCardinalis;
+}();
+
+exports.default = LobeliaCardinalis;
+
+/***/ }),
+
+/***/ "./src/background/plants/longGrass.js":
+/*!********************************************!*\
+  !*** ./src/background/plants/longGrass.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
@@ -423,6 +702,124 @@ var LongGrass = function () {
 }();
 
 exports.default = LongGrass;
+
+/***/ }),
+
+/***/ "./src/background/plants/tree.js":
+/*!***************************************!*\
+  !*** ./src/background/plants/tree.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Tree = function () {
+  function Tree(canvas, ctx, size) {
+    _classCallCheck(this, Tree);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.size = size;
+  }
+
+  _createClass(Tree, [{
+    key: "setPos",
+    value: function setPos(pos) {
+      this.pos = pos;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      // Change for initial thickness
+      var w = this.size / 20;
+
+      this.ctx.save();
+      this.ctx.translate(this.pos[0], this.pos[1]);
+      for (var i = 0; i < Math.PI * 2; i += Math.PI / 8) {
+        this.ctx.rotate(i);
+        this.drawTree(0, 0, w);
+      }
+      // this.drawLeaf(0,0,this.size/200);
+      this.ctx.restore();
+    }
+  }, {
+    key: "drawTree",
+    value: function drawTree(x, y, w) {
+      for (var i = 0; i < 2; i++) {
+        // Change the amount for spread of the tree
+        var dx = Math.random() * this.size / 7;
+        var dy = Math.random() * this.size / 7;
+        this.drawBranch(x, y, dx, dy, w);
+        // Change for minimum branch thickness
+        if (w > this.size / 80) {
+          // Change w amount for change in thickness
+          this.drawTree(x + dx, y + dy, w / 1.75);
+        }
+        this.ctx.fillStyle = _colours2.default.leaf_brown;
+        this.drawSakuraLeaf(x + dx, y + dy, this.size / 200);
+      }
+    }
+  }, {
+    key: "drawSakuraLeaf",
+    value: function drawSakuraLeaf(x, y, w) {
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, y);
+      this.ctx.bezierCurveTo(x - 4 * w, y, x - 4 * w, y, x - 8 * w, y - 2 * w);
+      this.ctx.bezierCurveTo(x - 4 * w, y - 2 * w, x - 4 * w, y - 2 * w, x, y);
+
+      this.ctx.bezierCurveTo(x + 4 * w, y, x + 4 * w, y, x + 8 * w, y - 2 * w);
+      this.ctx.bezierCurveTo(x + 4 * w, y - 2 * w, x + 4 * w, y - 2 * w, x, y);
+
+      this.ctx.bezierCurveTo(x - 6 * w, y, x - 6 * w, y, x - 12 * w, y + 4 * w);
+      this.ctx.bezierCurveTo(x - 6 * w, y + 4 * w, x - 6 * w, y + 4 * w, x, y);
+
+      this.ctx.bezierCurveTo(x + 6 * w, y, x + 6 * w, y, x + 12 * w, y + 4 * w);
+      this.ctx.bezierCurveTo(x + 6 * w, y + 4 * w, x + 6 * w, y + 4 * w, x, y);
+
+      this.ctx.bezierCurveTo(x - 3 * w, y + 7 * w, x - 3 * w, y + 7 * w, x - 10 * w, y + 12 * w);
+      this.ctx.bezierCurveTo(x - 6 * w, y + 5 * w, x - 8 * w, y + 5 * w, x, y);
+
+      this.ctx.bezierCurveTo(x + 3 * w, y + 7 * w, x + 3 * w, y + 7 * w, x + 10 * w, y + 12 * w);
+      this.ctx.bezierCurveTo(x + 6 * w, y + 5 * w, x + 8 * w, y + 5 * w, x, y);
+
+      this.ctx.bezierCurveTo(x - 3 * w, y + 9 * w, x - 3 * w, y + 9 * w, x, y + 18 * w);
+      this.ctx.bezierCurveTo(x + 3 * w, y + 9 * w, x + 3 * w, y + 9 * w, x, y);
+
+      this.ctx.fill();
+    }
+  }, {
+    key: "drawBranch",
+    value: function drawBranch(x, y, dx, dy, w) {
+      this.ctx.beginPath();
+      this.ctx.lineWidth = w;
+      this.ctx.lineCap = "round";
+      this.ctx.strokeStyle = _colours2.default.bark;
+      this.ctx.moveTo(x, y);
+      this.ctx.lineTo(x + dx, y + dy);
+      this.ctx.stroke();
+    }
+  }]);
+
+  return Tree;
+}();
+
+exports.default = Tree;
 
 /***/ }),
 
@@ -530,124 +927,6 @@ exports.default = Rock;
 
 /***/ }),
 
-/***/ "./src/background/tree.js":
-/*!********************************!*\
-  !*** ./src/background/tree.js ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
-
-var _colours2 = _interopRequireDefault(_colours);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Tree = function () {
-  function Tree(canvas, ctx, size) {
-    _classCallCheck(this, Tree);
-
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.size = size;
-  }
-
-  _createClass(Tree, [{
-    key: "setPos",
-    value: function setPos(pos) {
-      this.pos = pos;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      // Change for initial thickness
-      var w = this.size / 20;
-
-      this.ctx.save();
-      this.ctx.translate(this.pos[0], this.pos[1]);
-      for (var i = 0; i < Math.PI * 2; i += Math.PI / 8) {
-        this.ctx.rotate(i);
-        this.drawTree(0, 0, w);
-      }
-      // this.drawLeaf(0,0,this.size/200);
-      this.ctx.restore();
-    }
-  }, {
-    key: "drawTree",
-    value: function drawTree(x, y, w) {
-      for (var i = 0; i < 2; i++) {
-        // Change the amount for spread of the tree
-        var dx = Math.random() * this.size / 7;
-        var dy = Math.random() * this.size / 7;
-        this.drawBranch(x, y, dx, dy, w);
-        // Change for minimum branch thickness
-        if (w > this.size / 80) {
-          // Change w amount for change in thickness
-          this.drawTree(x + dx, y + dy, w / 1.75);
-        }
-        this.ctx.fillStyle = _colours2.default.leaf_brown;
-        this.drawSakuraLeaf(x + dx, y + dy, this.size / 200);
-      }
-    }
-  }, {
-    key: "drawSakuraLeaf",
-    value: function drawSakuraLeaf(x, y, w) {
-      this.ctx.beginPath();
-      this.ctx.moveTo(x, y);
-      this.ctx.bezierCurveTo(x - 4 * w, y, x - 4 * w, y, x - 8 * w, y - 2 * w);
-      this.ctx.bezierCurveTo(x - 4 * w, y - 2 * w, x - 4 * w, y - 2 * w, x, y);
-
-      this.ctx.bezierCurveTo(x + 4 * w, y, x + 4 * w, y, x + 8 * w, y - 2 * w);
-      this.ctx.bezierCurveTo(x + 4 * w, y - 2 * w, x + 4 * w, y - 2 * w, x, y);
-
-      this.ctx.bezierCurveTo(x - 6 * w, y, x - 6 * w, y, x - 12 * w, y + 4 * w);
-      this.ctx.bezierCurveTo(x - 6 * w, y + 4 * w, x - 6 * w, y + 4 * w, x, y);
-
-      this.ctx.bezierCurveTo(x + 6 * w, y, x + 6 * w, y, x + 12 * w, y + 4 * w);
-      this.ctx.bezierCurveTo(x + 6 * w, y + 4 * w, x + 6 * w, y + 4 * w, x, y);
-
-      this.ctx.bezierCurveTo(x - 3 * w, y + 7 * w, x - 3 * w, y + 7 * w, x - 10 * w, y + 12 * w);
-      this.ctx.bezierCurveTo(x - 6 * w, y + 5 * w, x - 8 * w, y + 5 * w, x, y);
-
-      this.ctx.bezierCurveTo(x + 3 * w, y + 7 * w, x + 3 * w, y + 7 * w, x + 10 * w, y + 12 * w);
-      this.ctx.bezierCurveTo(x + 6 * w, y + 5 * w, x + 8 * w, y + 5 * w, x, y);
-
-      this.ctx.bezierCurveTo(x - 3 * w, y + 9 * w, x - 3 * w, y + 9 * w, x, y + 18 * w);
-      this.ctx.bezierCurveTo(x + 3 * w, y + 9 * w, x + 3 * w, y + 9 * w, x, y);
-
-      this.ctx.fill();
-    }
-  }, {
-    key: "drawBranch",
-    value: function drawBranch(x, y, dx, dy, w) {
-      this.ctx.beginPath();
-      this.ctx.lineWidth = w;
-      this.ctx.lineCap = "round";
-      this.ctx.strokeStyle = _colours2.default.bark;
-      this.ctx.moveTo(x, y);
-      this.ctx.lineTo(x + dx, y + dy);
-      this.ctx.stroke();
-    }
-  }]);
-
-  return Tree;
-}();
-
-exports.default = Tree;
-
-/***/ }),
-
 /***/ "./src/colours.js":
 /*!************************!*\
   !*** ./src/colours.js ***!
@@ -674,12 +953,15 @@ exports.default = {
   forest_green: '#68BA71',
   dark_green: '#388941',
   pea: '#60A568',
+  yellow_green: '#acff78',
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
   pink: '#FF6AD5',
   leaf_brown: '#ecb4bf',
   delicate_pink: '#FF9BE2',
   light_pink: '#FFBCEC',
+  purple: '#9370DB',
+  indigo: '#4B0082',
   registration_black: '#000000',
   rasin_black: '#212121',
   dark_gray: '#474747',
