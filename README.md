@@ -1,4 +1,4 @@
-# Pond V 2.1.11 - ALPHA
+# Pond V 2.2.2 - ALPHA
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 
@@ -47,6 +47,10 @@ Planned features:
    * The website should open automatically [here](http://127.0.0.1:3000)
 
 ## Changelog
+#### 2.2.2
+Flower Bushes are now randomly placed around
+#### 2.2.1
+Now uploaded to Heroku
 #### 2.1.11
 Trees have been created (Sakura Trees)
 #### 2.1.10

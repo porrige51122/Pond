@@ -5,7 +5,7 @@ class IrisEnsataVariegata {
   constructor(canvas, ctx, size) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.size = size/130;
+    this.size = size/180;
   }
 
   setPos(pos) {

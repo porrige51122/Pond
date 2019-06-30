@@ -51,6 +51,10 @@ class Background {
     this.edgeOfPond(rockCount, new Rock(this.canvasB, ctxB, this.size));
     // 25% chance to draw stepping stones
     // TODO: Draw Stepping stones
+
+    // Draw Flowers
+    this.aroundPond(Math.ceil(Math.random() * this.size/80), new FlowerBush(this.canvasB, ctxB, this.size));
+
     // Draw cattailCount number of cattails around pond
     let cattailCount = 30;
     this.edgeOfPond(cattailCount, new Cattail(this.canvasB, ctxB, this.size));
@@ -58,8 +62,6 @@ class Background {
     if (Math.random() < 0.75) {
       this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
     }
-    // Draw Flowers
-    this.aroundPond(1, new FlowerBush(this.canvasB, ctxB, this.size));
   }
 
 

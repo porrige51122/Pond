@@ -11,6 +11,7 @@ export default {
   forest_green: '#68BA71',
   dark_green: '#388941',
   pea: '#60A568',
+  yellow_green: '#acff78',
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
   pink: '#FF6AD5',

@@ -180,6 +180,10 @@ var Background = function () {
       this.edgeOfPond(rockCount, new _rock2.default(this.canvasB, ctxB, this.size));
       // 25% chance to draw stepping stones
       // TODO: Draw Stepping stones
+
+      // Draw Flowers
+      this.aroundPond(Math.ceil(Math.random() * this.size / 80), new _flowerBush2.default(this.canvasB, ctxB, this.size));
+
       // Draw cattailCount number of cattails around pond
       var cattailCount = 30;
       this.edgeOfPond(cattailCount, new _cattail2.default(this.canvasB, ctxB, this.size));
@@ -187,8 +191,6 @@ var Background = function () {
       if (Math.random() < 0.75) {
         this.aroundPond(1, new _tree2.default(this.canvasB, ctxB, this.size));
       }
-      // Draw Flowers
-      this.aroundPond(1, new _flowerBush2.default(this.canvasB, ctxB, this.size));
     }
   }, {
     key: 'edgeOfPond',
@@ -418,26 +420,62 @@ var FlowerBush = function () {
   }, {
     key: 'render',
     value: function render() {
-      // TODO: Draw Bush
-
+      var s = this.size / 15;
       var flower = new _irisEnsataVariegata2.default(this.canvas, this.ctx, this.size);
       var x = this.pos[0];
       var y = this.pos[1];
+
+      this.drawBush(x, y);
+
       flower.setPos([0, 0]);
       this.ctx.save();
-      this.ctx.translate(x, y + 15);
+
+      this.ctx.translate(x, y);
       this.ctx.save();
       this.ctx.rotate(Math.random() * 2 * Math.PI);
       flower.render();
       this.ctx.restore();
-      this.ctx.translate(-15, -30);
+      this.ctx.translate(0, s * 1.2);
       this.ctx.save();
       this.ctx.rotate(Math.random() * 2 * Math.PI);
       flower.render();
       this.ctx.restore();
-      this.ctx.translate(30, 0);
+      this.ctx.translate(-s, -(2 * s));
+      this.ctx.save();
       this.ctx.rotate(Math.random() * 2 * Math.PI);
       flower.render();
+      this.ctx.restore();
+      this.ctx.translate(2 * s, 0);
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+
+      this.ctx.restore();
+    }
+  }, {
+    key: 'drawBush',
+    value: function drawBush(x, y) {
+      var w = this.size / 20;
+      var h = w * 6;
+      this.ctx.save();
+      this.ctx.translate(x, y);
+
+      for (var i = 0; i < Math.PI; i += Math.PI / 10) {
+        this.ctx.save();
+        this.ctx.rotate(i);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = _colours2.default.forest_green;
+        this.ctx.moveTo(0, -h / 2);
+        this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
+        this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = _colours2.default.yellow_green;
+        this.ctx.moveTo(0, -h / 2);
+        this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
+        this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
+        this.ctx.stroke();
+        this.ctx.restore();
+      }
       this.ctx.restore();
     }
   }]);
@@ -483,7 +521,7 @@ var IrisEnsataVariegata = function () {
 
     this.canvas = canvas;
     this.ctx = ctx;
-    this.size = size / 130;
+    this.size = size / 180;
   }
 
   _createClass(IrisEnsataVariegata, [{
@@ -915,6 +953,7 @@ exports.default = {
   forest_green: '#68BA71',
   dark_green: '#388941',
   pea: '#60A568',
+  yellow_green: '#acff78',
   light_green: '#90ee90',
   lily_green: '#B4E8AC',
   pink: '#FF6AD5',
