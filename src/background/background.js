@@ -4,7 +4,7 @@ import Cattail from './plants/cattail';
 import LongGrass from './plants/longGrass';
 import Tree from './plants/tree';
 import LobeliaCardinalis from './plants/lobeliaCardinalis';
-import IrisEnsataVariegata  from './plants/irisEnsataVariegata';
+import FlowerBush from './plants/flowerBush';
 
 /**
  * BACKGROUND:
@@ -44,7 +44,7 @@ class Background {
     ctxB.restore();
 
     // Draw grassCount number of grass on pond bank
-    let grassCount = 1000;
+    let grassCount = this.size * 5;
     this.aroundPond(grassCount, new LongGrass(this.canvasB, ctxB, this.size));
     // Draw rockCount number of rocks around Pond
     let rockCount = 100;
@@ -59,7 +59,7 @@ class Background {
       this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
     }
     // Draw Flowers
-    this.aroundPond(1, new IrisEnsataVariegata(this.canvasB, ctxB, this.size));
+    this.aroundPond(1, new FlowerBush(this.canvasB, ctxB, this.size));
   }
 
 

@@ -1,10 +1,11 @@
 import colours from '../../colours';
+import LongGrass from './longGrass';
 
 class IrisEnsataVariegata {
   constructor(canvas, ctx, size) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.size = size/75;
+    this.size = size/130;
   }
 
   setPos(pos) {

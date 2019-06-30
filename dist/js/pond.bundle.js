@@ -126,9 +126,9 @@ var _lobeliaCardinalis = __webpack_require__(/*! ./plants/lobeliaCardinalis */ "
 
 var _lobeliaCardinalis2 = _interopRequireDefault(_lobeliaCardinalis);
 
-var _irisEnsataVariegata = __webpack_require__(/*! ./plants/irisEnsataVariegata */ "./src/background/plants/irisEnsataVariegata.js");
+var _flowerBush = __webpack_require__(/*! ./plants/flowerBush */ "./src/background/plants/flowerBush.js");
 
-var _irisEnsataVariegata2 = _interopRequireDefault(_irisEnsataVariegata);
+var _flowerBush2 = _interopRequireDefault(_flowerBush);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -173,7 +173,7 @@ var Background = function () {
       ctxB.restore();
 
       // Draw grassCount number of grass on pond bank
-      var grassCount = 1000;
+      var grassCount = this.size * 5;
       this.aroundPond(grassCount, new _longGrass2.default(this.canvasB, ctxB, this.size));
       // Draw rockCount number of rocks around Pond
       var rockCount = 100;
@@ -188,7 +188,7 @@ var Background = function () {
         this.aroundPond(1, new _tree2.default(this.canvasB, ctxB, this.size));
       }
       // Draw Flowers
-      this.aroundPond(1, new _irisEnsataVariegata2.default(this.canvasB, ctxB, this.size));
+      this.aroundPond(1, new _flowerBush2.default(this.canvasB, ctxB, this.size));
     }
   }, {
     key: 'edgeOfPond',
@@ -366,6 +366,89 @@ exports.default = Cattail;
 
 /***/ }),
 
+/***/ "./src/background/plants/flowerBush.js":
+/*!*********************************************!*\
+  !*** ./src/background/plants/flowerBush.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
+
+var _colours2 = _interopRequireDefault(_colours);
+
+var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/plants/longGrass.js");
+
+var _longGrass2 = _interopRequireDefault(_longGrass);
+
+var _irisEnsataVariegata = __webpack_require__(/*! ./irisEnsataVariegata */ "./src/background/plants/irisEnsataVariegata.js");
+
+var _irisEnsataVariegata2 = _interopRequireDefault(_irisEnsataVariegata);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var FlowerBush = function () {
+  function FlowerBush(canvas, ctx, size) {
+    _classCallCheck(this, FlowerBush);
+
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.size = size;
+  }
+
+  _createClass(FlowerBush, [{
+    key: 'setPos',
+    value: function setPos(pos) {
+      this.pos = pos;
+    }
+    // ctx.save pushes current state onto stack therefore
+    // multiple saves can be used to minimize code
+
+  }, {
+    key: 'render',
+    value: function render() {
+      // TODO: Draw Bush
+
+      var flower = new _irisEnsataVariegata2.default(this.canvas, this.ctx, this.size);
+      var x = this.pos[0];
+      var y = this.pos[1];
+      flower.setPos([0, 0]);
+      this.ctx.save();
+      this.ctx.translate(x, y + 15);
+      this.ctx.save();
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+      this.ctx.restore();
+      this.ctx.translate(-15, -30);
+      this.ctx.save();
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+      this.ctx.restore();
+      this.ctx.translate(30, 0);
+      this.ctx.rotate(Math.random() * 2 * Math.PI);
+      flower.render();
+      this.ctx.restore();
+    }
+  }]);
+
+  return FlowerBush;
+}();
+
+exports.default = FlowerBush;
+
+/***/ }),
+
 /***/ "./src/background/plants/irisEnsataVariegata.js":
 /*!******************************************************!*\
   !*** ./src/background/plants/irisEnsataVariegata.js ***!
@@ -386,6 +469,10 @@ var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
 var _colours2 = _interopRequireDefault(_colours);
 
+var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/plants/longGrass.js");
+
+var _longGrass2 = _interopRequireDefault(_longGrass);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -396,7 +483,7 @@ var IrisEnsataVariegata = function () {
 
     this.canvas = canvas;
     this.ctx = ctx;
-    this.size = size / 75;
+    this.size = size / 130;
   }
 
   _createClass(IrisEnsataVariegata, [{
