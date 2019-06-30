@@ -14,6 +14,8 @@ Current features include:
  * ⏺ Shape ⏺
    * The pond has banks to show that the pond isn't endless. It is contained. contained by you!
    * From here we have a random assortment of grass and cattails and rocks
+ * 🎶 Music 🎶
+   * No relaxation is perfect without some optional Lo-Fi tunes in the background
 
 Planned features:
  * 🌙 Day Night Cycle 🌙
@@ -30,8 +32,6 @@ Planned features:
    * I want your pond to be tailored the way *YOU* want it therefore I want the program to run faster in general so you can fit as much as you want in it
  * 🎣 FEAR!!!! 🎣
    * A big pointer is scary for the little fishes, so I want this to be represented properly
- * 🎶 Music 🎶
-   * No relaxation is perfect without some optional Lo-Fi tunes in the background
 
 ## Requirements
  * [NodeJs](https://nodejs.org/en/)
