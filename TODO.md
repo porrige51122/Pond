@@ -13,7 +13,7 @@ This contains all things that are currently being worked on or thought about:
  * Spatial Hashing
    * Collisions between creatures
  * Redo collisions
-   * make them actually collisions rather than
+   * make them actually collisions rather than overlapping
  * Spawn everything within the pond area
  * Redo the fish
    * More fish patterns
@@ -22,5 +22,4 @@ This contains all things that are currently being worked on or thought about:
    * Add lots of different kinds of fish
    * Have interactions with other fish
    * Have a swarm function for when food dropping is implemented
-   * add shadows
  * Update the menu (Maybe use bulma)
