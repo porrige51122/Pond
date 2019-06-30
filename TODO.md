@@ -4,7 +4,6 @@ This contains all things that are currently being worked on or thought about:
 ## In progress
 * Pond edge features
   * Plants
-    * Iris Ensata Variegata
     * Japanese blood grass
     * Bamboo
     * Barberry Shrub
@@ -24,3 +23,4 @@ This contains all things that are currently being worked on or thought about:
    * Have interactions with other fish
    * Have a swarm function for when food dropping is implemented
    * add shadows
+ * Update the menu (Maybe use bulma)
