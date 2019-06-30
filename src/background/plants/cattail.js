@@ -1,4 +1,4 @@
-import colours from '../colours';
+import colours from '../../colours';
 
 /**
  * CATTAIL class
@@ -27,7 +27,7 @@ class Cattail {
     let tipThickness = this.size/120;
     let tipColour = colours.khaki;
     let rotation = Math.random() * 2 * Math.PI;
-    
+
     this.ctx.save();
     this.ctx.translate(this.pos[0], this.pos[1]);
     this.ctx.rotate(rotation);

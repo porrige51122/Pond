@@ -1,8 +1,11 @@
 import colours from '../colours';
 import Rock from './rock';
-import Cattail from './cattail';
-import LongGrass from './longGrass';
-import Tree from './tree';
+import Cattail from './plants/cattail';
+import LongGrass from './plants/longGrass';
+import Tree from './plants/tree';
+import LobeliaCardinalis from './plants/lobeliaCardinalis';
+import IrisEnsataVariegata  from './plants/irisEnsataVariegata';
+
 /**
  * BACKGROUND:
  * This class creates the bank of the pond and checks to see if fish are
@@ -55,6 +58,8 @@ class Background {
     if (Math.random() < 0.75) {
       this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
     }
+    // Draw Flowers
+    this.aroundPond(1, new IrisEnsataVariegata(this.canvasB, ctxB, this.size));
   }
 
 

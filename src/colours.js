@@ -17,6 +17,8 @@ export default {
   leaf_brown: '#ecb4bf',
   delicate_pink: '#FF9BE2',
   light_pink: '#FFBCEC',
+  purple: '#9370DB',
+  indigo: '#4B0082',
   registration_black: '#000000',
   rasin_black: '#212121',
   dark_gray: '#474747',

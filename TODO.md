@@ -4,7 +4,7 @@ This contains all things that are currently being worked on or thought about:
 ## In progress
 * Pond edge features
   * Plants
-    * Iris ensata Variegata
+    * Iris Ensata Variegata
     * Japanese blood grass
     * Bamboo
     * Barberry Shrub
