@@ -40,10 +40,11 @@ class Pond {
     this.hidden = false;
     this.screenRatio = 3/4;
     hide.addEventListener('change', e => {
+      let x = document.getElementById('selections');
       if (e.target.checked) {
-        document.getElementById('menu').classList.add("hide");
+        x.style.display = "none";
       } else {
-        document.getElementById('menu').classList.remove("hide");
+        x.style.display = "block";
       }
     });
 
@@ -159,6 +160,7 @@ class Pond {
 
 }
 
+require('./mystyles.scss');
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 let pond = new Pond(canvas, ctx);
