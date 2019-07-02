@@ -1,4 +1,4 @@
-# Pond V 2.2.2 - ALPHA
+# Pond V 2.2.3 - ALPHA
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 
@@ -47,6 +47,8 @@ Planned features:
    * The website should open automatically [here](http://127.0.0.1:3000)
 
 ## Changelog
+#### 2.2.3
+Added lots of css to the menu to make it look better
 #### 2.2.2
 Flower Bushes are now randomly placed around
 #### 2.2.1
