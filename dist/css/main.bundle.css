@@ -20,7 +20,8 @@
   top: 5%;
   left: 5%;
   position: fixed;
-  z-index: 999; }
+  z-index: 999;
+  display: none; }
 
 .row {
   display: flex;
