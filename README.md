@@ -50,7 +50,7 @@ Planned features:
 #### 2.2.4
 Added lots of stuff to the menu to make it YOUR pond
 #### 2.2.3
-Added lots of css to the menu to make it look better
+Added lots of CSS to the menu to make it look better
 #### 2.2.2
 Flower Bushes are now randomly placed around
 #### 2.2.1
