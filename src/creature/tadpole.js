@@ -8,8 +8,8 @@ class Tadpole {
   constructor(canvas, size) {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
-    // Random size 3-4
-    this.size = size/200;
+    // Size
+    this.size = size/200 * (document.getElementById('tadsize').value / 2);
     // Initially still
     this.vel = [0, 0];
     // 1.5% chance to become leader
@@ -17,7 +17,7 @@ class Tadpole {
     // follow noone until assigned
     this.follow = null;
     // eagerness = how close to the leader the tadpole will follow
-    this.eagerness = Math.random();
+    this.eagerness = Math.random() * (document.getElementById('tadeager').value / 2);
   }
 
   /**

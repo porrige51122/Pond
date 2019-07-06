@@ -4,6 +4,7 @@
  */
 
 import Background from './background/background';
+import Menu from './menu';
 
 import Tadpole from './creature/tadpole';
 import Fish from './creature/fish';
@@ -34,31 +35,7 @@ class Pond {
    * are created
    */
   eventListeners() {
-    const hide = document.getElementById('hidecheck');
-    const refresh = document.getElementById('refresh');
-
-    this.hidden = false;
-    this.screenRatio = 3/4;
-    hide.addEventListener('change', e => {
-      let x = document.getElementById('selections');
-      if (e.target.checked) {
-        x.style.display = "none";
-      } else {
-        x.style.display = "block";
-      }
-    });
-
-    // Initialise the variables
-    this.tadpoleSize = document.getElementById('tadpoles').value;
-    this.fishSize = document.getElementById('fish').value;
-    this.lilySize = document.getElementById('lillies').value;
-
-    refresh.addEventListener('mouseup', e => {
-      this.tadpoleSize = document.getElementById('tadpoles').value;
-      this.fishSize = document.getElementById('fish').value;
-      this.lilySize = document.getElementById('lillies').value;
-      this.init();
-    });
+    this.menu = new Menu(this);
     let mousemovecount = 0;
     canvas.addEventListener("mousemove", () => {
       mousemovecount++;

@@ -6,6 +6,9 @@
 #myCanvas {
   z-index: 0; }
 
+#tab2 {
+  display: none; }
+
 .hidecheck {
   top: 1%;
   left: 1%;
