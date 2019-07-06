@@ -1345,8 +1345,8 @@ var Tadpole = function () {
 
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
-    // Random size 3-4
-    this.size = size / 200;
+    // Size
+    this.size = size / 200 * (document.getElementById('tadsize').value / 2);
     // Initially still
     this.vel = [0, 0];
     // 1.5% chance to become leader
@@ -1354,7 +1354,7 @@ var Tadpole = function () {
     // follow noone until assigned
     this.follow = null;
     // eagerness = how close to the leader the tadpole will follow
-    this.eagerness = Math.random();
+    this.eagerness = Math.random() * (document.getElementById('tadeager').value / 2);
   }
 
   /**
@@ -1415,6 +1415,70 @@ var Tadpole = function () {
 }();
 
 exports.default = Tadpole;
+
+/***/ }),
+
+/***/ "./src/menu.js":
+/*!*********************!*\
+  !*** ./src/menu.js ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Menu = function Menu(pond) {
+  _classCallCheck(this, Menu);
+
+  var hide = document.getElementById('hidecheck');
+  var refresh = document.getElementById('refresh');
+
+  this.hidden = false;
+  this.screenRatio = 3 / 4;
+  hide.addEventListener('change', function (e) {
+    var x = document.getElementById('selections');
+    if (e.target.checked) {
+      x.style.display = "none";
+    } else {
+      x.style.display = "block";
+    }
+  });
+
+  // Initialise the variables
+  pond.tadpoleSize = document.getElementById('tadpoles').value;
+  pond.fishSize = document.getElementById('fish').value;
+  pond.lilySize = document.getElementById('lillies').value;
+
+  refresh.addEventListener('mouseup', function (e) {
+    pond.tadpoleSize = document.getElementById('tadpoles').value;
+    pond.fishSize = document.getElementById('fish').value;
+    pond.lilySize = document.getElementById('lillies').value;
+    pond.init();
+  });
+
+  // Change Tabs
+  var tab1butt = document.getElementById('tab1butt');
+  var tab2butt = document.getElementById('tab2butt');
+
+  tab1butt.addEventListener('mouseup', function (e) {
+    document.getElementById('tab1').style.display = "block";
+    document.getElementById('tab2').style.display = "none";
+  });
+
+  tab2butt.addEventListener('mouseup', function (e) {
+    document.getElementById('tab1').style.display = "none";
+    document.getElementById('tab2').style.display = "block";
+  });
+};
+
+exports.default = Menu;
 
 /***/ }),
 
@@ -1847,7 +1911,7 @@ var TadMovement = function (_Movement) {
             this.entities[i].leader = true;
           }
         }
-        this.slowing(i, 0.5);
+        this.slowing(i, document.getElementById('tadspd').value / 20);
       }
       this.collisions.checkTadpoles(this);
     }
@@ -2087,6 +2151,10 @@ var _background = __webpack_require__(/*! ./background/background */ "./src/back
 
 var _background2 = _interopRequireDefault(_background);
 
+var _menu = __webpack_require__(/*! ./menu */ "./src/menu.js");
+
+var _menu2 = _interopRequireDefault(_menu);
+
 var _tadpole = __webpack_require__(/*! ./creature/tadpole */ "./src/creature/tadpole.js");
 
 var _tadpole2 = _interopRequireDefault(_tadpole);
@@ -2149,31 +2217,7 @@ var Pond = function () {
     value: function eventListeners() {
       var _this = this;
 
-      var hide = document.getElementById('hidecheck');
-      var refresh = document.getElementById('refresh');
-
-      this.hidden = false;
-      this.screenRatio = 3 / 4;
-      hide.addEventListener('change', function (e) {
-        var x = document.getElementById('selections');
-        if (e.target.checked) {
-          x.style.display = "none";
-        } else {
-          x.style.display = "block";
-        }
-      });
-
-      // Initialise the variables
-      this.tadpoleSize = document.getElementById('tadpoles').value;
-      this.fishSize = document.getElementById('fish').value;
-      this.lilySize = document.getElementById('lillies').value;
-
-      refresh.addEventListener('mouseup', function (e) {
-        _this.tadpoleSize = document.getElementById('tadpoles').value;
-        _this.fishSize = document.getElementById('fish').value;
-        _this.lilySize = document.getElementById('lillies').value;
-        _this.init();
-      });
+      this.menu = new _menu2.default(this);
       var mousemovecount = 0;
       canvas.addEventListener("mousemove", function () {
         mousemovecount++;
