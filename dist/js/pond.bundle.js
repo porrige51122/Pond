@@ -1466,27 +1466,39 @@ var Menu = function Menu(pond) {
   // Change Tabs
   var tab1butt = document.getElementById('tab1butt');
   var tab1 = document.getElementById('tab1');
+  var pag1 = document.getElementById('p1');
   var tab2butt = document.getElementById('tab2butt');
   var tab2 = document.getElementById('tab2');
+  var pag2 = document.getElementById('p2');
   var tab3butt = document.getElementById('tab3butt');
   var tab3 = document.getElementById('tab3');
+  var pag3 = document.getElementById('p3');
 
   tab1butt.addEventListener('mouseup', function (e) {
     tab1.style.display = "block";
     tab2.style.display = "none";
     tab3.style.display = "none";
+    pag1.classList.add('is-active');
+    pag2.classList.remove('is-active');
+    pag3.classList.remove('is-active');
   });
 
   tab2butt.addEventListener('mouseup', function (e) {
     tab1.style.display = "none";
     tab2.style.display = "block";
     tab3.style.display = "none";
+    pag1.classList.remove('is-active');
+    pag2.classList.add('is-active');
+    pag3.classList.remove('is-active');
   });
 
   tab3butt.addEventListener('mouseup', function (e) {
     tab1.style.display = "none";
     tab2.style.display = "none";
     tab3.style.display = "block";
+    pag1.classList.remove('is-active');
+    pag2.classList.remove('is-active');
+    pag3.classList.add('is-active');
   });
 };
 

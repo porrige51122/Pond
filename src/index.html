@@ -15,15 +15,20 @@
   <meta name="msapplication-TileColor" content="#2b5797">
   <meta name="msapplication-config" content="/icons/browserconfig.xml">
   <meta name="theme-color" content="#ffffff">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 
 <body>
   <canvas id="myCanvas" width="100%" height="100%"></canvas>
   <div id="selections">
     <div class="box">
-      <a class="button is-link" id="tab1butt">General</a>
-      <a class="button is-link" id="tab2butt">Tadpoles</a>
-      <a class="button is-link" id="tab3butt">Fish</a>
+      <div class="tabs is-centered">
+        <ul>
+          <li id="p1" class="is-active"><a id="tab1butt"><span class="icon"><i class="fas fa-cogs"></i></span>General</a></li>
+          <li id="p2"><a id="tab2butt"><span class="icon"><i class="fas fa-frog"></i></span>Tadpoles</a></li>
+          <li id="p3"><a id="tab3butt"><span class="icon"><i class="fas fa-fish"></i></span>Fish</a></li>
+        </ul>
+      </div>
       <div class="tab" id="tab1">
         <div class="row">
           <div class="column">
@@ -52,10 +57,13 @@
             <h1><u> Tadpole Settings </u></h1>
             <p>Size</p>
             <input type="range" min="1" max="5" value="2" class="slider is-circle is-danger" id="tadsize">
+            <div class="is-divider"></div>
             <p>Eagerness</p>
             <input type="range" min="1" max="5" value="2" class="slider is-circle is-danger" id="tadeager">
+            <div class="is-divider"></div>
             <p>Max Speed</p>
             <input type="range" min="1" max="20" value="4" class="slider is-circle is-danger" id="tadspd">
+            <div class="is-divider"></div>
           </div>
         </div>
       </div>
