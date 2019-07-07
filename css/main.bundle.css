@@ -6,7 +6,7 @@
 #myCanvas {
   z-index: 0; }
 
-#tab2 {
+#tab2, #tab3 {
   display: none; }
 
 .hidecheck {

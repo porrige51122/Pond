@@ -1004,7 +1004,7 @@ var Fish = function () {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size this.size-this.size * (3/2)
-    this.size = size / 40;
+    this.size = size / 40 * (document.getElementById('fishsize').value / 10);
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     // Colour
@@ -1050,7 +1050,7 @@ var Fish = function () {
 
 
   _createClass(Fish, [{
-    key: "tick",
+    key: 'tick',
     value: function tick() {
       // sin is the angle along sin that the fish is swimming along
       if (this.swimming) {
@@ -1068,7 +1068,7 @@ var Fish = function () {
      */
 
   }, {
-    key: "render",
+    key: 'render',
     value: function render(canvas, ctx) {
       this.angles.push(this.angle);
       this.angles.shift();
@@ -1088,7 +1088,7 @@ var Fish = function () {
       ctx.restore();
     }
   }, {
-    key: "drawfish",
+    key: 'drawfish',
     value: function drawfish(canvas, ctx, x, y, offsetArr, shadow) {
       var offset = (offsetArr[0] - offsetArr[1]) * 100;
       if (offset > 10) {
@@ -1119,7 +1119,7 @@ var Fish = function () {
       }
     }
   }, {
-    key: "fishShape",
+    key: 'fishShape',
     value: function fishShape(canvas, ctx, x, y, h, t, f, a) {
       // Head
       ctx.moveTo(h[0], h[1]);
@@ -1465,16 +1465,28 @@ var Menu = function Menu(pond) {
 
   // Change Tabs
   var tab1butt = document.getElementById('tab1butt');
+  var tab1 = document.getElementById('tab1');
   var tab2butt = document.getElementById('tab2butt');
+  var tab2 = document.getElementById('tab2');
+  var tab3butt = document.getElementById('tab3butt');
+  var tab3 = document.getElementById('tab3');
 
   tab1butt.addEventListener('mouseup', function (e) {
-    document.getElementById('tab1').style.display = "block";
-    document.getElementById('tab2').style.display = "none";
+    tab1.style.display = "block";
+    tab2.style.display = "none";
+    tab3.style.display = "none";
   });
 
   tab2butt.addEventListener('mouseup', function (e) {
-    document.getElementById('tab1').style.display = "none";
-    document.getElementById('tab2').style.display = "block";
+    tab1.style.display = "none";
+    tab2.style.display = "block";
+    tab3.style.display = "none";
+  });
+
+  tab3butt.addEventListener('mouseup', function (e) {
+    tab1.style.display = "none";
+    tab2.style.display = "none";
+    tab3.style.display = "block";
   });
 };
 
@@ -1613,28 +1625,28 @@ var FishMovement = function (_Movement) {
     value: function move(water) {
       var wiggleRate = 8;
       var wiggleSize = 0.5;
-      var speed = 1;
+      var speed = document.getElementById('fishspd').value / 5;
 
       for (var i = 0; i < this.entities.length; i++) {
         var pos = this.entities[i].pos;
         this.edgeCheck(i, pos);
         if (this.entities[i].swimming) {
           this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
-          if (Math.random() < 0.005) {
+          if (Math.random() < 0.002) {
             this.entities[i].swimming = false;
             this.entities[i].vel = [0, 0];
           }
-          this.slowing(i, 2);
+          this.slowing(i, speed);
         } else {
           this.reduce(i);
           if (this.entities[i].vel[0] < 0.01 && this.entities[i].vel[1] < 0.01) {
             if (Math.random() < 0.5) {
               this.entities[i].swimming = true;
-              this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
+              this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.5) * speed];
             } else {
               // Setting a random direction and speed while not being in the
               // range -1 to 1 as it is too slow
-              var velx = (Math.random() > 0.5 ? 1 : -1) * (speed * Math.random() + 1.5);
+              var velx = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1.5);
               var vely = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1.5);
               this.entities[i].vel = [velx, vely];
 
