@@ -9,28 +9,28 @@ class FishMovement extends Movement {
   move(water) {
     let wiggleRate = 8;
     let wiggleSize = 0.5;
-    let speed = 1;
+    let speed = document.getElementById('fishspd').value/5;
 
     for (let i = 0; i < this.entities.length; i++) {
       let pos = this.entities[i].pos;
       this.edgeCheck(i, pos);
       if (this.entities[i].swimming) {
         this.entities[i].vel[1] = wiggleSize * Math.sin(2 * Math.PI * (this.entities[i].sin / wiggleRate * Math.PI / 180));
-        if (Math.random() < 0.005) {
+        if (Math.random() < 0.002) {
           this.entities[i].swimming = false;
           this.entities[i].vel = [0, 0];
         }
-        this.slowing(i, 2);
+        this.slowing(i, speed);
       } else {
         this.reduce(i);
         if (this.entities[i].vel[0] < 0.01 && this.entities[i].vel[1] < 0.01) {
           if (Math.random() < 0.5) {
             this.entities[i].swimming = true;
-            this.entities[i].vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
+            this.entities[i].vel = [(Math.random() - 0.5) * speed, (Math.random() - 0.5) * speed];
           } else {
             // Setting a random direction and speed while not being in the
             // range -1 to 1 as it is too slow
-            let velx = (Math.random() > 0.5 ? 1 : -1) * (speed * Math.random() + 1.5);
+            let velx = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1.5);
             let vely = (Math.random() > 0.8 ? 1 : -1) * (speed * Math.random() + 1.5);
             this.entities[i].vel = [velx, vely];
 

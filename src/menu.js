@@ -28,16 +28,28 @@ class Menu {
 
     // Change Tabs
     const tab1butt = document.getElementById('tab1butt');
+    let tab1 = document.getElementById('tab1');
     const tab2butt = document.getElementById('tab2butt');
+    let tab2 = document.getElementById('tab2');
+    const tab3butt = document.getElementById('tab3butt');
+    let tab3 = document.getElementById('tab3');
 
     tab1butt.addEventListener('mouseup', e => {
-      document.getElementById('tab1').style.display = "block";
-      document.getElementById('tab2').style.display = "none";
+      tab1.style.display = "block";
+      tab2.style.display = "none";
+      tab3.style.display = "none";
     });
 
     tab2butt.addEventListener('mouseup', e => {
-      document.getElementById('tab1').style.display = "none";
-      document.getElementById('tab2').style.display = "block";
+      tab1.style.display = "none";
+      tab2.style.display = "block";
+      tab3.style.display = "none";
+    });
+
+    tab3butt.addEventListener('mouseup', e => {
+      tab1.style.display = "none";
+      tab2.style.display = "none";
+      tab3.style.display = "block";
     });
   }
 
