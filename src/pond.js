@@ -77,8 +77,8 @@ class Pond {
     this.collisions = new Collisions(this.tadpoles, this.fish, this.lillies, this.background);
 
     this.movement.push(new TadMovement(this.tadpoles, canvas, this.collisions),
-                      new FishMovement(this.fish, canvas, this.collisions),
-                      new LilyMovement(this.lillies, canvas, this.collisions));
+      new FishMovement(this.fish, canvas, this.collisions),
+      new LilyMovement(this.lillies, canvas, this.collisions));
   }
 
   loop() {

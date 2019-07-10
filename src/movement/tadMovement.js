@@ -64,7 +64,7 @@ class TadMovement extends Movement {
         }
 
       }
-      this.slowing(i, document.getElementById('tadspd').value/20);
+      this.slowing(i, document.getElementById('tadspd').value / 20);
     }
     this.collisions.checkTadpoles(this);
   }

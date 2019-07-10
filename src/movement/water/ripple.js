@@ -29,7 +29,7 @@ class Ripple {
     let x = this.dx;
     let y = this.dy;
     let s = this.size;
-    
+
     ctx.beginPath();
     ctx.lineWidth = this.w;
     ctx.strokeStyle = colours.deep_blue;
@@ -42,7 +42,7 @@ class Ripple {
       y += this.vy;
     }
     ctx.beginPath();
-    ctx.lineWidth = this.w/2;
+    ctx.lineWidth = this.w / 2;
     ctx.strokeStyle = colours.deep_blue;
     ctx.arc(x, y, s, 0, Math.PI * 2);
     ctx.stroke();

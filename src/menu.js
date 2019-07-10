@@ -4,7 +4,7 @@ class Menu {
     const refresh = document.getElementById('refresh');
 
     this.hidden = false;
-    this.screenRatio = 3/4;
+    this.screenRatio = 3 / 4;
     hide.addEventListener('change', e => {
       let x = document.getElementById('selections');
       if (e.target.checked) {

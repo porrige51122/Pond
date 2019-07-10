@@ -8,7 +8,7 @@ class Lily {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // All have same size 30 - CHANGE TO RANDOM SOON
-    this.size = size/10;
+    this.size = size / 10;
     // Random velocity [-0.5, -0.5] - [0.5, 0.5]
     this.vel = [Math.random() - 0.5, Math.random() - 0.5];
     // Chooses a random point to put the split of the lily pad
@@ -97,7 +97,7 @@ class Lily {
 
   // Draws 8 petals each at 45 degrees to each other
   drawRing(ctx, fillStyle, w, h) {
-    for (let i = 0; i <= Math.PI * 2; i+= Math.PI/4) {
+    for (let i = 0; i <= Math.PI * 2; i += Math.PI / 4) {
       ctx.save();
       ctx.translate(this.pos[0], this.pos[1]);
       ctx.rotate(i);

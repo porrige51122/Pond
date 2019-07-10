@@ -14,13 +14,15 @@ import FlowerBush from './plants/flowerBush';
 class Background {
   constructor(canvas, ctx) {
     if (canvas.width < canvas.height) {
-      this.pos = [canvas.width/2, (canvas.height/8) * 3,
-                  canvas.width/2, (canvas.height/8) * 5];
-      this.size = canvas.width/2;
+      this.pos = [canvas.width / 2, (canvas.height / 8) * 3,
+        canvas.width / 2, (canvas.height / 8) * 5
+      ];
+      this.size = canvas.width / 2;
     } else {
-      this.pos = [(canvas.width/8) * 3, canvas.height/2,
-                  (canvas.width/8) * 5, canvas.height/2];
-      this.size = canvas.height/2;
+      this.pos = [(canvas.width / 8) * 3, canvas.height / 2,
+        (canvas.width / 8) * 5, canvas.height / 2
+      ];
+      this.size = canvas.height / 2;
     }
     this.pondColour = colours.ocean_blue;
     this.landColour = colours.pea;
@@ -53,7 +55,7 @@ class Background {
     // TODO: Draw Stepping stones
 
     // Draw Flowers
-    this.aroundPond(Math.ceil(Math.random() * this.size/80), new FlowerBush(this.canvasB, ctxB, this.size));
+    this.aroundPond(Math.ceil(Math.random() * this.size / 80), new FlowerBush(this.canvasB, ctxB, this.size));
 
     // Draw cattailCount number of cattails around pond
     let cattailCount = 30;

@@ -35,7 +35,8 @@ class Movement {
     let smoothing = 0.005;
     let prevVel = this.entities[index].vel;
     this.entities[index].vel = [prevVel[0] + velx * smoothing,
-                                prevVel[1] + vely * smoothing];
+      prevVel[1] + vely * smoothing
+    ];
   }
 
   /*

@@ -9,7 +9,7 @@ class FishMovement extends Movement {
   move(water) {
     let wiggleRate = 8;
     let wiggleSize = 0.5;
-    let speed = document.getElementById('fishspd').value/5;
+    let speed = document.getElementById('fishspd').value / 5;
 
     for (let i = 0; i < this.entities.length; i++) {
       let pos = this.entities[i].pos;

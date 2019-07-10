@@ -9,7 +9,7 @@ class Tadpole {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Size
-    this.size = size/200 * (document.getElementById('tadsize').value / 2);
+    this.size = size / 200 * (document.getElementById('tadsize').value / 2);
     // Initially still
     this.vel = [0, 0];
     // 1.5% chance to become leader

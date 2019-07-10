@@ -9,7 +9,7 @@ class Fish {
     // Random Position on canvas
     this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
     // Random size this.size-this.size * (3/2)
-    this.size = size/40 * (document.getElementById('fishsize').value / 10);
+    this.size = size / 40 * (document.getElementById('fishsize').value / 10);
     // Random velocity [-1, -1] - [1, 1]
     this.vel = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2];
     // Colour
@@ -19,20 +19,20 @@ class Fish {
         this.colourA = colours.orange_peel;
         this.colourB = colours.yellow;
         break;
-      // ki-goi (are entirely yellow/gold)
+        // ki-goi (are entirely yellow/gold)
       case 1:
         this.colourA = colours.yellow;
         this.colourB = colours.orange_peel;
         break;
-      // Tancho (White with a red mark on the head but no red on body)
+        // Tancho (White with a red mark on the head but no red on body)
       case 2:
-        this.colourA = ctx.createRadialGradient(0,0,this.size/4,0,0,this.size * 4);
+        this.colourA = ctx.createRadialGradient(0, 0, this.size / 4, 0, 0, this.size * 4);
         this.colourA.addColorStop(0, "red");
         this.colourA.addColorStop(0.25, "white");
         this.colourA.addColorStop(1, "white");
         this.colourB = colours.yellow;
         break;
-      // Karasugoi (are entirely black/dark gray)
+        // Karasugoi (are entirely black/dark gray)
       case 3:
         this.colourA = colours.dark_gray;
         this.colourB = "white";
