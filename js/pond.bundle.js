@@ -104,7 +104,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
 var _rock = __webpack_require__(/*! ./rock */ "./src/background/rock.js");
 
@@ -132,6 +132,8 @@ var _flowerBush2 = _interopRequireDefault(_flowerBush);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -150,8 +152,8 @@ var Background = function () {
       this.pos = [canvas.width / 8 * 3, canvas.height / 2, canvas.width / 8 * 5, canvas.height / 2];
       this.size = canvas.height / 2;
     }
-    this.pondColour = _colours2.default.ocean_blue;
-    this.landColour = _colours2.default.pea;
+    this.pondColour = colours.ocean_blue;
+    this.landColour = colours.pea;
     this.createLand(canvas, ctx);
   }
 
@@ -301,9 +303,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -331,13 +333,13 @@ var Cattail = function () {
       var length = Math.random();
       var stemLength = this.size / 8 * length;
       var stemThickness = this.size / 64;
-      var stemColour = _colours2.default.dark_green;
+      var stemColour = colours.dark_green;
       var headLength = this.size / 15 * length;
       var headThickness = this.size / 20;
-      var headColour = _colours2.default.olive;
+      var headColour = colours.olive;
       var tipLength = this.size / 40 * length;
       var tipThickness = this.size / 120;
-      var tipColour = _colours2.default.khaki;
+      var tipColour = colours.khaki;
       var rotation = Math.random() * 2 * Math.PI;
 
       this.ctx.save();
@@ -386,7 +388,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
 var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/plants/longGrass.js");
 
@@ -397,6 +399,8 @@ var _irisEnsataVariegata = __webpack_require__(/*! ./irisEnsataVariegata */ "./s
 var _irisEnsataVariegata2 = _interopRequireDefault(_irisEnsataVariegata);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -463,13 +467,13 @@ var FlowerBush = function () {
         this.ctx.save();
         this.ctx.rotate(i);
         this.ctx.beginPath();
-        this.ctx.fillStyle = _colours2.default.forest_green;
+        this.ctx.fillStyle = colours.forest_green;
         this.ctx.moveTo(0, -h / 2);
         this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
         this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.strokeStyle = _colours2.default.yellow_green;
+        this.ctx.strokeStyle = colours.yellow_green;
         this.ctx.moveTo(0, -h / 2);
         this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
         this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
@@ -505,13 +509,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
 var _longGrass = __webpack_require__(/*! ./longGrass */ "./src/background/plants/longGrass.js");
 
 var _longGrass2 = _interopRequireDefault(_longGrass);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -540,16 +546,16 @@ var IrisEnsataVariegata = function () {
         this.ctx.rotate(i);
 
         this.ctx.beginPath();
-        this.ctx.fillStyle = _colours2.default.purple;
+        this.ctx.fillStyle = colours.purple;
         this.drawPetal(0, -this.size / 2);
         this.ctx.fill();
         this.ctx.beginPath();
-        this.ctx.strokeStyle = _colours2.default.indigo;
+        this.ctx.strokeStyle = colours.indigo;
         this.drawPetal(0, -this.size / 2);
         this.ctx.stroke();
 
         this.ctx.beginPath();
-        this.ctx.fillStyle = _colours2.default.yellow;
+        this.ctx.fillStyle = colours.yellow;
         this.drawInnerPetal(0, -this.size / 2);
         this.ctx.fill();
 
@@ -603,9 +609,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -653,9 +659,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -683,13 +689,13 @@ var LongGrass = function () {
       this.ctx.translate(this.pos[0], this.pos[1]);
       this.ctx.rotate(rotation);
       this.ctx.beginPath();
-      this.ctx.fillStyle = _colours2.default.forest_green;
+      this.ctx.fillStyle = colours.forest_green;
       this.ctx.moveTo(0, -h / 2);
       this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
       this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
       this.ctx.fill();
       this.ctx.beginPath();
-      this.ctx.strokeStyle = _colours2.default.dark_green;
+      this.ctx.strokeStyle = colours.dark_green;
       this.ctx.moveTo(0, -h / 2);
       this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
       this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
@@ -723,9 +729,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -771,7 +777,7 @@ var Tree = function () {
           // Change w amount for change in thickness
           this.drawTree(x + dx, y + dy, w / 1.75);
         }
-        this.ctx.fillStyle = _colours2.default.leaf_brown;
+        this.ctx.fillStyle = colours.leaf_brown;
         this.drawSakuraLeaf(x + dx, y + dy, this.size / 200);
       }
     }
@@ -809,7 +815,7 @@ var Tree = function () {
       this.ctx.beginPath();
       this.ctx.lineWidth = w;
       this.ctx.lineCap = "round";
-      this.ctx.strokeStyle = _colours2.default.bark;
+      this.ctx.strokeStyle = colours.bark;
       this.ctx.moveTo(x, y);
       this.ctx.lineTo(x + dx, y + dy);
       this.ctx.stroke();
@@ -841,9 +847,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -888,14 +894,14 @@ var Rock = function () {
       }
 
       this.ctx.beginPath();
-      this.ctx.fillStyle = _colours2.default.rock_gray;
+      this.ctx.fillStyle = colours.rock_gray;
       this.ctx.moveTo(points[0][0], points[0][1]);
       for (var _a = 2; _a < points.length; _a += 2) {
         this.ctx.lineTo(points[_a][0], points[_a][1]);
       }this.ctx.fill();
 
       this.ctx.beginPath();
-      this.ctx.fillStyle = _colours2.default.gray;
+      this.ctx.fillStyle = colours.gray;
       this.ctx.moveTo(points[1][0], points[1][1]);
       for (var _a2 = 1; _a2 < points.length; _a2 += 2) {
         this.ctx.lineTo(points[_a2][0], points[_a2][1]);
@@ -910,7 +916,7 @@ var Rock = function () {
     key: 'drawLines',
     value: function drawLines(a, b, c, d) {
       this.ctx.beginPath();
-      this.ctx.strokeStyle = _colours2.default.dark_gray;
+      this.ctx.strokeStyle = colours.dark_gray;
       this.ctx.moveTo(a[0], a[1]);
       this.ctx.lineTo(b[0], b[1]);
       this.ctx.lineTo(d[0], d[1]);
@@ -940,34 +946,31 @@ exports.default = Rock;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = {
-  // Daytime
-  ocean_blue: '#94D0FF',
-  deep_blue: 'rgba(135,149,232,0.7)',
-  pond_shadow: 'rgba(11, 45, 99, 0.7)',
-  yellow: '#fdf3b8',
-  orange_peel: '#FCC08F',
-  bark: '#917e7e',
-  khaki: '#F0E68C',
-  olive: '#808000',
-  forest_green: '#68BA71',
-  dark_green: '#388941',
-  pea: '#60A568',
-  yellow_green: '#acff78',
-  light_green: '#90ee90',
-  lily_green: '#B4E8AC',
-  pink: '#FF6AD5',
-  leaf_brown: '#ecb4bf',
-  delicate_pink: '#FF9BE2',
-  light_pink: '#FFBCEC',
-  purple: '#9370DB',
-  indigo: '#4B0082',
-  registration_black: '#000000',
-  rasin_black: '#212121',
-  dark_gray: '#474747',
-  rock_gray: '#606060',
-  gray: '#808080'
-};
+var ocean_blue = exports.ocean_blue = '#94D0FF',
+    deep_blue = exports.deep_blue = 'rgba(135,149,232,0.7)',
+    pond_shadow = exports.pond_shadow = 'rgba(11, 45, 99, 0.7)',
+    yellow = exports.yellow = '#fdf3b8',
+    orange_peel = exports.orange_peel = '#FCC08F',
+    bark = exports.bark = '#917e7e',
+    khaki = exports.khaki = '#F0E68C',
+    olive = exports.olive = '#808000',
+    forest_green = exports.forest_green = '#68BA71',
+    dark_green = exports.dark_green = '#388941',
+    pea = exports.pea = '#60A568',
+    yellow_green = exports.yellow_green = '#acff78',
+    light_green = exports.light_green = '#90ee90',
+    lily_green = exports.lily_green = '#B4E8AC',
+    pink = exports.pink = '#FF6AD5',
+    leaf_brown = exports.leaf_brown = '#ecb4bf',
+    delicate_pink = exports.delicate_pink = '#FF9BE2',
+    light_pink = exports.light_pink = '#FFBCEC',
+    purple = exports.purple = '#9370DB',
+    indigo = exports.indigo = '#4B0082',
+    registration_black = exports.registration_black = '#000000',
+    rasin_black = exports.rasin_black = '#212121',
+    dark_gray = exports.dark_gray = '#474747',
+    rock_gray = exports.rock_gray = '#606060',
+    gray = exports.gray = '#808080';
 
 /***/ }),
 
@@ -991,9 +994,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1011,13 +1014,13 @@ var Fish = function () {
     switch (Math.floor(Math.random() * 4)) {
       // Beni-goi (are entirely red/orange)
       case 0:
-        this.colourA = _colours2.default.orange_peel;
-        this.colourB = _colours2.default.yellow;
+        this.colourA = colours.orange_peel;
+        this.colourB = colours.yellow;
         break;
       // ki-goi (are entirely yellow/gold)
       case 1:
-        this.colourA = _colours2.default.yellow;
-        this.colourB = _colours2.default.orange_peel;
+        this.colourA = colours.yellow;
+        this.colourB = colours.orange_peel;
         break;
       // Tancho (White with a red mark on the head but no red on body)
       case 2:
@@ -1025,16 +1028,16 @@ var Fish = function () {
         this.colourA.addColorStop(0, "red");
         this.colourA.addColorStop(0.25, "white");
         this.colourA.addColorStop(1, "white");
-        this.colourB = _colours2.default.yellow;
+        this.colourB = colours.yellow;
         break;
       // Karasugoi (are entirely black/dark gray)
       case 3:
-        this.colourA = _colours2.default.dark_gray;
+        this.colourA = colours.dark_gray;
         this.colourB = "white";
         break;
       default:
-        this.colourA = _colours2.default.registration_black;
-        this.colourB = _colours2.default.registration_black;
+        this.colourA = colours.registration_black;
+        this.colourB = colours.registration_black;
     }
     // Extra Variables
     this.swimming = true;
@@ -1105,7 +1108,7 @@ var Fish = function () {
       // Fin Coordinates
       var a = [h[0] - this.size - offset, h[1] - this.size, h[2] + this.size + offset, h[3] - this.size];
 
-      if (shadow) ctx.fillStyle = _colours2.default.deep_blue;else ctx.fillStyle = this.colourA;
+      if (shadow) ctx.fillStyle = colours.deep_blue;else ctx.fillStyle = this.colourA;
 
       ctx.beginPath();
       this.fishShape(canvas, ctx, x, y, h, t, f, a);
@@ -1171,9 +1174,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1221,42 +1224,42 @@ var Lily = function () {
         var start = this.startAngle;
         // Shadow
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.fillStyle = colours.deep_blue;
         ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, 0, Math.PI * 2);
         ctx.fill();
 
         // Draw First Half
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.light_green;
+        ctx.fillStyle = colours.light_green;
         ctx.arc(this.pos[0], this.pos[1], this.size, start, Math.PI + start);
         ctx.fill();
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.lily_green;
+        ctx.fillStyle = colours.lily_green;
         ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, start, Math.PI + start);
         ctx.fill();
         // Draws second half with not full rotation to give the circle the slit
         start += Math.PI / 180 * 170;
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.light_green;
+        ctx.fillStyle = colours.light_green;
         ctx.arc(this.pos[0], this.pos[1], this.size, start, Math.PI + start);
         ctx.fill();
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.lily_green;
+        ctx.fillStyle = colours.lily_green;
         ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, start, Math.PI + start);
         ctx.fill();
       } else {
         // Shadow
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.deep_blue;
+        ctx.fillStyle = colours.deep_blue;
         ctx.arc(this.pos[0] + 20, this.pos[1] + 20, this.size, 0, Math.PI * 2);
         ctx.fill();
         // Draws the full circle
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.light_green;
+        ctx.fillStyle = colours.light_green;
         ctx.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
         ctx.fill();
         ctx.beginPath();
-        ctx.fillStyle = _colours2.default.lily_green;
+        ctx.fillStyle = colours.lily_green;
         ctx.arc(this.pos[0], this.pos[1], this.size / 4 * 3, 0, Math.PI * 2);
         ctx.fill();
         this.drawFlower(ctx);
@@ -1269,11 +1272,11 @@ var Lily = function () {
     key: 'drawFlower',
     value: function drawFlower(ctx) {
       var firstRing = this.size / 4;
-      this.drawRing(ctx, _colours2.default.pink, this.size / 2, this.size / 4 * 3);
-      this.drawRing(ctx, _colours2.default.delicate_pink, this.size / 4, this.size / 2);
-      this.drawRing(ctx, _colours2.default.light_pink, this.size / 8, this.size / 3);
+      this.drawRing(ctx, colours.pink, this.size / 2, this.size / 4 * 3);
+      this.drawRing(ctx, colours.delicate_pink, this.size / 4, this.size / 2);
+      this.drawRing(ctx, colours.light_pink, this.size / 8, this.size / 3);
       ctx.beginPath();
-      ctx.fillStyle = _colours2.default.yellow;
+      ctx.fillStyle = colours.yellow;
       ctx.arc(this.pos[0], this.pos[1], this.size / 8, 0, Math.PI * 2);
       ctx.fill();
     }
@@ -1333,9 +1336,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1379,12 +1382,12 @@ var Tadpole = function () {
     value: function render(canvas, ctx) {
       // Draw Body
       ctx.beginPath();
-      ctx.fillStyle = _colours2.default.registration_black;
+      ctx.fillStyle = colours.registration_black;
       ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
       ctx.fill();
       // Draw Tail
       ctx.beginPath();
-      ctx.fillStyle = _colours2.default.rasin_black;
+      ctx.fillStyle = colours.rasin_black;
       ctx.arc(this.pos[0] - this.vel[0] * 5, this.pos[1] - this.vel[1] * 5, this.size / 4 * 3, 0, 2 * Math.PI);
       ctx.fill();
       ctx.beginPath();
@@ -1431,6 +1434,12 @@ exports.default = Tadpole;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _colours = __webpack_require__(/*! ./colours */ "./src/colours.js");
+
+var colours = _interopRequireWildcard(_colours);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1500,6 +1509,43 @@ var Menu = function Menu(pond) {
     pag2.classList.remove('is-active');
     pag3.classList.add('is-active');
   });
+
+  var colour = document.getElementsByName('colour');
+
+  for (var i = 0; i < colour.length; i++) {
+    colour[i].addEventListener('click', function (e) {
+      if (e.target.value == 'summer') {
+        colours.ocean_blue = '#94D0FF', colours.deep_blue = 'rgba(135,149,232,0.7)', colours.pond_shadow = 'rgba(11, 45, 99, 0.7)', colours.yellow = '#fdf3b8', colours.orange_peel = '#FCC08F', colours.bark = '#917e7e', colours.khaki = '#F0E68C', colours.olive = '#808000', colours.forest_green = '#68BA71', colours.dark_green = '#388941', colours.pea = '#60A568', colours.yellow_green = '#acff78', colours.light_green = '#90ee90', colours.lily_green = '#B4E8AC', colours.pink = '#FF6AD5', colours.leaf_brown = '#ecb4bf', colours.delicate_pink = '#FF9BE2', colours.light_pink = '#FFBCEC', colours.purple = '#9370DB', colours.indigo = '#4B0082', colours.registration_black = '#000000', colours.rasin_black = '#212121', colours.dark_gray = '#474747', colours.rock_gray = '#606060', colours.gray = '#808080';
+      } else if (e.target.value == 'autumn') {
+        colours.ocean_blue = '#489191';
+        colours.deep_blue = 'rgba(58,117,117,0.7)';
+        colours.yellow = '#FFC201';
+        colours.orange_peel = '#FF9962';
+        colours.bark = '#552250F';
+        colours.khaki = '#F0E68C';
+        colours.olive = '#808000';
+        colours.forest_green = '#A85832';
+        colours.dark_green = '#66331F';
+        colours.pea = '#663636';
+        colours.yellow_green = '#FCB5B5';
+        colours.light_green = '#90ee90';
+        colours.lily_green = '#B4E8AC';
+        colours.pink = '#FCB5B5';
+        colours.leaf_brown = '#BC8274';
+        colours.delicate_pink = '#FCDDF2';
+        colours.light_pink = '#FAF6F6';
+        colours.purple = '#9370DB';
+        colours.indigo = '#4B0082';
+        colours.registration_black = '#000000';
+        colours.rasin_black = '#212121';
+        colours.dark_gray = '#72583D';
+        colours.rock_gray = '#7F6244';
+        colours.gray = '#BD9267';
+      } else {
+        console.log("Error: radio button has no value");
+      }
+    });
+  }
 };
 
 exports.default = Menu;
@@ -1969,9 +2015,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
-var _colours2 = _interopRequireDefault(_colours);
+var colours = _interopRequireWildcard(_colours);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2014,7 +2060,7 @@ var Ripple = function () {
 
       ctx.beginPath();
       ctx.lineWidth = this.w;
-      ctx.strokeStyle = _colours2.default.deep_blue;
+      ctx.strokeStyle = colours.deep_blue;
       ctx.arc(x, y, s, 0, Math.PI * 2);
       ctx.stroke();
 
@@ -2025,7 +2071,7 @@ var Ripple = function () {
       }
       ctx.beginPath();
       ctx.lineWidth = this.w / 2;
-      ctx.strokeStyle = _colours2.default.deep_blue;
+      ctx.strokeStyle = colours.deep_blue;
       ctx.arc(x, y, s, 0, Math.PI * 2);
       ctx.stroke();
     }
