@@ -1,4 +1,4 @@
-import colours from '../../colours';
+import * as colours from '../../colours';
 
 class LongGrass {
   constructor(canvas, ctx, size) {

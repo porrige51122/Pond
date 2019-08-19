@@ -1,4 +1,4 @@
-import colours from '../../colours';
+import * as colours from  '../../colours';
 import LongGrass from './longGrass';
 
 class IrisEnsataVariegata {

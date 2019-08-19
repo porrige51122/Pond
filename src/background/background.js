@@ -1,4 +1,4 @@
-import colours from '../colours';
+import * as colours from '../colours';
 import Rock from './rock';
 import Cattail from './plants/cattail';
 import LongGrass from './plants/longGrass';

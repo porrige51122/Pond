@@ -2,7 +2,7 @@
  * This class contains all information for each fish
  */
 
-import colours from '../colours';
+import * as colours from '../colours';
 
 class Fish {
   constructor(canvas, ctx, size) {

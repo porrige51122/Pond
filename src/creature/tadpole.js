@@ -2,7 +2,7 @@
  * This class contains all information for each tadpole
  */
 
-import colours from '../colours';
+import * as colours from '../colours';
 
 class Tadpole {
   constructor(canvas, size) {

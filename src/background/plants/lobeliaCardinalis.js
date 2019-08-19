@@ -1,4 +1,4 @@
-import colours from '../../colours';
+import * as colours from'../../colours';
 
 class LobeliaCardinalis {
   constructor(canvas, ctx, size) {

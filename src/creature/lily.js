@@ -1,7 +1,7 @@
 /**
  * This class contains all information for each lily
  */
-import colours from '../colours';
+import * as colours from '../colours';
 
 class Lily {
   constructor(canvas, size) {
