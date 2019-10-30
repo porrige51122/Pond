@@ -6,8 +6,7 @@
 #myCanvas {
   z-index: 0; }
 
-#tab2,
-#tab3 {
+#tab2, #tab3 {
   display: none; }
 
 .hidecheck {
@@ -39,8 +38,8 @@
   background: #d3d3d3;
   outline: none;
   opacity: 0.7;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s; }
+  -webkit-transition: .2s;
+  transition: opacity .2s; }
 
 @keyframes spinAround {
   from {
