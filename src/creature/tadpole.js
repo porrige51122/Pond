@@ -11,21 +11,56 @@ class Tadpole {
     // Size
     this.size = size / 200 * (document.getElementById('tadsize').value / 2);
     // Initially still
-    this.vel = [0, 0];
-    // 1.5% chance to become leader
-    this.leader = Math.random() < 0.015;
-    // follow noone until assigned
-    this.follow = null;
-    // eagerness = how close to the leader the tadpole will follow
-    this.eagerness = Math.random() * (document.getElementById('tadeager').value / 2);
+    this.vel = [Math.random(-1, 1), Math.random(-1, 1)];
+    this.acceleration = [0, 0];
+    this.r = 3.0;
+    // Maximum speed per tadpole
+    this.maxspeed = 3;
+    // Maximum steering force
+    this.maxforce = 0.05
+  }
+
+  /**
+   * APPLYFORCE - adds force to acceleration;
+   */
+  applyForce(force) {
+    this.acceleration[0] += force[0];
+    this.acceleration[1] += force[1];
+  }
+
+  /**
+   * FLOCK - Gets new acceleration based on 3 rules
+   */
+  flock(tadpoles) {
+    let sep = this.separate(tadpoles);
+    let ali = this.align(tadpoles);
+    let coh = this.cohesion(tadpoles);
+    // Adjust weight of each force
+    let sepWeight = 1.5;
+    let aliWeight = 1.0;
+    let cohWeight = 1.0;
+    sep[0] *= sepWeight;
+    sep[1] *= sepWeight;
+    ali[0] *= aliWeight;
+    ali[1] *= aliWeight;
+    coh[0] *= cohWeight;
+    coh[1] *= cohWeight;
+    this.applyForce(sep);
+    this.applyForce(ali);
+    this.applyForce(coh);
   }
 
   /**
    * TICK - Moves the entity
    */
   tick() {
+    this.vel[0] += this.acceleration[0];
+    this.vel[1] += this.acceleration[1];
+    this.velocity = this.limit(this.velocity, this.maxspeed)
+
     this.pos[0] += this.vel[0];
     this.pos[1] += this.vel[1];
+    this.acceleration = [0, 0]
   }
 
   /**
@@ -48,20 +83,33 @@ class Tadpole {
     ctx.fill();
   }
 
-  /**
-   * GETLEADER - creates an array of leader tadpoles and radomly chooses
-   * which one it will follow
-   */
-  getLeader(tadpoles) {
-    let leaders = [];
-    for (let i = 0; i < tadpoles.length; i++) {
-      if (this.leader) {
-        break;
-      }
-      if (tadpoles[i].leader)
-        leaders.push(i);
+  limit(v, max) {
+    const mSq = v[0] * v[0] + v[1] * v[1];
+    if (mSq > max * max) {
+      v[0] /= Math.sqrt(msq) * max;
+      v[1] /= Math.sqrt(msq) * max;
     }
-    this.follow = leaders[Math.floor(Math.random() * leaders.length)];
+    return v;
+  }
+
+  separate() {
+
+  }
+
+  /**
+   * Checks to see if tadpoles are in sense distance
+   * If so, add their velocity to a value
+   * Divide value by number of other tadpoles
+   * Normalize, multiply by max speed
+   * subtract current velocity,
+   * limit velocity then return.
+   */
+  align() {
+
+  }
+
+  cohesion() {
+
   }
 }
 
