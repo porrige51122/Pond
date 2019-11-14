@@ -1351,25 +1351,61 @@ var Tadpole = function () {
     // Size
     this.size = size / 200 * (document.getElementById('tadsize').value / 2);
     // Initially still
-    this.vel = [0, 0];
-    // 1.5% chance to become leader
-    this.leader = Math.random() < 0.015;
-    // follow noone until assigned
-    this.follow = null;
-    // eagerness = how close to the leader the tadpole will follow
-    this.eagerness = Math.random() * (document.getElementById('tadeager').value / 2);
+    this.vel = [Math.random() * 2 - 1, Math.random() * 2 - 1];
+    this.acceleration = [0, 0];
+    this.r = 3.0;
+    // Maximum speed per tadpole
+    this.maxspeed = 0.5;
+    // Maximum steering force
+    this.maxforce = 0.05;
   }
 
   /**
-   * TICK - Moves the entity
+   * APPLYFORCE - adds force to acceleration;
    */
 
 
   _createClass(Tadpole, [{
+    key: 'applyForce',
+    value: function applyForce(force) {
+      this.acceleration = this.add(this.acceleration, force);
+    }
+
+    /**
+     * FLOCK - Gets new acceleration based on 3 rules
+     */
+
+  }, {
+    key: 'flock',
+    value: function flock(tadpoles) {
+      var sep = this.separate(tadpoles);
+      var ali = this.align(tadpoles);
+      var coh = this.cohesion(tadpoles);
+      // Adjust weight of each force
+      var sepWeight = 1.5;
+      var aliWeight = 0.01;
+      var cohWeight = 1.0;
+      sep = this.mul(sep, sepWeight);
+      ali = this.mul(ali, aliWeight);
+      coh = this.mul(coh, cohWeight);
+
+      this.applyForce(sep);
+      this.applyForce(ali);
+      this.applyForce(coh);
+    }
+
+    /**
+     * TICK - Moves the entity
+     */
+
+  }, {
     key: 'tick',
     value: function tick() {
-      this.pos[0] += this.vel[0];
-      this.pos[1] += this.vel[1];
+      this.vel = this.add(this.vel, this.acceleration);
+      this.vel = this.limit(this.vel, this.maxspeed);
+
+      this.pos = this.add(this.pos, this.vel);
+      this.acceleration = [0, 0];
     }
 
     /**
@@ -1394,23 +1430,113 @@ var Tadpole = function () {
       ctx.arc(this.pos[0] - this.vel[0] * 10, this.pos[1] - this.vel[1] * 10, this.size / 2, 0, 2 * Math.PI);
       ctx.fill();
     }
+  }, {
+    key: 'limit',
+    value: function limit(v, max) {
+      var mSq = this.magSq(v);
+      if (mSq > max * max) {
+        v = this.div(v, Math.sqrt(mSq));
+        v = this.mul(v, max);
+      }
+      return v;
+    }
+  }, {
+    key: 'dist',
+    value: function dist(a, b) {
+      var c = this.add(a, [-b[0], -b[1]]);
+      return this.mag(c);
+    }
+  }, {
+    key: 'mag',
+    value: function mag(a) {
+      a = this.magSq(a);
+      return Math.sqrt(a);
+    }
+  }, {
+    key: 'magSq',
+    value: function magSq(a) {
+      return a[0] * a[0] + a[1] * a[1];
+    }
+  }, {
+    key: 'add',
+    value: function add(a, b) {
+      return [a[0] + b[0], a[1] + b[1]];
+    }
+  }, {
+    key: 'sub',
+    value: function sub(a, b) {
+      return [a[0] - b[0], a[1] - b[1]];
+    }
+  }, {
+    key: 'mul',
+    value: function mul(a, x) {
+      return [a[0] * x, a[1] * x];
+    }
+  }, {
+    key: 'div',
+    value: function div(a, x) {
+      return [a[0] / x, a[1] / x];
+    }
+  }, {
+    key: 'normalize',
+    value: function normalize(a) {
+      var len = this.mag(a);
+      if (len !== 0) {
+        a = this.mul(a, 1 / len);
+      }
+      return a;
+    }
+  }, {
+    key: 'separate',
+    value: function separate() {
+      return [0, 0];
+    }
 
     /**
-     * GETLEADER - creates an array of leader tadpoles and radomly chooses
-     * which one it will follow
+     * Checks to see if tadpoles are in sense distance
+     * If so, add their velocity to a value
+     * Divide value by number of other tadpoles
+     * Normalize, multiply by max speed
+     * subtract current velocity,
+     * limit velocity then return.
      */
 
   }, {
-    key: 'getLeader',
-    value: function getLeader(tadpoles) {
-      var leaders = [];
+    key: 'align',
+    value: function align(tadpoles) {
+      var neighbordist = 50;
+      var sum = [0, 0];
+      var count = 0;
       for (var i = 0; i < tadpoles.length; i++) {
-        if (this.leader) {
-          break;
+        var d = this.dist(this.pos, tadpoles[i].pos);
+        if (d > 0 && d < neighbordist) {
+          sum = this.add(sum, tadpoles[i].vel);
+          count++;
         }
-        if (tadpoles[i].leader) leaders.push(i);
       }
-      this.follow = leaders[Math.floor(Math.random() * leaders.length)];
+      if (count > 0) {
+        this.mul(sum, 1 / count);
+        sum = this.normalize(sum);
+        sum = this.mul(sum, this.maxspeed);
+        var steer = this.sub(sum, this.vel);
+        sum = this.limit(steer, this.maxforce);
+        return steer;
+      } else {
+        return [0, 0];
+      }
+    }
+  }, {
+    key: 'cohesion',
+    value: function cohesion() {
+      return [0, 0];
+    }
+  }, {
+    key: 'borders',
+    value: function borders() {
+      if (this.pos[0] < -this.r) this.pos[0] = window.innerWidth + this.r;
+      if (this.pos[1] < -this.r) this.pos[1] = window.innerHeight + this.r;
+      if (this.pos[0] > window.innerWidth + this.r) this.pos[0] = -this.r;
+      if (this.pos[1] > window.innerHeight + this.r) this.pos[1] = -this.r;
     }
   }]);
 
@@ -1898,7 +2024,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * TADMOVEMENT
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * All of the movement patterns for tadpoles are contained here
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 var _movement = __webpack_require__(/*! ./movement */ "./src/movement/movement.js");
 
@@ -1908,87 +2037,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * TADMOVEMENT
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * All of the movement patterns for tadpoles are contained here
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-var TadMovement = function (_Movement) {
-  _inherits(TadMovement, _Movement);
-
+var TadMovement = function () {
+  /*
+     */
   function TadMovement(entity, canvas, collisions) {
     _classCallCheck(this, TadMovement);
 
-    var _this = _possibleConstructorReturn(this, (TadMovement.__proto__ || Object.getPrototypeOf(TadMovement)).call(this, entity, canvas, collisions));
-
-    _this.spacing = 20;
-    return _this;
+    this.canvas = canvas;
+    this.boids = entity;
+    this.collisions = collisions;
   }
 
   _createClass(TadMovement, [{
     key: 'move',
     value: function move() {
-      // Chance that the tadpole will change their leadership state
-      var leaderChance = 0.0000005;
+      var _this = this;
 
-      // Chance that the tadpole will change the leader they are following
-      var followChance = 0.00002;
-
-      for (var i = 0; i < this.entities.length; i++) {
-        var pos = this.entities[i].pos;
-        this.edgeCheck(i, pos);
-
-        if (this.entities[i].leader) {
-          // Leader
-          // Random movement
-          this.smoothing(i, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2);
-
-          if (Math.random() < leaderChance) {
-            this.entities[i].leader = false;
-
-            // Makes all tadpoles following that leader find a new leader
-            for (var j = 0; j < this.entities.length; j++) {
-              if (this.entities[j].follow == i) {
-                this.entities[i].getLeader(this.entities);
-              }
-            }
-          }
-        } else if (this.entities[i].follow == null) {
-          // Prevents error
-          this.entities[i].getLeader(this.entities);
-        } else {
-          // Non Leader
-          // Setting variables
-          var leaderPos = this.entities[this.entities[i].follow].pos;
-          var disX = pos[0] - leaderPos[0];
-          var disY = pos[1] - leaderPos[1];
-          // Length between current position and leader position
-          var length = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
-
-          if (length == 0) length = 1; // Preventing dividing by zero
-          if (length > this.entities[i].eagerness * this.spacing) {
-            this.smoothing(i, -disX / (length * 2), -disY / (length * 2));
-          } else {
-            this.smoothing(i, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4);
-          }
-
-          if (Math.random() < followChance) {
-            this.entities[i].getLeader(this.entities);
-          }
-          if (Math.random() < leaderChance) {
-            this.entities[i].leader = true;
-          }
-        }
-        this.slowing(i, document.getElementById('tadspd').value / 20);
-      }
-      this.collisions.checkTadpoles(this);
+      this.boids.forEach(function (boid) {
+        boid.flock(_this.boids);
+        boid.borders();
+      });
     }
   }]);
 
   return TadMovement;
-}(_movement2.default);
+}();
 
 exports.default = TadMovement;
 
@@ -2305,8 +2378,6 @@ var Pond = function () {
   }, {
     key: 'init',
     value: function init() {
-      var _this2 = this;
-
       this.background = new _background2.default(canvas, ctx);
       this.water.setBackground(this.background);
       var size = this.background.size;
@@ -2316,16 +2387,10 @@ var Pond = function () {
       this.lillies = [];
       this.movement = [];
 
-      // Pushes all tadpoles to their array and sets the first one as
-      // leader in case there are no tadpole leaders.
+      // Pushes all tadpoles to their array
       for (var i = 0; i < this.tadpoleSize; i++) {
         this.tadpoles.push(new _tadpole2.default(canvas, size));
-      }this.tadpoles.forEach(function (tad) {
-        return tad.getLeader(_this2.tadpoles);
-      });
-      this.tadpoles[0].leader = true;
-
-      // Pushes all fish and lillies to their arrays
+      } // Pushes all fish and lillies to their arrays
       for (var _i = 0; _i < this.fishSize; _i++) {
         this.fish.push(new _fish2.default(canvas, ctx, size));
       }for (var _i2 = 0; _i2 < this.lilySize; _i2++) {
@@ -2338,13 +2403,13 @@ var Pond = function () {
   }, {
     key: 'loop',
     value: function loop() {
-      var _this3 = this;
+      var _this2 = this;
 
       window.requestAnimationFrame(function () {
-        _this3.resize();
-        _this3.tick();
-        _this3.render();
-        _this3.loop();
+        _this2.resize();
+        _this2.tick();
+        _this2.render();
+        _this2.loop();
       });
     }
 
@@ -2356,10 +2421,10 @@ var Pond = function () {
   }, {
     key: 'tick',
     value: function tick() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.movement.forEach(function (m) {
-        return m.move(_this4.water);
+        return m.move(_this3.water);
       });
       this.tadpoles.forEach(function (t) {
         return t.tick();
