@@ -1382,9 +1382,9 @@ var Tadpole = function () {
       var ali = this.align(tadpoles);
       var coh = this.cohesion(tadpoles);
       // Adjust weight of each force
-      var sepWeight = 1.5;
+      var sepWeight = 0.2;
       var aliWeight = 0.01;
-      var cohWeight = 1.0;
+      var cohWeight = 0.2;
       sep = this.mul(sep, sepWeight);
       ali = this.mul(ali, aliWeight);
       coh = this.mul(coh, cohWeight);
@@ -1487,9 +1487,46 @@ var Tadpole = function () {
       return a;
     }
   }, {
+    key: 'seek',
+    value: function seek(target) {
+      var desired = this.sub(target, this.pos);
+
+      desired = this.normalize(desired);
+      desired = this.mul(desired, this.maxspeed);
+
+      var steer = this.sub(desired, this.vel);
+      steer = this.limit(steer, this.maxforce);
+      return steer;
+    }
+  }, {
     key: 'separate',
-    value: function separate() {
-      return [0, 0];
+    value: function separate(tadpoles) {
+      var desiredseparation = 25;
+      var steer = [0, 0];
+      var count = 0;
+
+      for (var i = 0; i < tadpoles.length; i++) {
+        var d = this.dist(this.pos, tadpoles[i].pos);
+        if (d > 0 && d < desiredseparation) {
+          var diff = this.sub(this.pos, tadpoles[i].pos);
+          diff = this.normalize(diff);
+          diff = this.div(diff, d);
+          steer = this.add(steer, diff);
+          count++;
+        }
+      }
+
+      if (count > 0) {
+        steer = this.div(steer, count);
+      }
+
+      if (this.mag(steer) > 0) {
+        steer = this.normalize(steer);
+        steer = this.mul(steer, this.maxspeed);
+        steer = this.sub(steer, this.vel);
+        steer = this.limit(steer, this.maxforce);
+      }
+      return steer;
     }
 
     /**
@@ -1527,8 +1564,23 @@ var Tadpole = function () {
     }
   }, {
     key: 'cohesion',
-    value: function cohesion() {
-      return [0, 0];
+    value: function cohesion(tadpoles) {
+      var neighbordist = 50;
+      var sum = [0, 0];
+      var count = 0;
+      for (var i = 0; i < tadpoles.length; i++) {
+        var d = this.dist(this.pos, tadpoles[i].pos);
+        if (d > 0 && d < neighbordist) {
+          sum = this.add(sum, tadpoles[i].pos);
+          count++;
+        }
+      }
+      if (count > 0) {
+        sum = this.div(sum, count);
+        return this.seek(sum);
+      } else {
+        return [0, 0];
+      }
     }
   }, {
     key: 'borders',
@@ -2038,8 +2090,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var TadMovement = function () {
-  /*
-     */
   function TadMovement(entity, canvas, collisions) {
     _classCallCheck(this, TadMovement);
 

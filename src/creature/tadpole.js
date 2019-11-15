@@ -35,9 +35,9 @@ class Tadpole {
     let ali = this.align(tadpoles);
     let coh = this.cohesion(tadpoles);
     // Adjust weight of each force
-    let sepWeight = 1.5;
+    let sepWeight = 0.2;
     let aliWeight = 0.01;
-    let cohWeight = 1.0;
+    let cohWeight = 0.2;
     sep = this.mul(sep, sepWeight);
     ali = this.mul(ali, aliWeight);
     coh = this.mul(coh, cohWeight);
@@ -126,8 +126,44 @@ class Tadpole {
     return a;
   }
 
-  separate() {
-    return [0, 0];
+  seek(target) {
+    let desired = this.sub(target, this.pos);
+
+    desired = this.normalize(desired);
+    desired = this.mul(desired, this.maxspeed);
+
+    let steer = this.sub(desired, this.vel);
+    steer = this.limit(steer, this.maxforce);
+    return steer;
+  }
+
+  separate(tadpoles) {
+    let desiredseparation = 25;
+    let steer = [0, 0];
+    let count = 0;
+
+    for (let i = 0; i < tadpoles.length; i++) {
+      let d = this.dist(this.pos, tadpoles[i].pos);
+      if ((d > 0) && (d < desiredseparation)) {
+        let diff = this.sub(this.pos, tadpoles[i].pos);
+        diff = this.normalize(diff);
+        diff = this.div(diff, d);
+        steer = this.add(steer, diff);
+        count++;
+      }
+    }
+
+    if (count > 0) {
+      steer = this.div(steer, count);
+    }
+
+    if (this.mag(steer) > 0) {
+      steer = this.normalize(steer);
+      steer = this.mul(steer, this.maxspeed);
+      steer = this.sub(steer, this.vel);
+      steer = this.limit(steer, this.maxforce);
+    }
+    return steer;
   }
 
   /**
@@ -161,8 +197,23 @@ class Tadpole {
     }
   }
 
-  cohesion() {
-    return [0, 0];
+  cohesion(tadpoles) {
+    let neighbordist = 50;
+    let sum = [0, 0];
+    let count = 0;
+    for (let i = 0; i < tadpoles.length; i++) {
+      let d = this.dist(this.pos, tadpoles[i].pos);
+      if ((d > 0) && (d < neighbordist)) {
+        sum = this.add(sum, tadpoles[i].pos);
+        count++
+      }
+    }
+    if (count > 0) {
+      sum = this.div(sum, count);
+      return this.seek(sum);
+    } else {
+      return [0, 0]
+    }
   }
 
   borders() {

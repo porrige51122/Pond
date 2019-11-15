@@ -6,9 +6,6 @@
 import Movement from './movement'
 
 class TadMovement {
-  /*
-
-   */
   constructor(entity, canvas, collisions) {
     this.canvas = canvas;
     this.boids = entity;
