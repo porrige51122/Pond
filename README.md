@@ -1,4 +1,4 @@
-# Pond V 2.2.6 - ALPHA
+# Pond V 2.2.7 - ALPHA
 ## Description
 Pond is a tranquil home for you to take your mind off what you were doing and to calm you down.
 
@@ -47,6 +47,8 @@ Planned features:
    * The website should open automatically [here](http://127.0.0.1:3000)
 
 ## Changelog
+#### 2.2.7
+Redesigned Tadpole movement to use Boids Algorithm
 #### 2.2.6
 Added another colour scheme "Autumn"
 #### 2.2.5
@@ -115,3 +117,4 @@ Tadpoles added
 ## Credits
 https://github.com/christopher4lis/canvas-boilerplate - Used as boilerplate code for Web Pack
 http://agilerepose.weebly.com/water-ripple.html - Used to create the water effect in water.js - Not used any more but still a great resource
+https://p5js.org/examples/simulate-flocking.html - Boids Code used for Tadpoles since 2.2.7
