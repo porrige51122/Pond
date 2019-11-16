@@ -1355,7 +1355,7 @@ var Tadpole = function () {
     this.acceleration = [0, 0];
     this.r = 3.0;
     // Maximum speed per tadpole
-    this.maxspeed = 0.5;
+    this.maxspeed = 0.7;
     // Maximum steering force
     this.maxforce = 0.05;
   }
@@ -1382,7 +1382,7 @@ var Tadpole = function () {
       var ali = this.align(tadpoles);
       var coh = this.cohesion(tadpoles);
       // Adjust weight of each force
-      var sepWeight = 0.2;
+      var sepWeight = 0.25;
       var aliWeight = 0.01;
       var cohWeight = 0.2;
       sep = this.mul(sep, sepWeight);
@@ -1501,7 +1501,7 @@ var Tadpole = function () {
   }, {
     key: 'separate',
     value: function separate(tadpoles) {
-      var desiredseparation = 25;
+      var desiredseparation = 15;
       var steer = [0, 0];
       var count = 0;
 
@@ -1768,7 +1768,7 @@ var Collisions = function () {
           var dx = pondEdge[0] - pos[0];
           var dy = pondEdge[1] - pos[1];
           var len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-          movement.smoothing(i, dx / len, dy / len);
+          this.tadpoles[i].applyForce([dx / len, dy / len]);
         }
       }
     }
@@ -2105,7 +2105,7 @@ var TadMovement = function () {
 
       this.boids.forEach(function (boid) {
         boid.flock(_this.boids);
-        boid.borders();
+        _this.collisions.checkTadpoles(_this);
       });
     }
   }]);

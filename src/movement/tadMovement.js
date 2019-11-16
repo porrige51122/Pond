@@ -15,7 +15,7 @@ class TadMovement {
   move() {
     this.boids.forEach((boid) => {
       boid.flock(this.boids);
-      boid.borders();
+      this.collisions.checkTadpoles(this);
     });
   }
 }

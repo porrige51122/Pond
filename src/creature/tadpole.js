@@ -15,7 +15,7 @@ class Tadpole {
     this.acceleration = [0, 0];
     this.r = 3.0;
     // Maximum speed per tadpole
-    this.maxspeed = 0.5;
+    this.maxspeed = 0.7;
     // Maximum steering force
     this.maxforce = 0.05;
   }
@@ -35,7 +35,7 @@ class Tadpole {
     let ali = this.align(tadpoles);
     let coh = this.cohesion(tadpoles);
     // Adjust weight of each force
-    let sepWeight = 0.2;
+    let sepWeight = 0.25;
     let aliWeight = 0.01;
     let cohWeight = 0.2;
     sep = this.mul(sep, sepWeight);
@@ -138,7 +138,7 @@ class Tadpole {
   }
 
   separate(tadpoles) {
-    let desiredseparation = 25;
+    let desiredseparation = 15;
     let steer = [0, 0];
     let count = 0;
 

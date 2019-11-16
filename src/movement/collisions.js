@@ -14,7 +14,7 @@ class Collisions {
         let dx = pondEdge[0] - pos[0];
         let dy = pondEdge[1] - pos[1];
         let len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        movement.smoothing(i, dx / len, dy / len);
+        this.tadpoles[i].applyForce([dx / len, dy / len]);
       }
     }
   }
