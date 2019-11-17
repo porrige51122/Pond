@@ -15,6 +15,7 @@ class TadMovement {
   move() {
     this.boids.forEach((boid) => {
       boid.flock(this.boids);
+      boid.flee(this.collisions.fish);
       this.collisions.checkTadpoles(this);
     });
   }

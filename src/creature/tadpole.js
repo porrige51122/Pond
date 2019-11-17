@@ -18,6 +18,8 @@ class Tadpole {
     this.maxspeed = 0.7;
     // Maximum steering force
     this.maxforce = 0.05;
+
+    this.separationSize = 15
   }
 
   /**
@@ -31,7 +33,7 @@ class Tadpole {
    * FLOCK - Gets new acceleration based on 3 rules
    */
   flock(tadpoles) {
-    let sep = this.separate(tadpoles);
+    let sep = this.separate(tadpoles, this.separationSize);
     let ali = this.align(tadpoles);
     let coh = this.cohesion(tadpoles);
     // Adjust weight of each force
@@ -137,8 +139,8 @@ class Tadpole {
     return steer;
   }
 
-  separate(tadpoles) {
-    let desiredseparation = 15;
+  separate(tadpoles, separationSize) {
+    let desiredseparation = separationSize;
     let steer = [0, 0];
     let count = 0;
 
@@ -214,6 +216,12 @@ class Tadpole {
     } else {
       return [0, 0]
     }
+  }
+
+  flee(other) {
+    let desiredseparation = 100;
+    let steer = this.separate(other, desiredseparation);
+    this.applyForce(steer);
   }
 
   borders() {

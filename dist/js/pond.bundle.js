@@ -1358,6 +1358,8 @@ var Tadpole = function () {
     this.maxspeed = 0.7;
     // Maximum steering force
     this.maxforce = 0.05;
+
+    this.separationSize = 15;
   }
 
   /**
@@ -1378,7 +1380,7 @@ var Tadpole = function () {
   }, {
     key: 'flock',
     value: function flock(tadpoles) {
-      var sep = this.separate(tadpoles);
+      var sep = this.separate(tadpoles, this.separationSize);
       var ali = this.align(tadpoles);
       var coh = this.cohesion(tadpoles);
       // Adjust weight of each force
@@ -1500,8 +1502,8 @@ var Tadpole = function () {
     }
   }, {
     key: 'separate',
-    value: function separate(tadpoles) {
-      var desiredseparation = 15;
+    value: function separate(tadpoles, separationSize) {
+      var desiredseparation = separationSize;
       var steer = [0, 0];
       var count = 0;
 
@@ -1581,6 +1583,13 @@ var Tadpole = function () {
       } else {
         return [0, 0];
       }
+    }
+  }, {
+    key: 'flee',
+    value: function flee(other) {
+      var desiredseparation = 100;
+      var steer = this.separate(other, desiredseparation);
+      this.applyForce(steer);
     }
   }, {
     key: 'borders',
@@ -1767,8 +1776,7 @@ var Collisions = function () {
           var pos = this.tadpoles[i].pos;
           var dx = pondEdge[0] - pos[0];
           var dy = pondEdge[1] - pos[1];
-          var len = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-          this.tadpoles[i].applyForce([dx / len, dy / len]);
+          this.tadpoles[i].applyForce([dx, dy]);
         }
       }
     }
@@ -2105,6 +2113,7 @@ var TadMovement = function () {
 
       this.boids.forEach(function (boid) {
         boid.flock(_this.boids);
+        boid.flee(_this.collisions.fish);
         _this.collisions.checkTadpoles(_this);
       });
     }
@@ -2537,6 +2546,7 @@ var Pond = function () {
   return Pond;
 }();
 
+document.getElementById("youtube").src += Math.round(Math.random() * 300);
 __webpack_require__(/*! ./mystyles.scss */ "./src/mystyles.scss");
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
