@@ -59,12 +59,9 @@ class Pond {
     this.lillies = [];
     this.movement = [];
 
-    // Pushes all tadpoles to their array and sets the first one as
-    // leader in case there are no tadpole leaders.
+    // Pushes all tadpoles to their array
     for (let i = 0; i < this.tadpoleSize; i++)
       this.tadpoles.push(new Tadpole(canvas, size));
-    this.tadpoles.forEach((tad) => tad.getLeader(this.tadpoles));
-    this.tadpoles[0].leader = true;
 
     // Pushes all fish and lillies to their arrays
     for (let i = 0; i < this.fishSize; i++)
@@ -137,6 +134,7 @@ class Pond {
 
 }
 
+document.getElementById("youtube").src += Math.round(Math.random() * 300);
 require('./mystyles.scss');
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
