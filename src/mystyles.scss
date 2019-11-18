@@ -8,6 +8,10 @@ $box-radius: 10px;
   font-family: 'Courgette', cursive;
 }
 
+html, body {
+  overflow: hidden !importan;
+}
+
 #myCanvas {
   z-index: 0;
 }
