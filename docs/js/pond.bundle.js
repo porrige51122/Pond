@@ -2548,7 +2548,7 @@ var Pond = function () {
   return Pond;
 }();
 
-document.getElementById("youtube").src += Math.round(Math.random() * 300);
+document.getElementById("youtube").src += Math.round(Math.random() * 275);
 __webpack_require__(/*! ./mystyles.scss */ "./src/mystyles.scss");
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");

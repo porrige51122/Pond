@@ -134,7 +134,7 @@ class Pond {
 
 }
 
-document.getElementById("youtube").src += Math.round(Math.random() * 300);
+document.getElementById("youtube").src += Math.round(Math.random() * 275);
 require('./mystyles.scss');
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
