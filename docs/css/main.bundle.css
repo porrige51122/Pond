@@ -4,7 +4,7 @@
   font-family: 'Courgette', cursive; }
 
 html, body {
-  overflow: hidden; }
+  overflow: hidden !important; }
 
 #myCanvas {
   z-index: 0; }
