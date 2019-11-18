@@ -122,7 +122,9 @@ class Background {
 
   // Draws loaded template
   renderLand(canvas, ctx) {
-    ctx.drawImage(this.canvasB, 0, 0);
+    if (this.canvasB.width > 0 && this.canvasB.height > 0) {
+      ctx.drawImage(this.canvasB, 0, 0);
+    }
   }
 
   isColliding(pos) {

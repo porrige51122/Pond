@@ -6,7 +6,7 @@ module.exports = {
   mode: 'development',
   entry: './src/pond.js',
   output: {
-    path: __dirname + '/dist/',
+    path: __dirname + '/docs/',
     filename: './js/pond.bundle.js'
   },
   module: {
@@ -43,8 +43,8 @@ module.exports = {
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 3000,
-      server: { baseDir: ['dist'] },
-      files: ['./dist/*'],
+      server: { baseDir: ['docs'] },
+      files: ['./docs/*'],
       notify: false
     }),
     new HtmlWebpackPlugin({
