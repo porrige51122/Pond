@@ -2,32 +2,31 @@
  * POND: This is the controller of the entire program, this is where
  * the program loop is run, containing: render, tick and resize.
  */
-
-import Background from './background/background';
-import Menu from './menu';
-
-import Tadpole from './creature/tadpole';
-import Fish from './creature/fish';
-import Lily from './creature/lily';
-
-import Water from './movement/water/water';
-import Collisions from './movement/collisions';
-import TadMovement from './movement/tadMovement';
-import FishMovement from './movement/fishMovement';
-import LilyMovement from './movement/lilyMovement';
+// import Background from './background/background';
+// import Menu from './menu';
+//
+// import Tadpole from './creature/tadpole';
+// import Fish from './creature/fish';
+// import Lily from './creature/lily';
+//
+// import Water from './movement/water/water';
+// import Collisions from './movement/collisions';
+// import TadMovement from './movement/tadMovement';
+// import FishMovement from './movement/fishMovement';
+// import LilyMovement from './movement/lilyMovement';
 
 
 class Pond {
-  constructor(canvas, ctx) {
-    this.canvas = canvas;
-    this.ctx = ctx;
-
-    this.water = new Water(canvas, ctx);
-
-    this.eventListeners();
-    this.resize();
-    this.init();
-    this.loop();
+  constructor() {
+    this.canvas = new PIXI.Application({
+      resizeTo: window,
+    });
+    document.body.appendChild(this.canvas.view);
+    // this.water = new Water(canvas, ctx);
+    //
+    // this.eventListeners();
+    // this.init();
+    // this.loop();
   }
 
   /**
@@ -116,26 +115,7 @@ class Pond {
     this.background.renderLand(canvas, ctx);
   }
 
-  /**
-   * This is run every frame loop but only gets past the if statement
-   * if the window size has changed
-   */
-  resize() {
-    if (canvas.width != window.innerWidth || canvas.height != window.innerHeight) {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      this.water.resize();
-      this.tadpoleSize = document.getElementById('tadpoles').value;
-      this.fishSize = document.getElementById('fish').value;
-      this.lilySize = document.getElementById('lillies').value;
-      this.init();
-    }
-  }
-
 }
 
-document.getElementById("youtube").src += Math.round(Math.random() * 275);
 require('./mystyles.scss');
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
-let pond = new Pond(canvas, ctx);
+let pond = new Pond();

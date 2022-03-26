@@ -16,7 +16,8 @@
     "bulma-checkradio": "^1.1.1",
     "bulma-extensions": "^6.2.7",
     "bulma-slider": "^2.0.5",
-    "gsap": "^3.9.1"
+    "gsap": "^3.9.1",
+    "pixi.js": "^5.0.0-rc"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
