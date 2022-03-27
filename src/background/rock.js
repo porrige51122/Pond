@@ -1,27 +1,44 @@
 import * as colours from '../colours';
 
-class Rock {
-  constructor(canvas, ctx, size) {
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.size = size;
+class Rock extends PIXI.Container {
+  constructor(app, x, y) {
+    super()
+    this.app = app;
+    this.size = window.innerHeight / 30;
+    let points = this.generatePoints(x, y)
+    this.rock = new PIXI.Graphics();
+    this.rock//.lineStyle(1, colours.dark_gray)
+        .beginFill(colours.rock_gray)
+        .drawPolygon(this.outerPoints)
+    this.rockshade = new PIXI.Graphics();
+    this.rockshade//.lineStyle(1, colours.dark_gray)
+        .beginFill(colours.gray)
+        .drawPolygon(this.innerPoints)
+    this.addChild(this.rock, this.rockshade)
   }
 
-  setPos(pos) {
-    this.pos = pos;
-  }
-
-  generatePoints() {
+  generatePoints(x, y) {
     let pointCountAvg = 8;
-    this.circPos = [((360 / pointCountAvg) * Math.random() * 2)];
-    while (this.circPos[this.circPos.length - 1] < 360) {
-      let nextPoint = this.circPos[this.circPos.length - 1] + (360 / pointCountAvg / 2) + (360 / pointCountAvg / 2) * Math.random() * 2;
-      this.circPos.push(nextPoint);
+    let circPos = [((360 / pointCountAvg) * Math.random() * 2)];
+    while (circPos[circPos.length - 1] < 360) {
+      let nextPoint = circPos[circPos.length - 1] + (360 / pointCountAvg / 2) + (360 / pointCountAvg / 2) * Math.random() * 2;
+      circPos.push(nextPoint);
     }
-    this.circPos.pop();
+    circPos.pop();
+
+    this.innerPoints = [];
+    this.outerPoints = [];
+    for (let a = 0; a < circPos.length; a++) {
+      let px = this.size * Math.cos(circPos[a] * (Math.PI / 180)) + x;
+      let py = this.size * Math.sin(circPos[a] * (Math.PI / 180)) + y;
+      this.outerPoints.push(px, py);
+      px = this.size * 5 / 8 * Math.cos(circPos[a] * (Math.PI / 180)) + x;
+      py = this.size * 5 / 8 * Math.sin(circPos[a] * (Math.PI / 180)) + y;
+      this.innerPoints.push(px, py);
+    }
   }
 
-  render() {
+  renderDEPRECATED() {
     this.generatePoints();
     let size = this.size / 20 + this.size / 20 * Math.random();
     let points = [];

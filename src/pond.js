@@ -31,7 +31,6 @@ class Pond {
     this.canvas.ticker.add((delta) => {
       elapsed += delta
     })
-    console.log(this.canvas)
     // this.water = new Water(canvas, ctx);
     //
     // this.eventListeners();

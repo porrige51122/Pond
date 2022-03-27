@@ -106,123 +106,155 @@ var Background = function () {
     key: 'createLand',
     value: function createLand() {
       // Create a polygon of the pond object
-      this.pond = new PIXI.Graphics();
-      this.pond.beginFill(this.pondColour);
       var points = [];
       for (var i in this.edgeOfPondPoints) {
         points.push(this.edgeOfPondPoints[i].x);
         points.push(this.edgeOfPondPoints[i].y);
       }
-      this.pond.drawPolygon(points);
+      this.pond = new PIXI.Graphics();
+      this.pond.beginFill(this.pondColour);
+      this.pondShape = new PIXI.Polygon(points);
+      this.pond.drawPolygon(this.pondShape);
       this.app.stage.addChild(this.pond);
+
+      // Draw Grass
+      var grassCount = 1000;
+      this.grass = [];
+      for (var _i = 0; _i < grassCount; _i++) {
+        var x = Math.floor(Math.random() * window.innerWidth);
+        var y = Math.floor(Math.random() * window.innerHeight);
+        if (this.pondShape.contains(x, y)) {
+          _i--;
+          continue;
+        }
+        var singleBlade = new _longGrass2.default(this.app, x, y);
+        this.app.stage.addChild(singleBlade);
+        this.grass.push(singleBlade);
+      }
+
+      // Draw Rocks
+      var rockCount = 50;
+      this.rocks = [];
+      var rockCoords = this.edgeOfPond(rockCount);
+      for (var _i2 = 0; _i2 < rockCount; _i2++) {
+        var rock = new _rock2.default(this.app, rockCoords[_i2][0], rockCoords[_i2][1]);
+        this.app.stage.addChild(rock);
+      }
     }
   }, {
-    key: 'createLandDEPRECATED',
-    value: function createLandDEPRECATED(canvas, ctx) {
-      // Draw grassCount number of grass on pond bank
-      var grassCount = this.size * 5;
-      this.aroundPond(grassCount, new _longGrass2.default(this.canvasB, ctxB, this.size));
-      // Draw rockCount number of rocks around Pond
-      var rockCount = 100;
-      this.edgeOfPond(rockCount, new _rock2.default(this.canvasB, ctxB, this.size));
-      // 25% chance to draw stepping stones
-      // TODO: Draw Stepping stones
+    key: 'pointOnLine',
+    value: function pointOnLine(x1, y1, x2, y2, per) {
+      return [x1 + (x2 - x1) * per, y1 + (y2 - y1) * per];
+    }
 
-      // Draw Flowers
-      this.aroundPond(Math.ceil(Math.random() * this.size / 80), new _flowerBush2.default(this.canvasB, ctxB, this.size));
+    // createLandDEPRECATED(canvas, ctx) {
+    //   // Draw grassCount number of grass on pond bank
+    //   let grassCount = this.size * 5;
+    //   this.aroundPond(grassCount, new LongGrass(this.canvasB, ctxB, this.size));
+    //   // Draw rockCount number of rocks around Pond
+    //   let rockCount = 100;
+    //   this.edgeOfPond(rockCount, new Rock(this.canvasB, ctxB, this.size));
+    //   // 25% chance to draw stepping stones
+    //   // TODO: Draw Stepping stones
+    //
+    //   // Draw Flowers
+    //   this.aroundPond(Math.ceil(Math.random() * this.size / 80), new FlowerBush(this.canvasB, ctxB, this.size));
+    //
+    //   // Draw cattailCount number of cattails around pond
+    //   let cattailCount = 30;
+    //   this.edgeOfPond(cattailCount, new Cattail(this.canvasB, ctxB, this.size));
+    //   // 75% chance of tree around pond
+    //   if (Math.random() < 0.75) {
+    //     this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
+    //   }
+    // }
 
-      // Draw cattailCount number of cattails around pond
-      var cattailCount = 30;
-      this.edgeOfPond(cattailCount, new _cattail2.default(this.canvasB, ctxB, this.size));
-      // 75% chance of tree around pond
-      if (Math.random() < 0.75) {
-        this.aroundPond(1, new _tree2.default(this.canvasB, ctxB, this.size));
-      }
+  }, {
+    key: 'getDistance',
+    value: function getDistance(xA, yA, xB, yB) {
+      var xDiff = xA - xB;
+      var yDiff = yA - yB;
+      return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
   }, {
     key: 'edgeOfPond',
-    value: function edgeOfPond(count, entity) {
-      var surrounded = true;
-      var angle = 0;
-
-      while (surrounded) {
-        var x = this.size * Math.cos(angle) + this.pos[0];
-        var y = this.size * Math.sin(angle) + this.pos[1];
-        var pos = [x, y];
-        var dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
-        if (dis > this.size) {
-          entity.setPos(pos);
-          entity.render();
-        }
-
-        x += this.pos[2] - this.pos[0];
-        y += this.pos[3] - this.pos[1];
-        pos = [x, y];
-        dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
-        if (dis > this.size) {
-          entity.setPos(pos);
-          entity.render();
-        }
-        if (angle > count * 25) surrounded = false;else angle += Math.random() * 50;
+    value: function edgeOfPond(amount) {
+      //prep
+      var totalDistance = 0;
+      var linesPerDistance = [];
+      for (var i = 0; i < this.edgeOfPondPoints.length; i++) {
+        var cur = this.getDistance(this.edgeOfPondPoints[i].x, this.edgeOfPondPoints[i].y, this.edgeOfPondPoints[(i + 1) % this.edgeOfPondPoints.length].x, this.edgeOfPondPoints[(i + 1) % this.edgeOfPondPoints.length].y);
+        linesPerDistance.push(cur);
+        totalDistance += cur;
       }
-    }
-  }, {
-    key: 'aroundPond',
-    value: function aroundPond(count, entity) {
-      for (var i = 0; i < count; i++) {
-        var pondEdge = false;
-        var pos = void 0;
-        while (!pondEdge) {
-          pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
-          if (this.isColliding(pos) != null) {
-            pondEdge = true;
+      var outputPoints = [];
+      for (var _i3 = 0; _i3 < amount; _i3++) {
+        var pointPos = totalDistance / amount * (_i3 - 0.5 + Math.random());
+        var pointLine = 0;
+        for (var _i4 = 0; _i4 < linesPerDistance.length; _i4++) {
+          if (linesPerDistance[_i4] < pointPos) {
+            pointPos -= linesPerDistance[_i4];
+            continue;
           }
+          pointLine = _i4;
+          break;
         }
-        entity.setPos(pos);
-        entity.render();
+        outputPoints.push(this.pointOnLine(this.edgeOfPondPoints[pointLine].x, this.edgeOfPondPoints[pointLine].y, this.edgeOfPondPoints[(pointLine + 1) % this.edgeOfPondPoints.length].x, this.edgeOfPondPoints[(pointLine + 1) % this.edgeOfPondPoints.length].y, pointPos / linesPerDistance[pointLine]));
       }
-    }
-  }, {
-    key: 'withinPond',
-    value: function withinPond(count, entity) {
-      // TODO: Code to put all entities within the pond
-    }
-  }, {
-    key: 'renderPond',
-    value: function renderPond(canvas, ctx) {
-      ctx.fillStyle = this.pondColour;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      console.log(outputPoints);
+      return outputPoints;
     }
 
-    // Draws loaded template
+    // aroundPond(count, entity) {
+    //   for (let i = 0; i < count; i++) {
+    //     let pondEdge = false;
+    //     let pos;
+    //     while (!pondEdge) {
+    //       pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
+    //       if (this.isColliding(pos) != null) {
+    //         pondEdge = true;
+    //       }
+    //     }
+    //     entity.setPos(pos);
+    //     entity.render();
+    //   }
+    // }
+    //
+    // withinPond(count, entity) {
+    //   // TODO: Code to put all entities within the pond
+    // }
+    //
+    // renderPond(canvas, ctx) {
+    //   ctx.fillStyle = this.pondColour;
+    //   ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // }
+    //
+    // // Draws loaded template
+    // renderLand(canvas, ctx) {
+    //   if (this.canvasB.width > 0 && this.canvasB.height > 0) {
+    //     ctx.drawImage(this.canvasB, 0, 0);
+    //   }
+    // }
+    //
+    // isColliding(pos) {
+    //   // Calculate if the object will collide with the wall
+    //   let dxa = pos[0] - this.pos[0];
+    //   let dya = pos[1] - this.pos[1];
+    //   let dxb = pos[0] - this.pos[2];
+    //   let dyb = pos[1] - this.pos[3];
+    //   let lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
+    //   let lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
+    //   if (lenA < this.size || lenB < this.size) {
+    //     return null;
+    //   }
+    //   // return collision info here
+    //   if (lenB > lenA) {
+    //     return [this.pos[0], this.pos[1]];
+    //   } else {
+    //     return [this.pos[2], this.pos[3]];
+    //   }
+    // }
 
-  }, {
-    key: 'renderLand',
-    value: function renderLand(canvas, ctx) {
-      if (this.canvasB.width > 0 && this.canvasB.height > 0) {
-        ctx.drawImage(this.canvasB, 0, 0);
-      }
-    }
-  }, {
-    key: 'isColliding',
-    value: function isColliding(pos) {
-      // Calculate if the object will collide with the wall
-      var dxa = pos[0] - this.pos[0];
-      var dya = pos[1] - this.pos[1];
-      var dxb = pos[0] - this.pos[2];
-      var dyb = pos[1] - this.pos[3];
-      var lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
-      var lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
-      if (lenA < this.size || lenB < this.size) {
-        return null;
-      }
-      // return collision info here
-      if (lenB > lenA) {
-        return [this.pos[0], this.pos[1]];
-      } else {
-        return [this.pos[2], this.pos[3]];
-      }
-    }
   }]);
 
   return Background;
@@ -594,10 +626,8 @@ exports["default"] = LobeliaCardinalis;
 
 
 Object.defineProperty(exports, "__esModule", ({
-  value: true
+    value: true
 }));
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _colours = __webpack_require__(/*! ../../colours */ "./src/colours.js");
 
@@ -607,47 +637,31 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LongGrass = function () {
-  function LongGrass(canvas, ctx, size) {
-    _classCallCheck(this, LongGrass);
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.size = size;
-  }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-  _createClass(LongGrass, [{
-    key: 'setPos',
-    value: function setPos(pos) {
-      this.pos = pos;
+var LongGrass = function (_PIXI$Container) {
+    _inherits(LongGrass, _PIXI$Container);
+
+    function LongGrass(app, x, y) {
+        _classCallCheck(this, LongGrass);
+
+        var _this = _possibleConstructorReturn(this, (LongGrass.__proto__ || Object.getPrototypeOf(LongGrass)).call(this));
+
+        _this.grass = new PIXI.Graphics();
+        var w = window.innerHeight / 80;
+        var h = w * 6;
+        _this.position.set(x, y);
+        _this.angle = Math.random() * 100 - 50;
+
+        _this.grass.beginFill(colours.forest_green).moveTo(0, -h / 2).bezierCurveTo(w / 4, -h / 2, w / 4, h / 2, 0, h / 2).bezierCurveTo(-w / 4, h / 2, -w / 4, -h / 2, 0, -h / 2);
+        _this.addChild(_this.grass);
+        return _this;
     }
-  }, {
-    key: 'render',
-    value: function render() {
-      var w = this.size / 40;
-      var h = w * 6;
-      var rotation = Math.random() * Math.PI;
-      this.ctx.save();
-      this.ctx.translate(this.pos[0], this.pos[1]);
-      this.ctx.rotate(rotation);
-      this.ctx.beginPath();
-      this.ctx.fillStyle = colours.forest_green;
-      this.ctx.moveTo(0, -h / 2);
-      this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
-      this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
-      this.ctx.fill();
-      this.ctx.beginPath();
-      this.ctx.strokeStyle = colours.dark_green;
-      this.ctx.moveTo(0, -h / 2);
-      this.ctx.bezierCurveTo(w / 2, -h / 2, w / 2, h / 2, 0, h / 2);
-      this.ctx.bezierCurveTo(-w / 2, h / 2, -w / 2, -h / 2, 0, -h / 2);
-      this.ctx.stroke();
-      this.ctx.restore();
-    }
-  }]);
 
-  return LongGrass;
-}();
+    return LongGrass;
+}(PIXI.Container);
 
 exports["default"] = LongGrass;
 
@@ -793,34 +807,56 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Rock = function () {
-  function Rock(canvas, ctx, size) {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Rock = function (_PIXI$Container) {
+  _inherits(Rock, _PIXI$Container);
+
+  function Rock(app, x, y) {
     _classCallCheck(this, Rock);
 
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.size = size;
+    var _this = _possibleConstructorReturn(this, (Rock.__proto__ || Object.getPrototypeOf(Rock)).call(this));
+
+    _this.app = app;
+    _this.size = window.innerHeight / 30;
+    var points = _this.generatePoints(x, y);
+    _this.rock = new PIXI.Graphics();
+    _this.rock //.lineStyle(1, colours.dark_gray)
+    .beginFill(colours.rock_gray).drawPolygon(_this.outerPoints);
+    _this.rockshade = new PIXI.Graphics();
+    _this.rockshade //.lineStyle(1, colours.dark_gray)
+    .beginFill(colours.gray).drawPolygon(_this.innerPoints);
+    _this.addChild(_this.rock, _this.rockshade);
+    return _this;
   }
 
   _createClass(Rock, [{
-    key: 'setPos',
-    value: function setPos(pos) {
-      this.pos = pos;
-    }
-  }, {
     key: 'generatePoints',
-    value: function generatePoints() {
+    value: function generatePoints(x, y) {
       var pointCountAvg = 8;
-      this.circPos = [360 / pointCountAvg * Math.random() * 2];
-      while (this.circPos[this.circPos.length - 1] < 360) {
-        var nextPoint = this.circPos[this.circPos.length - 1] + 360 / pointCountAvg / 2 + 360 / pointCountAvg / 2 * Math.random() * 2;
-        this.circPos.push(nextPoint);
+      var circPos = [360 / pointCountAvg * Math.random() * 2];
+      while (circPos[circPos.length - 1] < 360) {
+        var nextPoint = circPos[circPos.length - 1] + 360 / pointCountAvg / 2 + 360 / pointCountAvg / 2 * Math.random() * 2;
+        circPos.push(nextPoint);
       }
-      this.circPos.pop();
+      circPos.pop();
+
+      this.innerPoints = [];
+      this.outerPoints = [];
+      for (var a = 0; a < circPos.length; a++) {
+        var px = this.size * Math.cos(circPos[a] * (Math.PI / 180)) + x;
+        var py = this.size * Math.sin(circPos[a] * (Math.PI / 180)) + y;
+        this.outerPoints.push(px, py);
+        px = this.size * 5 / 8 * Math.cos(circPos[a] * (Math.PI / 180)) + x;
+        py = this.size * 5 / 8 * Math.sin(circPos[a] * (Math.PI / 180)) + y;
+        this.innerPoints.push(px, py);
+      }
     }
   }, {
-    key: 'render',
-    value: function render() {
+    key: 'renderDEPRECATED',
+    value: function renderDEPRECATED() {
       this.generatePoints();
       var size = this.size / 20 + this.size / 20 * Math.random();
       var points = [];
@@ -867,7 +903,7 @@ var Rock = function () {
   }]);
 
   return Rock;
-}();
+}(PIXI.Container);
 
 exports["default"] = Rock;
 
@@ -1009,7 +1045,6 @@ var Pond = function () {
     this.canvas.ticker.add(function (delta) {
       elapsed += delta;
     });
-    console.log(this.canvas);
     // this.water = new Water(canvas, ctx);
     //
     // this.eventListeners();

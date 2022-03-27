@@ -56,118 +56,161 @@ class Background {
 
   createLand() {
     // Create a polygon of the pond object
-    this.pond = new PIXI.Graphics();
-    this.pond.beginFill(this.pondColour)
     let points = []
     for (let i in this.edgeOfPondPoints) {
       points.push(this.edgeOfPondPoints[i].x)
       points.push(this.edgeOfPondPoints[i].y)
     }
-    this.pond.drawPolygon(points)
+    this.pond = new PIXI.Graphics();
+    this.pond.beginFill(this.pondColour)
+    this.pondShape = new PIXI.Polygon(points)
+    this.pond.drawPolygon(this.pondShape)
     this.app.stage.addChild(this.pond)
-  }
 
-  createLandDEPRECATED(canvas, ctx) {
-    // Draw grassCount number of grass on pond bank
-    let grassCount = this.size * 5;
-    this.aroundPond(grassCount, new LongGrass(this.canvasB, ctxB, this.size));
-    // Draw rockCount number of rocks around Pond
-    let rockCount = 100;
-    this.edgeOfPond(rockCount, new Rock(this.canvasB, ctxB, this.size));
-    // 25% chance to draw stepping stones
-    // TODO: Draw Stepping stones
+    // Draw Grass
+    let grassCount = 1000;
+    this.grass = []
+    for (let i = 0; i < grassCount; i++) {
+      let x = Math.floor(Math.random() * window.innerWidth)
+      let y = Math.floor(Math.random() * window.innerHeight)
+      if (this.pondShape.contains(x, y)) {
+        i--;
+        continue
+      }
+      let singleBlade = new LongGrass(this.app, x, y)
+      this.app.stage.addChild(singleBlade)
+      this.grass.push(singleBlade)
+    }
 
-    // Draw Flowers
-    this.aroundPond(Math.ceil(Math.random() * this.size / 80), new FlowerBush(this.canvasB, ctxB, this.size));
-
-    // Draw cattailCount number of cattails around pond
-    let cattailCount = 30;
-    this.edgeOfPond(cattailCount, new Cattail(this.canvasB, ctxB, this.size));
-    // 75% chance of tree around pond
-    if (Math.random() < 0.75) {
-      this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
+    // Draw Rocks
+    let rockCount = 50;
+    this.rocks = []
+    let rockCoords = this.edgeOfPond(rockCount);
+    for (let i = 0; i < rockCount; i++) {
+      let rock = new Rock(this.app, rockCoords[i][0], rockCoords[i][1])
+      this.app.stage.addChild(rock)
     }
   }
 
-
-  edgeOfPond(count, entity) {
-    let surrounded = true;
-    let angle = 0;
-
-    while (surrounded) {
-      let x = this.size * Math.cos(angle) + this.pos[0];
-      let y = this.size * Math.sin(angle) + this.pos[1];
-      let pos = [x, y];
-      let dis = Math.sqrt(Math.pow(x - this.pos[2], 2) + Math.pow(y - this.pos[3], 2));
-      if (dis > this.size) {
-        entity.setPos(pos);
-        entity.render();
-      }
-
-      x += this.pos[2] - this.pos[0];
-      y += this.pos[3] - this.pos[1];
-      pos = [x, y];
-      dis = Math.sqrt(Math.pow(x - this.pos[0], 2) + Math.pow(y - this.pos[1], 2));
-      if (dis > this.size) {
-        entity.setPos(pos);
-        entity.render();
-      }
-      if (angle > count * 25)
-        surrounded = false;
-      else
-        angle += Math.random() * 50;
-    }
+  pointOnLine(x1,y1,x2,y2,per) {
+    return [x1 + (x2 - x1) * per, y1 + (y2 - y1) * per];
   }
 
-  aroundPond(count, entity) {
-    for (let i = 0; i < count; i++) {
-      let pondEdge = false;
-      let pos;
-      while (!pondEdge) {
-        pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
-        if (this.isColliding(pos) != null) {
-          pondEdge = true;
+  // createLandDEPRECATED(canvas, ctx) {
+  //   // Draw grassCount number of grass on pond bank
+  //   let grassCount = this.size * 5;
+  //   this.aroundPond(grassCount, new LongGrass(this.canvasB, ctxB, this.size));
+  //   // Draw rockCount number of rocks around Pond
+  //   let rockCount = 100;
+  //   this.edgeOfPond(rockCount, new Rock(this.canvasB, ctxB, this.size));
+  //   // 25% chance to draw stepping stones
+  //   // TODO: Draw Stepping stones
+  //
+  //   // Draw Flowers
+  //   this.aroundPond(Math.ceil(Math.random() * this.size / 80), new FlowerBush(this.canvasB, ctxB, this.size));
+  //
+  //   // Draw cattailCount number of cattails around pond
+  //   let cattailCount = 30;
+  //   this.edgeOfPond(cattailCount, new Cattail(this.canvasB, ctxB, this.size));
+  //   // 75% chance of tree around pond
+  //   if (Math.random() < 0.75) {
+  //     this.aroundPond(1, new Tree(this.canvasB, ctxB, this.size));
+  //   }
+  // }
+
+  getDistance(xA, yA, xB, yB) {
+    let xDiff = xA - xB;
+    let yDiff = yA - yB;
+    return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+  }
+
+  edgeOfPond(amount) {
+    //prep
+    let totalDistance = 0;
+    let linesPerDistance = []
+    for (let i = 0; i < this.edgeOfPondPoints.length; i++) {
+      let cur = this.getDistance(
+        this.edgeOfPondPoints[i].x,
+        this.edgeOfPondPoints[i].y,
+        this.edgeOfPondPoints[(i + 1) % this.edgeOfPondPoints.length].x,
+        this.edgeOfPondPoints[(i + 1) % this.edgeOfPondPoints.length].y
+      );
+      linesPerDistance.push(cur)
+      totalDistance += cur;
+    }
+    let outputPoints = [];
+    for (let i = 0; i < amount; i++) {
+      let pointPos = totalDistance / amount * (i - 0.5 + Math.random())
+      let pointLine = 0;
+      for (let i = 0; i < linesPerDistance.length; i++) {
+        if (linesPerDistance[i] < pointPos) {
+          pointPos -= linesPerDistance[i];
+          continue;
         }
+        pointLine = i;
+        break;
       }
-      entity.setPos(pos);
-      entity.render();
+      outputPoints.push(this.pointOnLine(
+        this.edgeOfPondPoints[pointLine].x,
+        this.edgeOfPondPoints[pointLine].y,
+        this.edgeOfPondPoints[(pointLine + 1) % this.edgeOfPondPoints.length].x,
+        this.edgeOfPondPoints[(pointLine + 1) % this.edgeOfPondPoints.length].y,
+        pointPos / linesPerDistance[pointLine]
+      ))
     }
+    console.log(outputPoints)
+    return outputPoints
   }
 
-  withinPond(count, entity) {
-    // TODO: Code to put all entities within the pond
-  }
-
-  renderPond(canvas, ctx) {
-    ctx.fillStyle = this.pondColour;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-
-  // Draws loaded template
-  renderLand(canvas, ctx) {
-    if (this.canvasB.width > 0 && this.canvasB.height > 0) {
-      ctx.drawImage(this.canvasB, 0, 0);
-    }
-  }
-
-  isColliding(pos) {
-    // Calculate if the object will collide with the wall
-    let dxa = pos[0] - this.pos[0];
-    let dya = pos[1] - this.pos[1];
-    let dxb = pos[0] - this.pos[2];
-    let dyb = pos[1] - this.pos[3];
-    let lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
-    let lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
-    if (lenA < this.size || lenB < this.size) {
-      return null;
-    }
-    // return collision info here
-    if (lenB > lenA) {
-      return [this.pos[0], this.pos[1]];
-    } else {
-      return [this.pos[2], this.pos[3]];
-    }
-  }
+  // aroundPond(count, entity) {
+  //   for (let i = 0; i < count; i++) {
+  //     let pondEdge = false;
+  //     let pos;
+  //     while (!pondEdge) {
+  //       pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
+  //       if (this.isColliding(pos) != null) {
+  //         pondEdge = true;
+  //       }
+  //     }
+  //     entity.setPos(pos);
+  //     entity.render();
+  //   }
+  // }
+  //
+  // withinPond(count, entity) {
+  //   // TODO: Code to put all entities within the pond
+  // }
+  //
+  // renderPond(canvas, ctx) {
+  //   ctx.fillStyle = this.pondColour;
+  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // }
+  //
+  // // Draws loaded template
+  // renderLand(canvas, ctx) {
+  //   if (this.canvasB.width > 0 && this.canvasB.height > 0) {
+  //     ctx.drawImage(this.canvasB, 0, 0);
+  //   }
+  // }
+  //
+  // isColliding(pos) {
+  //   // Calculate if the object will collide with the wall
+  //   let dxa = pos[0] - this.pos[0];
+  //   let dya = pos[1] - this.pos[1];
+  //   let dxb = pos[0] - this.pos[2];
+  //   let dyb = pos[1] - this.pos[3];
+  //   let lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
+  //   let lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
+  //   if (lenA < this.size || lenB < this.size) {
+  //     return null;
+  //   }
+  //   // return collision info here
+  //   if (lenB > lenA) {
+  //     return [this.pos[0], this.pos[1]];
+  //   } else {
+  //     return [this.pos[2], this.pos[3]];
+  //   }
+  // }
 }
 
 export default Background;
