@@ -12,39 +12,62 @@ import FlowerBush from './plants/flowerBush';
  * colliding with it
  */
 class Background {
-  constructor(canvas, ctx) {
-    if (canvas.width < canvas.height) {
-      this.pos = [canvas.width / 2, (canvas.height / 8) * 3,
-        canvas.width / 2, (canvas.height / 8) * 5
-      ];
-      this.size = canvas.width / 2;
-    } else {
-      this.pos = [(canvas.width / 8) * 3, canvas.height / 2,
-        (canvas.width / 8) * 5, canvas.height / 2
-      ];
-      this.size = canvas.height / 2;
-    }
+  constructor(app) {
+    this.app = app
     this.pondColour = colours.ocean_blue;
     this.landColour = colours.pea;
-    this.createLand(canvas, ctx);
 
+    let pointRange = 20; // 10 low poly -> 500 close to square
+    let buffer = window.innerWidth/32
+    let randomPoints = [];
+    for (let i = 0; i < pointRange; i++) {
+      let x = Math.floor(Math.random() * (window.innerWidth - (2 * buffer))) + buffer
+      let y = Math.floor(Math.random() * (window.innerHeight - (2 * buffer))) + buffer
+      randomPoints.push({x:x, y:y});
+    }
+    this.edgeOfPondPoints = this.convexHull(randomPoints)
+    this.createLand();
   }
 
-  createLand(canvas, ctx) {
-    // Create a mask and cuts 2 circles out of it then draws it to the canvas
-    this.canvasB = document.createElement('canvas');
-    this.canvasB.width = canvas.width;
-    this.canvasB.height = canvas.height;
-    let ctxB = this.canvasB.getContext('2d');
-    ctxB.save();
-    ctxB.fillStyle = this.landColour;
-    ctxB.fillRect(0, 0, canvas.width, canvas.height);
-    ctxB.globalCompositeOperation = 'xor';
-    ctxB.arc(this.pos[0], this.pos[1], this.size, 0, Math.PI * 2);
-    ctxB.arc(this.pos[2], this.pos[3], this.size, 0, Math.PI * 2);
-    ctxB.fill();
-    ctxB.restore();
+  convexHull(points) {
+    points.sort(function (a, b) {
+      return a.x != b.x ? a.x - b.x : a.y - b.y;
+    });
 
+    var n = points.length;
+    var hull = [];
+
+    for (var i = 0; i < 2 * n; i++) {
+      var j = i < n ? i : 2 * n - 1 - i;
+      while (hull.length >= 2 && this.removeMiddle(hull[hull.length - 2], hull[hull.length - 1], points[j]))
+        hull.pop();
+      hull.push(points[j]);
+    }
+
+    hull.pop();
+    return hull;
+  }
+
+  removeMiddle(a, b, c) {
+    var cross = (a.x - b.x) * (c.y - b.y) - (a.y - b.y) * (c.x - b.x);
+    var dot = (a.x - b.x) * (c.x - b.x) + (a.y - b.y) * (c.y - b.y);
+    return cross < 0 || cross == 0 && dot <= 0;
+  }
+
+  createLand() {
+    // Create a polygon of the pond object
+    this.pond = new PIXI.Graphics();
+    this.pond.beginFill(this.pondColour)
+    let points = []
+    for (let i in this.edgeOfPondPoints) {
+      points.push(this.edgeOfPondPoints[i].x)
+      points.push(this.edgeOfPondPoints[i].y)
+    }
+    this.pond.drawPolygon(points)
+    this.app.stage.addChild(this.pond)
+  }
+
+  createLandDEPRECATED(canvas, ctx) {
     // Draw grassCount number of grass on pond bank
     let grassCount = this.size * 5;
     this.aroundPond(grassCount, new LongGrass(this.canvasB, ctxB, this.size));

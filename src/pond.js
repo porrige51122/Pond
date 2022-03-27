@@ -2,7 +2,8 @@
  * POND: This is the controller of the entire program, this is where
  * the program loop is run, containing: render, tick and resize.
  */
-// import Background from './background/background';
+ import * as colours from './colours';
+import Background from './background/background';
 // import Menu from './menu';
 //
 // import Tadpole from './creature/tadpole';
@@ -20,13 +21,20 @@ class Pond {
   constructor() {
     this.canvas = new PIXI.Application({
       resizeTo: window,
+      backgroundColor: colours.pea
     });
     document.body.appendChild(this.canvas.view);
+
+    this.init();
+
+    let elapsed = 0.0;
+    this.canvas.ticker.add((delta) => {
+      elapsed += delta
+    })
+    console.log(this.canvas)
     // this.water = new Water(canvas, ctx);
     //
     // this.eventListeners();
-    // this.init();
-    // this.loop();
   }
 
   /**
@@ -49,41 +57,32 @@ class Pond {
    * Movements are initiated
    */
   init() {
-    this.background = new Background(canvas, ctx);
-    this.water.setBackground(this.background);
-    let size = this.background.size;
-
-    this.tadpoles = [];
-    this.fish = [];
-    this.lillies = [];
-    this.movement = [];
-
-    // Pushes all tadpoles to their array
-    for (let i = 0; i < this.tadpoleSize; i++)
-      this.tadpoles.push(new Tadpole(canvas, size));
-
-    // Pushes all fish and lillies to their arrays
-    for (let i = 0; i < this.fishSize; i++)
-      this.fish.push(new Fish(canvas, ctx, size));
-
-    for (let i = 0; i < this.lilySize; i++)
-      this.lillies.push(new Lily(canvas, size));
-
-    // Sets movement patterns for all entities
-    this.collisions = new Collisions(this.tadpoles, this.fish, this.lillies, this.background);
-
-    this.movement.push(new TadMovement(this.tadpoles, canvas, this.collisions),
-      new FishMovement(this.fish, canvas, this.collisions),
-      new LilyMovement(this.lillies, canvas, this.collisions));
-  }
-
-  loop() {
-    window.requestAnimationFrame(() => {
-      this.resize();
-      this.tick();
-      this.render();
-      this.loop();
-    });
+    this.background = new Background(this.canvas);
+    // this.water.setBackground(this.background);
+    // let size = this.background.size;
+    //
+    // this.tadpoles = [];
+    // this.fish = [];
+    // this.lillies = [];
+    // this.movement = [];
+    //
+    // // Pushes all tadpoles to their array
+    // for (let i = 0; i < this.tadpoleSize; i++)
+    //   this.tadpoles.push(new Tadpole(canvas, size));
+    //
+    // // Pushes all fish and lillies to their arrays
+    // for (let i = 0; i < this.fishSize; i++)
+    //   this.fish.push(new Fish(canvas, ctx, size));
+    //
+    // for (let i = 0; i < this.lilySize; i++)
+    //   this.lillies.push(new Lily(canvas, size));
+    //
+    // // Sets movement patterns for all entities
+    // this.collisions = new Collisions(this.tadpoles, this.fish, this.lillies, this.background);
+    //
+    // this.movement.push(new TadMovement(this.tadpoles, canvas, this.collisions),
+    //   new FishMovement(this.fish, canvas, this.collisions),
+    //   new LilyMovement(this.lillies, canvas, this.collisions));
   }
 
   /**
