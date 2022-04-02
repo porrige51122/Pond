@@ -96,6 +96,10 @@ class Background {
     return [x1 + (x2 - x1) * per, y1 + (y2 - y1) * per];
   }
 
+  withinPond(x, y) {
+    return this.pondShape.contains(x, y)
+  }
+
   // createLandDEPRECATED(canvas, ctx) {
   //   // Draw grassCount number of grass on pond bank
   //   let grassCount = this.size * 5;
@@ -125,7 +129,6 @@ class Background {
   }
 
   edgeOfPond(amount) {
-    //prep
     let totalDistance = 0;
     let linesPerDistance = []
     for (let i = 0; i < this.edgeOfPondPoints.length; i++) {
@@ -158,59 +161,8 @@ class Background {
         pointPos / linesPerDistance[pointLine]
       ))
     }
-    console.log(outputPoints)
     return outputPoints
   }
-
-  // aroundPond(count, entity) {
-  //   for (let i = 0; i < count; i++) {
-  //     let pondEdge = false;
-  //     let pos;
-  //     while (!pondEdge) {
-  //       pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
-  //       if (this.isColliding(pos) != null) {
-  //         pondEdge = true;
-  //       }
-  //     }
-  //     entity.setPos(pos);
-  //     entity.render();
-  //   }
-  // }
-  //
-  // withinPond(count, entity) {
-  //   // TODO: Code to put all entities within the pond
-  // }
-  //
-  // renderPond(canvas, ctx) {
-  //   ctx.fillStyle = this.pondColour;
-  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  // }
-  //
-  // // Draws loaded template
-  // renderLand(canvas, ctx) {
-  //   if (this.canvasB.width > 0 && this.canvasB.height > 0) {
-  //     ctx.drawImage(this.canvasB, 0, 0);
-  //   }
-  // }
-  //
-  // isColliding(pos) {
-  //   // Calculate if the object will collide with the wall
-  //   let dxa = pos[0] - this.pos[0];
-  //   let dya = pos[1] - this.pos[1];
-  //   let dxb = pos[0] - this.pos[2];
-  //   let dyb = pos[1] - this.pos[3];
-  //   let lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
-  //   let lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
-  //   if (lenA < this.size || lenB < this.size) {
-  //     return null;
-  //   }
-  //   // return collision info here
-  //   if (lenB > lenA) {
-  //     return [this.pos[0], this.pos[1]];
-  //   } else {
-  //     return [this.pos[2], this.pos[3]];
-  //   }
-  // }
 }
 
 export default Background;

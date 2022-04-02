@@ -4,15 +4,20 @@
 
 import * as colours from '../colours';
 
-class Tadpole {
-  constructor(canvas, size) {
+class Tadpole extends PIXI.Container {
+  constructor(app, x, y) {
+    super()
+    this.app = app;
     // Random Position on canvas
-    this.pos = [Math.random() * canvas.width, Math.random() * canvas.height];
+    this.position.set(x, y)
     // Size
-    this.size = size / 200 * (document.getElementById('tadsize').value / 2);
+    this.size = window.innerHeight / 300;
     // Initially still
-    this.vel = [Math.random() * 2 - 1, Math.random() * 2 - 1];
-    this.acceleration = [0, 0];
+    this.maxspeed = 1 / 8
+    this.vel = new PIXI.Point(
+      Math.random() * this.maxspeed - this.maxspeed/2,
+      Math.random() * this.maxspeed - this.maxspeed/2)
+    this.acceleration = new PIXI.Point(0, 0);
     this.r = 3.0;
     // Maximum speed per tadpole
     this.maxspeed = 0.7;
@@ -20,13 +25,14 @@ class Tadpole {
     this.maxforce = 0.05;
 
     this.separationSize = 15
+    this.drawTad()
   }
 
   /**
    * APPLYFORCE - adds force to acceleration;
    */
   applyForce(force) {
-    this.acceleration = this.add(this.acceleration, force);
+    this.acceleration = this.acceleration.add(force);
   }
 
   /**
@@ -53,79 +59,25 @@ class Tadpole {
    * TICK - Moves the entity
    */
   tick() {
-    this.vel = this.add(this.vel, this.acceleration)
-    this.vel = this.limit(this.vel, this.maxspeed)
-
-    this.pos = this.add(this.pos, this.vel);
-    this.acceleration = [0, 0];
+    let temp = this.vel.add(this.acceleration)
+    this.vel.set(temp.x, temp.y)
+    temp = this.position.add(this.vel)
+    this.position.set(temp.x, temp.y)
+    this.acceleration.set(0, 0);
   }
 
   /**
    * RENDER - Draws an black ball and two smaller grey balls behind it to
    *  simulate a tail
    */
-  render(canvas, ctx) {
+  drawTad(canvas, ctx) {
+    this.removeChild(this.body)
     // Draw Body
-    ctx.beginPath();
-    ctx.fillStyle = colours.registration_black;
-    ctx.arc(this.pos[0], this.pos[1], this.size, 0, 2 * Math.PI);
-    ctx.fill();
-    // Draw Tail
-    ctx.beginPath();
-    ctx.fillStyle = colours.rasin_black;
-    ctx.arc(this.pos[0] - (this.vel[0] * 5), this.pos[1] - (this.vel[1] * 5), this.size / 4 * 3, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(this.pos[0] - (this.vel[0] * 10), this.pos[1] - (this.vel[1] * 10), this.size / 2, 0, 2 * Math.PI);
-    ctx.fill();
-  }
-
-  limit(v, max) {
-    const mSq = this.magSq(v);
-    if (mSq > max * max) {
-      v = this.div(v, Math.sqrt(mSq));
-      v = this.mul(v, max);
-    }
-    return v;
-  }
-
-  dist(a, b) {
-    let c = this.add(a, [-b[0], -b[1]]);
-    return this.mag(c);
-
-  }
-
-  mag(a) {
-    a = this.magSq(a);
-    return Math.sqrt(a);
-  }
-
-  magSq(a) {
-    return a[0] * a[0] + a[1] * a[1];
-  }
-
-  add(a, b) {
-    return [a[0] + b[0], a[1] + b[1]];
-  }
-
-  sub(a, b) {
-    return [a[0] - b[0], a[1] - b[1]];
-  }
-
-  mul(a, x) {
-    return [a[0] * x, a[1] * x];
-  }
-
-  div(a, x) {
-    return [a[0] / x, a[1] / x];
-  }
-
-  normalize(a) {
-    const len = this.mag(a);
-    if (len !== 0) {
-      a = this.mul(a, 1/len);
-    }
-    return a;
+    this.body = new PIXI.Graphics();
+    this.body.beginFill(colours.registration_black)
+        .arc(0, 0, this.size, 0, 2 * Math.PI);
+    // Add to Scene
+    this.addChild(this.body);
   }
 
   seek(target) {

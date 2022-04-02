@@ -146,6 +146,11 @@ var Background = function () {
     value: function pointOnLine(x1, y1, x2, y2, per) {
       return [x1 + (x2 - x1) * per, y1 + (y2 - y1) * per];
     }
+  }, {
+    key: 'withinPond',
+    value: function withinPond(x, y) {
+      return this.pondShape.contains(x, y);
+    }
 
     // createLandDEPRECATED(canvas, ctx) {
     //   // Draw grassCount number of grass on pond bank
@@ -179,7 +184,6 @@ var Background = function () {
   }, {
     key: 'edgeOfPond',
     value: function edgeOfPond(amount) {
-      //prep
       var totalDistance = 0;
       var linesPerDistance = [];
       for (var i = 0; i < this.edgeOfPondPoints.length; i++) {
@@ -201,60 +205,8 @@ var Background = function () {
         }
         outputPoints.push(this.pointOnLine(this.edgeOfPondPoints[pointLine].x, this.edgeOfPondPoints[pointLine].y, this.edgeOfPondPoints[(pointLine + 1) % this.edgeOfPondPoints.length].x, this.edgeOfPondPoints[(pointLine + 1) % this.edgeOfPondPoints.length].y, pointPos / linesPerDistance[pointLine]));
       }
-      console.log(outputPoints);
       return outputPoints;
     }
-
-    // aroundPond(count, entity) {
-    //   for (let i = 0; i < count; i++) {
-    //     let pondEdge = false;
-    //     let pos;
-    //     while (!pondEdge) {
-    //       pos = [Math.random() * entity.canvas.width, Math.random() * entity.canvas.height];
-    //       if (this.isColliding(pos) != null) {
-    //         pondEdge = true;
-    //       }
-    //     }
-    //     entity.setPos(pos);
-    //     entity.render();
-    //   }
-    // }
-    //
-    // withinPond(count, entity) {
-    //   // TODO: Code to put all entities within the pond
-    // }
-    //
-    // renderPond(canvas, ctx) {
-    //   ctx.fillStyle = this.pondColour;
-    //   ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // }
-    //
-    // // Draws loaded template
-    // renderLand(canvas, ctx) {
-    //   if (this.canvasB.width > 0 && this.canvasB.height > 0) {
-    //     ctx.drawImage(this.canvasB, 0, 0);
-    //   }
-    // }
-    //
-    // isColliding(pos) {
-    //   // Calculate if the object will collide with the wall
-    //   let dxa = pos[0] - this.pos[0];
-    //   let dya = pos[1] - this.pos[1];
-    //   let dxb = pos[0] - this.pos[2];
-    //   let dyb = pos[1] - this.pos[3];
-    //   let lenA = Math.sqrt(Math.pow(dxa, 2) + Math.pow(dya, 2));
-    //   let lenB = Math.sqrt(Math.pow(dxb, 2) + Math.pow(dyb, 2));
-    //   if (lenA < this.size || lenB < this.size) {
-    //     return null;
-    //   }
-    //   // return collision info here
-    //   if (lenB > lenA) {
-    //     return [this.pos[0], this.pos[1]];
-    //   } else {
-    //     return [this.pos[2], this.pos[3]];
-    //   }
-    // }
-
   }]);
 
   return Background;
@@ -949,6 +901,246 @@ var ocean_blue = exports.ocean_blue = '0x94D0FF',
 
 /***/ }),
 
+/***/ "./src/creature/tadpole.js":
+/*!*********************************!*\
+  !*** ./src/creature/tadpole.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _colours = __webpack_require__(/*! ../colours */ "./src/colours.js");
+
+var colours = _interopRequireWildcard(_colours);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * This class contains all information for each tadpole
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+var Tadpole = function (_PIXI$Container) {
+  _inherits(Tadpole, _PIXI$Container);
+
+  function Tadpole(app, x, y) {
+    _classCallCheck(this, Tadpole);
+
+    var _this = _possibleConstructorReturn(this, (Tadpole.__proto__ || Object.getPrototypeOf(Tadpole)).call(this));
+
+    _this.app = app;
+    // Random Position on canvas
+    _this.position.set(x, y);
+    // Size
+    _this.size = window.innerHeight / 300;
+    // Initially still
+    _this.maxspeed = 1 / 8;
+    _this.vel = new PIXI.Point(Math.random() * _this.maxspeed - _this.maxspeed / 2, Math.random() * _this.maxspeed - _this.maxspeed / 2);
+    _this.acceleration = new PIXI.Point(0, 0);
+    _this.r = 3.0;
+    // Maximum speed per tadpole
+    _this.maxspeed = 0.7;
+    // Maximum steering force
+    _this.maxforce = 0.05;
+
+    _this.separationSize = 15;
+    _this.drawTad();
+    return _this;
+  }
+
+  /**
+   * APPLYFORCE - adds force to acceleration;
+   */
+
+
+  _createClass(Tadpole, [{
+    key: 'applyForce',
+    value: function applyForce(force) {
+      this.acceleration = this.acceleration.add(force);
+    }
+
+    /**
+     * FLOCK - Gets new acceleration based on 3 rules
+     */
+
+  }, {
+    key: 'flock',
+    value: function flock(tadpoles) {
+      var sep = this.separate(tadpoles, this.separationSize);
+      var ali = this.align(tadpoles);
+      var coh = this.cohesion(tadpoles);
+      // Adjust weight of each force
+      var sepWeight = 0.25;
+      var aliWeight = 0.01;
+      var cohWeight = 0.2;
+      sep = this.mul(sep, sepWeight);
+      ali = this.mul(ali, aliWeight);
+      coh = this.mul(coh, cohWeight);
+
+      this.applyForce(sep);
+      this.applyForce(ali);
+      this.applyForce(coh);
+    }
+
+    /**
+     * TICK - Moves the entity
+     */
+
+  }, {
+    key: 'tick',
+    value: function tick() {
+      var temp = this.vel.add(this.acceleration);
+      this.vel.set(temp.x, temp.y);
+      temp = this.position.add(this.vel);
+      this.position.set(temp.x, temp.y);
+      this.acceleration.set(0, 0);
+    }
+
+    /**
+     * RENDER - Draws an black ball and two smaller grey balls behind it to
+     *  simulate a tail
+     */
+
+  }, {
+    key: 'drawTad',
+    value: function drawTad(canvas, ctx) {
+      this.removeChild(this.body);
+      // Draw Body
+      this.body = new PIXI.Graphics();
+      this.body.beginFill(colours.registration_black).arc(0, 0, this.size, 0, 2 * Math.PI);
+      // Add to Scene
+      this.addChild(this.body);
+    }
+  }, {
+    key: 'seek',
+    value: function seek(target) {
+      var desired = this.sub(target, this.pos);
+
+      desired = this.normalize(desired);
+      desired = this.mul(desired, this.maxspeed);
+
+      var steer = this.sub(desired, this.vel);
+      steer = this.limit(steer, this.maxforce);
+      return steer;
+    }
+  }, {
+    key: 'separate',
+    value: function separate(tadpoles, separationSize) {
+      var desiredseparation = separationSize;
+      var steer = [0, 0];
+      var count = 0;
+
+      for (var i = 0; i < tadpoles.length; i++) {
+        var d = this.dist(this.pos, tadpoles[i].pos);
+        if (d > 0 && d < desiredseparation) {
+          var diff = this.sub(this.pos, tadpoles[i].pos);
+          diff = this.normalize(diff);
+          diff = this.div(diff, d);
+          steer = this.add(steer, diff);
+          count++;
+        }
+      }
+
+      if (count > 0) {
+        steer = this.div(steer, count);
+      }
+
+      if (this.mag(steer) > 0) {
+        steer = this.normalize(steer);
+        steer = this.mul(steer, this.maxspeed);
+        steer = this.sub(steer, this.vel);
+        steer = this.limit(steer, this.maxforce);
+      }
+      return steer;
+    }
+
+    /**
+     * Checks to see if tadpoles are in sense distance
+     * If so, add their velocity to a value
+     * Divide value by number of other tadpoles
+     * Normalize, multiply by max speed
+     * subtract current velocity,
+     * limit velocity then return.
+     */
+
+  }, {
+    key: 'align',
+    value: function align(tadpoles) {
+      var neighbordist = 50;
+      var sum = [0, 0];
+      var count = 0;
+      for (var i = 0; i < tadpoles.length; i++) {
+        var d = this.dist(this.pos, tadpoles[i].pos);
+        if (d > 0 && d < neighbordist) {
+          sum = this.add(sum, tadpoles[i].vel);
+          count++;
+        }
+      }
+      if (count > 0) {
+        this.mul(sum, 1 / count);
+        sum = this.normalize(sum);
+        sum = this.mul(sum, this.maxspeed);
+        var steer = this.sub(sum, this.vel);
+        sum = this.limit(steer, this.maxforce);
+        return steer;
+      } else {
+        return [0, 0];
+      }
+    }
+  }, {
+    key: 'cohesion',
+    value: function cohesion(tadpoles) {
+      var neighbordist = 50;
+      var sum = [0, 0];
+      var count = 0;
+      for (var i = 0; i < tadpoles.length; i++) {
+        var d = this.dist(this.pos, tadpoles[i].pos);
+        if (d > 0 && d < neighbordist) {
+          sum = this.add(sum, tadpoles[i].pos);
+          count++;
+        }
+      }
+      if (count > 0) {
+        sum = this.div(sum, count);
+        return this.seek(sum);
+      } else {
+        return [0, 0];
+      }
+    }
+  }, {
+    key: 'flee',
+    value: function flee(other) {
+      var desiredseparation = 100;
+      var steer = this.separate(other, desiredseparation);
+      this.applyForce(steer);
+    }
+  }, {
+    key: 'borders',
+    value: function borders() {
+      if (this.pos[0] < -this.r) this.pos[0] = window.innerWidth + this.r;
+      if (this.pos[1] < -this.r) this.pos[1] = window.innerHeight + this.r;
+      if (this.pos[0] > window.innerWidth + this.r) this.pos[0] = -this.r;
+      if (this.pos[1] > window.innerHeight + this.r) this.pos[1] = -this.r;
+    }
+  }]);
+
+  return Tadpole;
+}(PIXI.Container);
+
+exports["default"] = Tadpole;
+
+/***/ }),
+
 /***/ "./src/mystyles.scss":
 /*!***************************!*\
   !*** ./src/mystyles.scss ***!
@@ -1010,15 +1202,16 @@ var _background = __webpack_require__(/*! ./background/background */ "./src/back
 
 var _background2 = _interopRequireDefault(_background);
 
+var _tadpole = __webpack_require__(/*! ./creature/tadpole */ "./src/creature/tadpole.js");
+
+var _tadpole2 = _interopRequireDefault(_tadpole);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// import Menu from './menu';
-//
-// import Tadpole from './creature/tadpole';
 // import Fish from './creature/fish';
 // import Lily from './creature/lily';
 //
@@ -1033,65 +1226,64 @@ var Pond = function () {
   function Pond() {
     _classCallCheck(this, Pond);
 
-    this.canvas = new PIXI.Application({
+    this.app = new PIXI.Application({
       resizeTo: window,
       backgroundColor: colours.pea
     });
-    document.body.appendChild(this.canvas.view);
+    document.body.appendChild(this.app.view);
 
     this.init();
 
     var elapsed = 0.0;
-    this.canvas.ticker.add(function (delta) {
-      elapsed += delta;
-    });
-    // this.water = new Water(canvas, ctx);
-    //
-    // this.eventListeners();
+    this.tickers();
   }
 
   /**
    * HTML canvas elements are initiated here and event listeners
    * are created
    */
+  // eventListeners() {
+  //   this.menu = new Menu(this);
+  //   let mousemovecount = 0;
+  //   canvas.addEventListener("mousemove", () => {
+  //     mousemovecount++;
+  //     if (mousemovecount % 4 == 0) {
+  //       this.water.dropAt(event.clientX, event.clientY);
+  //     }
+  //   });
+  // }
+
+  /**
+   * All entities are added to their arrays and ther corresponding
+   * Movements are initiated
+   */
 
 
   _createClass(Pond, [{
-    key: 'eventListeners',
-    value: function eventListeners() {
-      var _this = this;
-
-      this.menu = new Menu(this);
-      var mousemovecount = 0;
-      canvas.addEventListener("mousemove", function () {
-        mousemovecount++;
-        if (mousemovecount % 4 == 0) {
-          _this.water.dropAt(event.clientX, event.clientY);
-        }
-      });
-    }
-
-    /**
-     * All entities are added to their arrays and ther corresponding
-     * Movements are initiated
-     */
-
-  }, {
     key: 'init',
     value: function init() {
-      this.background = new _background2.default(this.canvas);
+      this.background = new _background2.default(this.app);
       // this.water.setBackground(this.background);
       // let size = this.background.size;
       //
-      // this.tadpoles = [];
+      this.tadpoles = [];
       // this.fish = [];
       // this.lillies = [];
       // this.movement = [];
       //
-      // // Pushes all tadpoles to their array
-      // for (let i = 0; i < this.tadpoleSize; i++)
-      //   this.tadpoles.push(new Tadpole(canvas, size));
-      //
+      // Pushes all tadpoles to their array
+      for (var i = 0; i < 2000; i++) {
+        var x = void 0,
+            y = void 0;
+        do {
+          x = window.innerWidth * Math.random();
+          y = window.innerHeight * Math.random();
+        } while (!this.background.withinPond(x, y));
+        var newTad = new _tadpole2.default(this.app, x, y);
+        this.app.stage.addChild(newTad);
+        this.tadpoles.push(newTad);
+      }
+
       // // Pushes all fish and lillies to their arrays
       // for (let i = 0; i < this.fishSize; i++)
       //   this.fish.push(new Fish(canvas, ctx, size));
@@ -1113,23 +1305,20 @@ var Pond = function () {
      */
 
   }, {
-    key: 'tick',
-    value: function tick() {
-      var _this2 = this;
+    key: 'tickers',
+    value: function tickers() {
+      var _this = this;
 
-      this.movement.forEach(function (m) {
-        return m.move(_this2.water);
+      // this.movement.forEach((m) => m.move(this.water));
+
+      this.app.ticker.add(function () {
+        for (var i in _this.tadpoles) {
+          _this.tadpoles[i].tick();
+        }
       });
-      this.tadpoles.forEach(function (t) {
-        return t.tick();
-      });
-      this.fish.forEach(function (f) {
-        return f.tick();
-      });
-      this.water.tick();
-      this.lillies.forEach(function (l) {
-        return l.tick();
-      });
+      // this.fish.forEach((f) => f.tick());
+      // this.water.tick();
+      // this.lillies.forEach((l) => l.tick());
     }
 
     /**
@@ -1140,22 +1329,18 @@ var Pond = function () {
     key: 'render',
     value: function render() {
       // Clear screen
-      this.background.renderPond(canvas, ctx);
+      // this.background.renderPond(canvas, ctx);
 
       // Draw to canvas in order of layers
       this.tadpoles.forEach(function (t) {
         return t.render(canvas, ctx);
       });
-      this.fish.forEach(function (f) {
-        return f.render(canvas, ctx);
-      });
-      this.water.render();
-      this.lillies.forEach(function (l) {
-        return l.render(canvas, ctx);
-      });
+      // this.fish.forEach((f) => f.render(canvas, ctx));
+      // this.water.render();
+      // this.lillies.forEach((l) => l.render(canvas, ctx));
 
       // Draw the land on the canvas
-      this.background.renderLand(canvas, ctx);
+      // this.background.renderLand(canvas, ctx);
     }
   }]);
 
